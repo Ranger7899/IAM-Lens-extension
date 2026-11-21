@@ -32,7 +32,11 @@ test('popup: typing a permission lists real results with previews; keyboard sele
   await box.press('Enter');
   await expect
     .poll(() =>
-      page.evaluate(async () => (await chrome.storage.session.get('pendingRoute')).pendingRoute?.route),
+      page.evaluate(
+        async () =>
+          ((await chrome.storage.session.get('pendingRoute')).pendingRoute as { route?: unknown } | undefined)
+            ?.route,
+      ),
     )
     .toEqual({ name: 'permission', id: 'storage.objects.get' });
 });
@@ -45,7 +49,11 @@ test('popup: FAB hands off the current query', async ({ context, extensionId }) 
   await page.getByRole('button', { name: 'Open side panel' }).click();
   await expect
     .poll(() =>
-      page.evaluate(async () => (await chrome.storage.session.get('pendingRoute')).pendingRoute?.route),
+      page.evaluate(
+        async () =>
+          ((await chrome.storage.session.get('pendingRoute')).pendingRoute as { route?: unknown } | undefined)
+            ?.route,
+      ),
     )
     .toEqual({ name: 'search', query: 'bigquery admin' });
 });

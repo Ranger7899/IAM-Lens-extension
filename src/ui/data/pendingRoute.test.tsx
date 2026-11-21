@@ -3,11 +3,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { PENDING_ROUTE_KEY, usePendingRoute } from './pendingRoute';
+import type { Route } from '@/entrypoints/sidepanel/routes';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 afterEach(() => vi.unstubAllGlobals());
 
-function Probe({ go }: { go: (r: never) => void }) {
+function Probe({ go }: { go: (r: Route) => void }) {
   usePendingRoute(go);
   return null;
 }
