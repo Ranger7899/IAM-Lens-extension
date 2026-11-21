@@ -1,0 +1,9 @@
+node_modules
+.output
+.wxt
+test-results
+playwright-report
+*.log
+.DS_Store
+.env*
+*.pem

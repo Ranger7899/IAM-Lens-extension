@@ -1,0 +1,30 @@
+/* Shared M3 state layer: compose with `composes: layer from './state-layer.module.css'` */
+.layer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-duration-short) linear;
+}
+.layer:hover::before {
+  opacity: var(--md-state-hover);
+}
+.layer:focus-visible::before {
+  opacity: var(--md-state-focus);
+}
+.layer:active::before {
+  opacity: var(--md-state-pressed);
+}
+.layer:disabled,
+.layer[aria-disabled='true'] {
+  opacity: 0.38;
+  pointer-events: none;
+}

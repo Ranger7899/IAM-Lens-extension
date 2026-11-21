@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+.tab {
+  composes: layer from './state-layer.module.css';
+  flex: 1;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: var(--md-sys-typescale-title-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.tab[aria-selected='true'] {
+  color: var(--md-sys-color-primary);
+  box-shadow: inset 0 -3px 0 var(--md-sys-color-primary);
+}

@@ -1,0 +1,35 @@
+.root {
+  composes: layer from './state-layer.module.css';
+  display: inline-flex;
+  align-items: baseline;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-mono-medium);
+  white-space: nowrap;
+  transition: transform var(--motion-spring-fast);
+}
+.root:active {
+  transform: scale(0.96);
+}
+.service {
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+}
+.verb {
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+}
+.read {
+  color: var(--md-custom-color-read);
+}
+.write {
+  color: var(--md-custom-color-write);
+}
+.admin {
+  color: var(--md-custom-color-admin);
+}

@@ -1,0 +1,35 @@
+.root {
+  composes: layer from './state-layer.module.css';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 24px;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-full);
+  font: var(--md-sys-typescale-label-large);
+  transition:
+    border-radius var(--motion-spring-fast),
+    box-shadow var(--md-sys-motion-duration-short) linear;
+}
+.root:active {
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+.filled {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+.filled:hover {
+  box-shadow: var(--md-sys-elevation-1);
+}
+.tonal {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.text {
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  padding: 0 12px;
+}

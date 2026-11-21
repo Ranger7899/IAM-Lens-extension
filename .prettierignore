@@ -1,0 +1,8 @@
+.output
+.wxt
+node_modules
+test-results
+playwright-report
+package-lock.json
+src/ui/theme/tokens.css
+data

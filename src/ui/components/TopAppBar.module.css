@@ -1,0 +1,22 @@
+.root {
+  background: var(--md-sys-color-surface-container);
+  padding: 4px 8px 8px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 48px;
+}
+.title {
+  flex: 1;
+  margin: 0 8px;
+  font: var(--md-sys-typescale-title-large);
+  letter-spacing: var(--tracking-display);
+}
+.actions {
+  display: flex;
+}
+.extra {
+  padding: 4px 8px 0;
+}

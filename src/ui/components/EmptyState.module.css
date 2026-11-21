@@ -1,0 +1,23 @@
+.root {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 24px 16px;
+}
+.title {
+  font: var(--md-sys-typescale-headline-small);
+  letter-spacing: var(--tracking-display);
+}
+.hint {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+}
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

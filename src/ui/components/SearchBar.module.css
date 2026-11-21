@@ -1,0 +1,48 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 16px;
+  background: var(--md-sys-color-surface-container-high);
+  border-radius: var(--md-sys-shape-corner-full);
+  transition:
+    border-radius var(--motion-spring-fast),
+    box-shadow var(--motion-spring-fast);
+}
+.root:focus-within {
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-2);
+}
+.icon {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-body-large);
+}
+.input:focus-visible {
+  outline: none;
+} /* container shows the focus ring */
+.root:focus-within {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+.input::placeholder {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.kbd {
+  font: var(--md-sys-typescale-mono-medium);
+  padding: 0 8px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.root:focus-within .kbd {
+  display: none;
+}

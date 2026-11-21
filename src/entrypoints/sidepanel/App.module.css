@@ -1,0 +1,15 @@
+.root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.root > header {
+  background: color-mix(in srgb, var(--md-sys-color-surface-container) 92%, transparent);
+}
+.main {
+  flex: 1;
+  padding: 16px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}

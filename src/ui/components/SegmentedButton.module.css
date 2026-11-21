@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  width: 100%;
+}
+.seg {
+  composes: layer from './state-layer.module.css';
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--md-sys-color-outline);
+  background: transparent;
+  cursor: pointer;
+  min-width: 0;
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-label-large);
+  transition: background-color var(--motion-spring-fast);
+}
+.seg span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.seg:first-child {
+  border-radius: var(--md-sys-shape-corner-full) 0 0 var(--md-sys-shape-corner-full);
+}
+.seg:last-child {
+  border-radius: 0 var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) 0;
+}
+.seg + .seg {
+  margin-inline-start: -1px;
+}
+.selected {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
