@@ -37,8 +37,8 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
 }) => {
   const page = await context.newPage();
   await page.goto(`chrome-extension://${extensionId}/sidepanel.html`);
-  const stub = (t: string) => page.getByRole('heading', { level: 2, name: t });
-  await expect(stub('Search')).toBeVisible(); // waits out the loading skeleton
+  const stub = (t: string | RegExp) => page.getByRole('heading', { level: 2, name: t });
+  await expect(page.getByRole('searchbox')).toBeVisible(); // waits out the loading skeleton
 
   await page.getByRole('radio', { name: 'Compare' }).click();
   await expect(stub('Compare roles')).toBeVisible();
@@ -48,13 +48,13 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   await expect(stub("What's new")).toBeVisible();
 
   await page.evaluate(() => (location.hash = '#/role/roles%2Fviewer'));
-  await expect(stub('Role')).toBeVisible();
+  await expect(stub('Viewer')).toBeVisible();
   await expect(page.getByText('roles/viewer')).toBeVisible();
-  await page.getByRole('button', { name: 'Back' }).click();
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
   await expect(stub("What's new")).toBeVisible();
 
   await page.evaluate(() => (location.hash = '#/permission/storage.objects.get'));
-  await expect(stub('Permission')).toBeVisible();
+  await expect(stub(/^Smallest first/)).toBeVisible();
   await page.keyboard.press('Alt+ArrowLeft');
   await expect(stub("What's new")).toBeVisible();
 });

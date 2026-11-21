@@ -1,17 +1,14 @@
 import { useMemo } from 'react';
+import { useNavigate } from '../navigation';
 import { EmptyState } from '@/ui/components';
 import { useIam } from '@/ui/data';
 import { PermissionDetailView } from './permission/PermissionDetailView';
 import { PermissionPicker } from './permission/PermissionPicker';
 import { resolvePermission } from './permission/resolve';
 
-// Hash navigation, same format as the router's routeHref (not imported: router imports this file).
-const go = (path: 'role' | 'permission', id: string) => {
-  location.hash = `#/${path}/${encodeURIComponent(id)}`;
-};
-
 /** `permission/:name`: roles granting the permission, smallest first; partial input shows a picker. */
 export function PermissionScreen({ name }: { name: string }) {
+  const { go } = useNavigate();
   const { index } = useIam();
   const resolved = useMemo(() => (index ? resolvePermission(index, name) : undefined), [index, name]);
   if (!index || !resolved) return null;
@@ -22,7 +19,7 @@ export function PermissionScreen({ name }: { name: string }) {
           key={resolved.permission}
           index={index}
           permIdx={resolved.index}
-          onOpenRole={(id) => go('role', id)}
+          onOpenRole={(id) => go({ name: 'role', id })}
         />
       );
     case 'picker':
@@ -32,7 +29,7 @@ export function PermissionScreen({ name }: { name: string }) {
           input={name}
           matches={resolved.matches}
           truncated={resolved.truncated}
-          onPick={(p) => go('permission', p)}
+          onPick={(p) => go({ name: 'permission', id: p })}
         />
       );
     default:

@@ -2,7 +2,7 @@
  * Side-panel router. Hash based (`#/role/roles%2Fstorage.admin`) so browser history gives us back
  * navigation for free; every route renders one file in ./screens inside a shared-axis transition.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IconButton, LensMark, SegmentedButton, TopAppBar, type IconName } from '@/ui/components';
 import { IamGate } from '@/ui/data';
 import { navigateWithTransition, type NavDirection } from '@/ui/motion/navigate';
@@ -12,54 +12,12 @@ import { PermissionScreen } from './screens/PermissionScreen';
 import { RoleScreen } from './screens/RoleScreen';
 import { SearchScreen } from './screens/SearchScreen';
 import { WhatsNewScreen } from './screens/WhatsNewScreen';
+import { NavigationContext, useNavigate, type NavigateOptions, type NavigationApi } from './navigation';
+import { parseRoute, routeHref, type Route, type TopLevelRoute } from './routes';
 import styles from './App.module.css';
 
-export type Route =
-  | { name: 'search'; query: string }
-  | { name: 'role'; id: string }
-  | { name: 'permission'; id: string }
-  | { name: 'minimal'; perms?: string[] }
-  | { name: 'compare' }
-  | { name: 'whatsnew' };
-
-export type TopLevelRoute = 'search' | 'minimal' | 'compare' | 'whatsnew';
-
-export function parseRoute(hash: string): Route {
-  const [path = '', qs = ''] = hash.replace(/^#\/?/, '').split('?');
-  const [head = '', ...rest] = path.split('/');
-  const arg = rest.length ? decodeURIComponent(rest.join('/')) : '';
-  switch (head) {
-    case 'role':
-      if (arg) return { name: 'role', id: arg };
-      break;
-    case 'permission':
-      if (arg) return { name: 'permission', id: arg };
-      break;
-    case 'minimal': {
-      const perms = (new URLSearchParams(qs).get('perms') ?? '').split(',').filter(Boolean);
-      return perms.length ? { name: 'minimal', perms } : { name: 'minimal' };
-    }
-    case 'compare':
-    case 'whatsnew':
-      return { name: head };
-  }
-  return { name: 'search', query: new URLSearchParams(qs).get('q') ?? '' };
-}
-
-export function routeHref(r: Route): string {
-  switch (r.name) {
-    case 'search':
-      return r.query ? `#/search?q=${encodeURIComponent(r.query)}` : '#/search';
-    case 'role':
-      return `#/role/${encodeURIComponent(r.id)}`;
-    case 'permission':
-      return `#/permission/${encodeURIComponent(r.id)}`;
-    case 'minimal':
-      return r.perms?.length ? `#/minimal?perms=${encodeURIComponent(r.perms.join(','))}` : '#/minimal';
-    default:
-      return `#/${r.name}`;
-  }
-}
+export { NavigationContext, useNavigate, parseRoute, routeHref };
+export type { Route, TopLevelRoute, NavigationApi, NavigateOptions };
 
 const MODES: { id: TopLevelRoute; label: string; icon: IconName }[] = [
   { id: 'search', label: 'Search', icon: 'search' },
@@ -77,37 +35,62 @@ export function isDetail(r: Route): boolean {
   return r.name === 'role' || r.name === 'permission';
 }
 
-export interface Navigator {
+export interface Navigator extends NavigationApi {
   route: Route;
-  go: (r: Route) => void;
-  back: () => void;
 }
 
+interface Stamp {
+  iamIdx: number;
+}
+const stampOf = (s: unknown): number | undefined =>
+  s && typeof (s as Stamp).iamIdx === 'number' ? (s as Stamp).iamIdx : undefined;
+
+/**
+ * Hash route state. Direction comes from intent: `go` = forward, `back` = backward. Every history entry
+ * is stamped with an index (history.state), so a traversal (popstate: browser back/forward) is told apart
+ * from a fresh hash change; an unstamped change (an external `<a href>`) counts as forward.
+ */
 export function useHashRoute(): Navigator {
   const [route, setRoute] = useState<Route>(() => parseRoute(location.hash));
-  // Set by `go`; a hashchange without it came from history (back/forward).
-  const pending = useRef({ forward: false });
+  const cur = useRef(0);
+  const intent = useRef<{ dir?: NavDirection; replace?: boolean }>({});
 
   useEffect(() => {
+    cur.current = stampOf(history.state) ?? 0;
+    history.replaceState({ ...(history.state ?? {}), iamIdx: cur.current }, '');
     const onChange = () => {
-      const dir: NavDirection = pending.current.forward ? 'forward' : 'back';
-      pending.current.forward = false;
+      const i = intent.current;
+      intent.current = {};
+      const idx = stampOf(history.state);
+      let dir: NavDirection;
+      if (idx !== undefined) {
+        // Traversal to an entry we stamped earlier.
+        dir = i.dir ?? (idx < cur.current ? 'back' : 'forward');
+        cur.current = idx;
+      } else {
+        dir = i.dir ?? 'forward';
+        if (!i.replace) cur.current += 1;
+        history.replaceState({ ...(history.state ?? {}), iamIdx: cur.current }, '');
+      }
       navigateWithTransition(() => setRoute(parseRoute(location.hash)), dir);
     };
     window.addEventListener('hashchange', onChange);
     return () => window.removeEventListener('hashchange', onChange);
   }, []);
 
-  const go = useCallback((r: Route) => {
+  const go = useCallback((r: Route, opts?: NavigateOptions) => {
     const href = routeHref(r);
     if (href === location.hash || (href === '#/search' && location.hash === '')) return;
-    pending.current.forward = true;
-    location.hash = href;
+    intent.current = { dir: 'forward', replace: opts?.replace };
+    if (opts?.replace) location.replace(href);
+    else location.hash = href;
   }, []);
   const back = useCallback(() => {
     // Opened straight on a detail route (no history to pop): fall back to Search.
-    if (history.length > 1) history.back();
-    else go({ name: 'search', query: '' });
+    if (cur.current > 0 || history.length > 1) {
+      intent.current = { dir: 'back' };
+      history.back();
+    } else go({ name: 'search', query: '' });
   }, [go]);
 
   // Alt+Left = back (the side panel has no browser chrome). Option+Left edits text on macOS, so skip fields.
@@ -123,10 +106,10 @@ export function useHashRoute(): Navigator {
     return () => window.removeEventListener('keydown', onKey);
   }, [back]);
 
-  return { route, go, back };
+  return { route, go, back, href: routeHref };
 }
 
-function Screen({ route, go }: { route: Route; go: (r: Route) => void }) {
+function Screen({ route, go }: { route: Route; go: NavigationApi['go'] }) {
   switch (route.name) {
     case 'search':
       return <SearchScreen query={route.query} go={go} />;
@@ -144,10 +127,12 @@ function Screen({ route, go }: { route: Route; go: (r: Route) => void }) {
 }
 
 export function SidePanelRouter() {
-  const { route, go, back } = useHashRoute();
+  const { route, go, back, href } = useHashRoute();
+  const api = useMemo<NavigationApi>(() => ({ go, back, href }), [go, back, href]);
   // Back arrow only where there is somewhere to go back to; the root Search route shows the mark.
   const detail = isDetail(route);
   return (
+    <NavigationContext.Provider value={api}>
     <div className={`${styles.root} dot-grid`}>
       <TopAppBar
         title="IAM Lens"
@@ -186,5 +171,6 @@ export function SidePanelRouter() {
         </div>
       </main>
     </div>
+    </NavigationContext.Provider>
   );
 }

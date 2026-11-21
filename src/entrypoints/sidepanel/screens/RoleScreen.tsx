@@ -5,7 +5,8 @@ import type { PrivilegeClass, ServiceGroup } from '@/core';
 import { RoleHeader } from './role/RoleHeader';
 import { RoleNotFound } from './role/RoleNotFound';
 import { ServiceSection } from './role/ServiceSection';
-import { docsUrl, gcloudDescribe, hrefCompare, navigate } from './role/roleLinks';
+import { docsUrl, gcloudDescribe } from './role/roleLinks';
+import { useNavigate } from '../navigation';
 import styles from './role/RoleScreen.module.css';
 
 const RISKS: { id: PrivilegeClass; label: string; icon: 'visibility' | 'edit' | 'shield' }[] = [
@@ -25,6 +26,7 @@ export function RoleScreen({ name }: { name: string }) {
 }
 
 function RoleView({ index, name }: { index: NonNullable<ReturnType<typeof useIam>['index']>; name: string }) {
+  const { go } = useNavigate();
   const role = useMemo(() => index.findRole(name), [index, name]);
   const groups = useMemo(() => (role ? index.permissionsByService(role) : []), [index, role]);
   const profile = useMemo(
@@ -101,7 +103,7 @@ function RoleView({ index, name }: { index: NonNullable<ReturnType<typeof useIam
         }
         onCopyGcloud={() => void copy(gcloudDescribe(role), 'gcloud command')}
         onOpenDocs={() => window.open(docsUrl(role), '_blank', 'noopener,noreferrer')}
-        onCompare={() => navigate(hrefCompare(role.name))}
+        onCompare={() => go({ name: 'compare', a: role.name })}
       />
 
       {total > 0 && (

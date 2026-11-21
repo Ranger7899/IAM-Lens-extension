@@ -1,9 +1,11 @@
 import { Button, Card, Icon } from '@/ui/components';
-import { hrefSearch, navigate, suggestQuery } from './roleLinks';
+import { useNavigate } from '../../navigation';
+import { suggestQuery } from './roleLinks';
 import styles from './RoleNotFound.module.css';
 
 /** Unknown role: say so plainly and offer a search seeded from the name. */
 export function RoleNotFound({ name }: { name: string }) {
+  const { go } = useNavigate();
   const q = suggestQuery(name);
   return (
     <Card variant="filled" className={styles.root} role="alert">
@@ -17,11 +19,11 @@ export function RoleNotFound({ name }: { name: string }) {
       </p>
       <div className={styles.actions}>
         {q && (
-          <Button variant="tonal" icon="search" onClick={() => navigate(hrefSearch(q))}>
+          <Button variant="tonal" icon="search" onClick={() => go({ name: 'search', query: q })}>
             Search for “{q}”
           </Button>
         )}
-        <Button variant="text" onClick={() => navigate(hrefSearch(''))}>
+        <Button variant="text" onClick={() => go({ name: 'search', query: '' })}>
           Browse all
         </Button>
       </div>

@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import type { IamIndex } from '@/core';
 import { Icon, PermissionToken } from '@/ui/components';
-import { hrefPermission, navigate } from './roleLinks';
+import { useNavigate } from '../../navigation';
 import styles from './ServiceSection.module.css';
 
 /** Rows rendered per expanded service before "Show more" (keeps roles/owner's 10k+ rows cheap). */
@@ -32,6 +32,7 @@ export function ServiceSection({
   onToggle,
   order = 0,
 }: ServiceSectionProps) {
+  const { go } = useNavigate();
   const [shown, setShown] = useState(PAGE);
   const visible = open ? indices.slice(0, shown) : [];
   const count = indices.length === total ? total : `${indices.length} of ${total}`;
@@ -58,7 +59,7 @@ export function ServiceSection({
                 <button
                   type="button"
                   className={styles.row}
-                  onClick={() => navigate(hrefPermission(name))}
+                  onClick={() => go({ name: 'permission', id: name })}
                   aria-label={`${name}, ${risk} permission`}
                 >
                   <PermissionToken permission={name} risk={risk} static />
