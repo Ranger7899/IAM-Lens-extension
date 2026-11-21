@@ -1,9 +1,10 @@
+import { LensMark } from '@/ui/components';
 import { FONT_LICENSE_URL, PRIVACY_URL, SOURCE_URL } from './constants';
 import { Section } from './Section';
 
 export function AboutCard({ version }: { version: string }) {
   return (
-    <Section icon="shield" title="About" subtitle={`IAM Lens ${version}`}>
+    <Section icon="shield" mark={<LensMark size={20} />} title="About" subtitle={`IAM Lens ${version}`}>
       <p>
         Searches stay on this device. IAM Lens has no analytics and never sends what you type anywhere.{' '}
         <a href={PRIVACY_URL} target="_blank" rel="noreferrer noopener">
