@@ -2,7 +2,7 @@
 
 Source: live console, project `iam-chrome`, pages read-only: IAM & Admin > Roles (predefined list), a predefined role detail page (Storage Object Viewer), IAM (Allow > View by principals), and the All products page. Values come from `getComputedStyle`. No personal data is stored here.
 
-**Theme captured: DARK ONLY.** The user's console was already in dark theme; the theme was not toggled. Light theme not captured, so no light values are derived. Screenshots were not saved (the IAM page shows account data); screens are described in words.
+**Themes captured: DARK and LIGHT** (both measured live via `getComputedStyle`; the user switched the console theme themselves, nothing was toggled by tooling). The prose below describes the dark theme; light values are in "Colour tokens (light)". Structure, sizes, spacing and radii are identical in both themes. Screenshots were not saved (the IAM page shows account data); screens are described in words.
 
 ## What makes it look like the console (summary)
 
@@ -35,7 +35,35 @@ Source: live console, project `iam-chrome`, pages read-only: IAM & Admin > Roles
 | Checkbox border | `#f1f4f9`, 2px, radius 2px, 16x16 |
 | Info banner text | `#f1f4f9` on `#50638b` |
 
-Status colours (error, success, warning) were not present on the pages read; not captured. Tab underline colour is not a computed value (drawn by an indicator element); visually it is periwinkle, likely `#a8baff` (visual estimate).
+Status colours (error, success, warning) were not present on the pages read in either theme; not captured. Tab underline colour is not a computed value (drawn by an indicator element); visually it is periwinkle, likely `#a8baff` (visual estimate).
+
+## Colour tokens (light)
+
+Same pages and elements as the dark table. In light the shell is a pale blue-grey and the content panel is pure white (inverted layering: panel lighter than shell, as in dark).
+
+| Role | Hex |
+|---|---|
+| App shell / body background | `#f0f5fe` |
+| Content panel surface | `#ffffff` |
+| Table header fill (on the `tr`; `th` is transparent) | `#e9eef6` |
+| Table header bottom border / outlined button border | `#b7c3e0` |
+| Info banner fill | `#e9eef6` (radius 16px, 52px tall) |
+| Active nav item fill (Roles) | `#dbedfc` (radius 0 12px 12px 0 on the measured pill) |
+| Text primary (headings, paragraphs, table header text, dt, nav section headers, checkbox border, nav icons use `#545f72`) | `#1b2e5d` |
+| Text secondary (table cells, nav labels, kv values) | `#475569` |
+| Link / tabs (top-level) / nav product title | `#3d60b8` (links underlined in tables) |
+| Accent / text-button label / outlined-button label | `#314f9b` |
+| Sub-tab label (View by principals etc.) | `#1b2e5d` (selected and not) |
+| Icon default (nav, star, row icons, copy, help) | `#545f72` |
+| Disabled button text / border | `#1b2e5d` at 38% / (Edit role: `#3c4043` at 38% / 12%) |
+| Chip "Preview": fill / text | `#467c95` / `#ffffff` (4px radius, 20px tall) |
+| Checkbox border | `#1b2e5d`, 2px |
+| Tooltip: fill / text | `#2d437c` / `#f1f4f9`, 12px, 4px radius |
+| Body element colour | near-black `rgba(0,0,0,.99)` (components override) |
+
+Notes: tab underline is not a computed value (indicator element), visually matches the accent. Search field, project pill and a placeholder text colour were not resolved by script (elements not matched); not captured. The All products page has product names as links `#3d60b8`; star and row icons `#545f72`; row height 54px, page title 28px, category headings 18px, all `#1b2e5d`. Light heading sizes match dark (22px section headings on IAM/detail; nav product title 22px).
+
+Light vs dark summary: primary text `#f1f4f9` -> `#1b2e5d`; secondary `#b9c0cc` -> `#475569`; link `#e5ebff` -> `#3d60b8`; accent `#a8baff` -> `#314f9b`; icons `#9ca6b2` -> `#545f72`; panel `#353b43` -> `#ffffff`; shell `#282c32` -> `#f0f5fe`; table header `#414d5e` -> `#e9eef6`; outline border `#50638b` -> `#b7c3e0`; chip `#8fbed4`/`#1b2e5d` -> `#467c95`/`#ffffff`. Info banner in light is the same fill as the table header, not a distinct blue.
 
 ## Typography
 
@@ -100,7 +128,9 @@ No letter-spacing or text-transform observed.
 
 **Detail page** (role): header bar with a back arrow, 18px/500 title, then two outlined buttons ("Edit role" disabled, "Create from role"). Below: key/value rows (ID with copy icon, launch stage), a 22px "Description" heading and paragraph, a 22px "8 assigned permissions" heading and a plain list of permission strings (14px/20px, no table, no checkboxes), then the info banner.
 
-**Empty state, tooltip, side panel/drawer**: not seen on the pages read; not captured.
+**Tooltip** (captured on hover of a "View docs in new tab" icon on All products): small dark chip in both themes, fill `#2d437c`, text `#f1f4f9`, 12px, radius 4px, no extra border measured. Dark-theme tooltip not measured (the dark pass missed it); the light value is a likely match since tooltips are normally theme-inverse.
+
+**Empty state, side panel/drawer**: not seen on the pages read; not captured.
 
 ## Product icons (navigation and lists)
 
@@ -117,4 +147,4 @@ No letter-spacing or text-transform observed.
 
 ## Not captured
 
-Light theme; status colours; filled primary button; tooltip, drawer, empty state, dialog; CSS custom-property token names (blocked by tooling); screenshots/GIFs (not saved to avoid account data).
+Status colours (error/success/warning), filled primary button, empty state, drawer, dialog (none present on the read-only pages, either theme); light-theme search field, project pill and filter placeholder colours; CSS custom-property token names (blocked by tooling); screenshots/GIFs (not saved to avoid account data).
