@@ -49,7 +49,7 @@ export function PrivilegeBar({
           {KINDS.map(({ key, icon }) => (
             <li key={key} className={styles[`t_${key}`]}>
               <Icon name={icon} size={14} filled />
-              <b>{counts[key]}</b>
+              <b>{counts[key].toLocaleString()}</b>
               {legendStyle === 'full' && <span>{key}</span>}
             </li>
           ))}

@@ -17,6 +17,8 @@ import {
 
 const SEED = '#1A73E8';
 const RISK = { read: '#1E8E3E', write: '#F9AB00', admin: '#D93025' } as const;
+// Light-theme bar fills deepened to reach 3:1 (WCAG 1.4.11) on surface-container-high; Google amber #F9AB00 is only ~1.6:1.
+const LIGHT_FILL: Partial<Record<keyof typeof RISK, string>> = { write: '#C26A00' };
 const DARK_DESAT = 0.9; // risk hues ~10% less chroma in dark mode
 
 const kebab = (s: string) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
@@ -79,7 +81,7 @@ function scheme(dark: boolean): string[] {
       ? hexFromArgb(
           TonalPalette.fromHueAndChroma(raw.hue, raw.chroma * DARK_DESAT).tone(Math.max(raw.tone, 68)),
         )
-      : hex.toLowerCase();
+      : (LIGHT_FILL[name as keyof typeof RISK] ?? hex).toLowerCase();
     lines.push(
       `  --md-custom-color-${name}: ${hexFromArgb(p.tone(t.c))};`,
       `  --md-custom-color-on-${name}: ${hexFromArgb(p.tone(t.on))};`,
