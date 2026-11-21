@@ -15,6 +15,7 @@ import {
   type ExampleQuery,
 } from '@/ui/components';
 import { IamGate, useIam } from '@/ui/data';
+import { useThemePreference } from '@/ui/theme/useThemePreference';
 import type { Route } from '@/entrypoints/sidepanel/routes';
 import { handOff } from './handoff';
 import { routeOf, topResults, type PopupResult } from './results';
@@ -25,6 +26,7 @@ function parseHash(hash: string): string {
 }
 
 export function App() {
+  useThemePreference();
   const [query, setQuery] = useState(() => parseHash(location.hash));
   // Resolved ahead of time so the click handler can call sidePanel.open() synchronously
   // (the call must happen inside the user gesture).

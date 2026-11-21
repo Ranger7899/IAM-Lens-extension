@@ -1,4 +1,5 @@
 import { IamProvider } from '@/ui/data';
+import { useThemePreference } from '@/ui/theme/useThemePreference';
 import { DemoApp } from './DemoApp';
 import { SidePanelRouter } from './router';
 
@@ -6,6 +7,7 @@ import { SidePanelRouter } from './router';
 const DEMO = new URLSearchParams(location.search).get('demo') === '1';
 
 export function App() {
+  useThemePreference();
   if (DEMO) return <DemoApp />;
   return (
     <IamProvider>

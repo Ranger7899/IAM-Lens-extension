@@ -1,17 +1,17 @@
-# Manual sign-in and scope test (IAM-19)
+# Manual sign-in and scope test (IAM-19 / IAM-20)
 
-Agents cannot sign in, so run this once yourself. Scope under test: `https://www.googleapis.com/auth/cloud-platform.read-only`.
+Agents cannot sign in, so run this once yourself, using the real options page. Scope under test: `https://www.googleapis.com/auth/cloud-platform.read-only`.
 
 1. Build: `npm run build`. Open `chrome://extensions`, enable Developer mode, Load unpacked, choose `.output/chrome-mv3`.
 2. Confirm the extension ID is `nkkmmkcohkjacpgiaiiadjmhcbmhgaen`.
-3. Open the extension's service worker console (Inspect views: service worker) or any extension page console (e.g. the options page).
-4. `signIn()` needs a user gesture, so trigger it from a click. Until the IAM-20 options UI exists, use a temporary button (for example in a dev build, a throwaway `<button>` in the options page whose click handler calls `signIn()` from `@/core/gcp`). Once IAM-20 lands, click "Sign in" there.
-5. Accept the optional permissions prompt (identity and googleapis.com), then pick your Google account and grant read-only access. The consent screen is External/Testing, so your account must be a listed test user; expect an "unverified app" warning.
-6. In the same console verify `await isSignedIn()` returns `true`.
-7. Scope test, replacing `<id>` with a project you can read:
-   - `await searchProjects('')` returns an array of `{id, displayName, name}` (needs Cloud Resource Manager API enabled and `resourcemanager.projects.get`).
-   - `await fetchCustomRoles('projects/<id>')` returns custom roles (needs IAM API enabled and `iam.roles.list`).
-   Both are imported from `@/core/gcp` and take `{ getToken }` (also exported from `@/core/gcp`), e.g. `searchProjects('', { getToken })`.
+3. Open the options page (extension details, Extension options). The Custom roles card should say "Sign in with Google".
+4. Click **Sign in with Google**. A "Before you sign in" sheet appears first: check that it explains read-only access, local storage, how to revoke, the source link and the unverified-app note. Click **Continue**.
+5. Accept the optional permissions prompt (identity and googleapis.com), then pick your Google account and grant read-only access. The consent screen is External/Testing, so your account must be a listed test user; expect an "unverified app" warning. Afterwards the card shows a "Signed in" badge.
+6. Click **Add projects or organizations**. The picker lists the projects and organizations you can see (this exercises `searchProjects` and `searchOrganizations`; it needs the Cloud Resource Manager API enabled and `resourcemanager.projects.get`). Use the filter box to narrow the list.
+7. Click **Add** on a project that has custom roles. The source appears with its role count and "fetched just now" (this exercises `fetchCustomRoles('projects/<id>')`; it needs the IAM API enabled and `iam.roles.list`). A project without access shows the reason inline, for example "Your account can't list custom roles on projects/<id>".
 8. Record the result on IAM-6/IAM-19. A 403 `ACCESS_TOKEN_SCOPE_INSUFFICIENT` means the scope is too narrow; 403 `SERVICE_DISABLED` means the API is not enabled in the GCP project.
-9. Sign-out check: call `await signOut()`; `isSignedIn()` becomes `false` and stored custom roles are cleared. Re-open https://myaccount.google.com/permissions to confirm the app grant is gone.
-10. Silent refresh check: set `chrome.storage.session` `gcpAuth.expiresAt` to a past time, then `await getToken()`; it should return a new token without a popup (or throw `AuthRequiredError` if Google needs interaction).
+9. Refresh and remove: click the refresh icon on a source (the "fetched" time updates), then the remove icon (the source disappears).
+10. Offline check: with a source added, turn on Chrome DevTools "Offline" throttling for the options page and click refresh. The source shows "You're offline..." and keeps its cached roles.
+11. Sign-out check: click **Sign out & clear** and confirm in the dialog. The card returns to "Sign in with Google" and the source list is empty. Re-open https://myaccount.google.com/permissions to confirm the app grant is gone.
+12. Silent refresh check: sign in again, then in an extension page console run `chrome.storage.session.get('gcpAuth')` and set `expiresAt` to a past time (`chrome.storage.session.set({gcpAuth: {token: 'x', expiresAt: 1}})`). Click refresh on a source: it should refresh silently without a popup, or show "Sign in again" if Google needs interaction.
+13. Theme check: in Appearance choose Dark, then open the popup and side panel; both follow the override. Choose System to go back.

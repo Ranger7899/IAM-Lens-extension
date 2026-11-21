@@ -1,9 +1,10 @@
 import { mount } from '@/ui/Root';
 import { IamProvider } from '@/ui/data';
 import { App } from './App';
+import { realDeps } from './realDeps';
 
 mount(
   <IamProvider>
-    <App />
+    <App deps={realDeps} />
   </IamProvider>,
 );
