@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IAM Lens privacy policy</title>
+    <meta name="description" content="Privacy policy for the IAM Lens browser extension.">
+    <style>
+      :root {
+        color-scheme: light dark;
+        --md-sys-color-background: #f9f9ff;
+        --md-sys-color-on-background: #181c25;
+        --md-sys-color-surface-container: #ebedfa;
+        --md-sys-color-on-surface-variant: #424753;
+        --md-sys-color-outline-variant: #c2c6d6;
+        --md-sys-color-primary: #005bc0;
+        --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-primary-container: #d8e2ff;
+        --md-sys-color-on-primary-container: #004493;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --md-sys-color-background: #0f131c;
+          --md-sys-color-on-background: #dfe2ef;
+          --md-sys-color-surface-container: #1c2029;
+          --md-sys-color-on-surface-variant: #c2c6d6;
+          --md-sys-color-outline-variant: #424753;
+          --md-sys-color-primary: #adc7ff;
+          --md-sys-color-on-primary: #002e68;
+          --md-sys-color-primary-container: #004493;
+          --md-sys-color-on-primary-container: #d8e2ff;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--md-sys-color-background);
+        color: var(--md-sys-color-on-background);
+        font-family: 'Google Sans Flex', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+      .skip {
+        position: absolute;
+        left: 0.5rem;
+        top: -4rem;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        background: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+      }
+      .skip:focus {
+        top: 0.5rem;
+      }
+      header,
+      main,
+      footer {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 0 1.25rem;
+      }
+      header {
+        padding-top: 2.5rem;
+      }
+      h1 {
+        font-size: 2.25rem;
+        line-height: 1.2;
+        letter-spacing: -0.005em;
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        font-size: 1.375rem;
+        margin: 2.25rem 0 0.5rem;
+      }
+      p,
+      li {
+        color: var(--md-sys-color-on-background);
+      }
+      .meta {
+        color: var(--md-sys-color-on-surface-variant);
+        margin: 0;
+      }
+      .summary {
+        margin-top: 1.5rem;
+        padding: 1rem 1.25rem;
+        border-radius: 1rem;
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+      }
+      .summary p {
+        margin: 0;
+        color: inherit;
+      }
+      a {
+        color: var(--md-sys-color-primary);
+      }
+      a:focus-visible,
+      .skip:focus-visible {
+        outline: 3px solid var(--md-sys-color-primary);
+        outline-offset: 2px;
+      }
+      code {
+        font-family: 'Google Sans Code', 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 0.9em;
+        padding: 0.1em 0.4em;
+        border-radius: 0.5rem;
+        background: var(--md-sys-color-surface-container);
+      }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        padding-bottom: 2.5rem;
+        border-top: 1px solid var(--md-sys-color-outline-variant);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <h1>IAM Lens privacy policy</h1>
+      <p class="meta">Last updated: <time datetime="2026-11-21">21 November 2026</time></p>
+      <div class="summary">
+        <p>
+          IAM Lens has no analytics, no tracking and no remote code. Everything it stores stays in
+          your browser, and signing out deletes your custom-role data.
+        </p>
+      </div>
+    </header>
+    <main id="main">
+      <h2>What IAM Lens is</h2>
+      <p>
+        IAM Lens is a browser extension that looks up Google Cloud IAM roles and permissions. It is
+        developed by <code>&lt;DEVELOPER_NAME&gt;</code> and is not affiliated with or endorsed by
+        Google.
+      </p>
+
+      <h2>No analytics, no tracking, no remote code</h2>
+      <p>
+        The extension does not collect analytics or telemetry, does not use advertising or tracking
+        identifiers, and does not send your searches anywhere. All code that runs is shipped inside
+        the extension package. It never downloads or runs code from a remote server.
+      </p>
+
+      <h2>Predefined roles snapshot</h2>
+      <p>
+        The list of Google Cloud predefined roles and permissions is bundled with the extension and
+        refreshed periodically by downloading a public data file (the snapshot) from GitHub Pages.
+        This is a plain request for a public file. It contains no information about you beyond what
+        any web request normally exposes to the host, such as your IP address, which GitHub handles
+        under its own privacy statement.
+      </p>
+
+      <h2>Optional sign-in and custom roles</h2>
+      <p>
+        Signing in with Google is optional and is only needed if you want to see your own
+        organisation or project custom roles. If you sign in:
+      </p>
+      <ul>
+        <li>
+          The OAuth access token is used only to call the Google IAM API and the Cloud Resource
+          Manager API directly from your browser, to list the projects you can access and their
+          custom roles.
+        </li>
+        <li>
+          The token and the data returned are never sent to the developer or to any third party.
+        </li>
+        <li>
+          Custom-role data is stored only locally in your browser (extension storage). It is not
+          synced or uploaded.
+        </li>
+        <li>
+          Signing out revokes the token and deletes the locally stored custom-role data. You can
+          also remove the extension to delete all of its data.
+        </li>
+      </ul>
+
+      <h2>Google API Services User Data Policy</h2>
+      <p>
+        IAM Lens's use and transfer to any other app of information received from Google APIs will
+        adhere to the
+        <a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"
+          >Google API Services User Data Policy</a
+        >, including the Limited Use requirements. Specifically, data received from Google APIs is
+        used only to provide and improve the user-facing lookup features, is not transferred to
+        others, is not used for advertising, and is not read by humans.
+      </p>
+
+      <h2>Permissions</h2>
+      <p>
+        The extension requests only the browser permissions it needs: side panel, local storage,
+        scheduled alarms (for snapshot refresh), and context menu. The identity permission and
+        access to <code>googleapis.com</code> are optional and are requested only when you choose to
+        sign in.
+      </p>
+
+      <h2>Children</h2>
+      <p>IAM Lens is a developer tool and is not directed at children.</p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        If this policy changes, the updated version will be posted on this page with a new date.
+      </p>
+
+      <h2>Contact</h2>
+      <p>Questions about privacy: <code>&lt;CONTACT_EMAIL&gt;</code></p>
+    </main>
+    <footer>
+      <p>IAM Lens. Not affiliated with Google. Google Cloud is a trademark of Google LLC.</p>
+    </footer>
+  </body>
+</html>
