@@ -3,7 +3,12 @@ import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-const EXTENSION_PATH = path.resolve(import.meta.dirname, '../.output/chrome-mv3');
+const EXTENSION_PATH = path.resolve(
+  import.meta.dirname,
+  '..',
+  process.env.IAM_OUT_DIR ?? '.output',
+  'chrome-mv3',
+);
 
 export const test = base.extend<{ context: BrowserContext; extensionId: string }>({
   // eslint-disable-next-line no-empty-pattern

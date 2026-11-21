@@ -8,7 +8,11 @@ import path from 'node:path';
 import type { Page } from '@playwright/test';
 import { test } from './fixtures';
 
-const OUT = path.resolve(import.meta.dirname, '../test-results/screens');
+const OUT = path.resolve(
+  import.meta.dirname,
+  '..',
+  `${process.env.IAM_TEST_OUT ?? 'test-results'}-screens`,
+);
 
 interface Shot {
   name: string;

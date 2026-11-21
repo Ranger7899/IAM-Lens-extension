@@ -33,6 +33,8 @@ function snapshotAsset() {
 
 export default defineConfig({
   srcDir: 'src',
+  // Per-worker build dirs (IAM_OUT_DIR=.output-IAM-9) let parallel builds coexist.
+  outDir: process.env.IAM_OUT_DIR ?? '.output',
   modules: ['@wxt-dev/module-react'],
   vite: () => ({ plugins: [snapshotAsset()] }),
   manifest: {

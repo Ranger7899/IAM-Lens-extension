@@ -10,5 +10,7 @@ export default defineConfig({
   timeout: shots ? 120_000 : 30_000,
   workers: 1, // one persistent-context browser at a time
   reporter: 'list',
+  // Per-worker output dirs (IAM_TEST_OUT=test-results-IAM-9) so parallel runs don't wipe each other.
+  outputDir: process.env.IAM_TEST_OUT ?? 'test-results',
   use: { trace: 'retain-on-failure' },
 });
