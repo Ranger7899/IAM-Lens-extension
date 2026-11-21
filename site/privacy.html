@@ -8,27 +8,31 @@
     <style>
       :root {
         color-scheme: light dark;
-        --md-sys-color-background: #f9f9ff;
-        --md-sys-color-on-background: #181c25;
-        --md-sys-color-surface-container: #ebedfa;
-        --md-sys-color-on-surface-variant: #424753;
-        --md-sys-color-outline-variant: #c2c6d6;
-        --md-sys-color-primary: #005bc0;
-        --md-sys-color-on-primary: #ffffff;
-        --md-sys-color-primary-container: #d8e2ff;
-        --md-sys-color-on-primary-container: #004493;
+        --shell: #f0f5fe;
+        --panel: #ffffff;
+        --head: #e9eef6;
+        --border: #b7c3e0;
+        --divider: #d3dbec;
+        --active: #dbedfc;
+        --ink: #1b2e5d;
+        --ink2: #475569;
+        --link: #3d60b8;
+        --accent: #314f9b;
+        --on-accent: #ffffff;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --md-sys-color-background: #0f131c;
-          --md-sys-color-on-background: #dfe2ef;
-          --md-sys-color-surface-container: #1c2029;
-          --md-sys-color-on-surface-variant: #c2c6d6;
-          --md-sys-color-outline-variant: #424753;
-          --md-sys-color-primary: #adc7ff;
-          --md-sys-color-on-primary: #002e68;
-          --md-sys-color-primary-container: #004493;
-          --md-sys-color-on-primary-container: #d8e2ff;
+          --shell: #282c32;
+          --panel: #353b43;
+          --head: #414d5e;
+          --border: #50638b;
+          --divider: #4a5568;
+          --active: #2a3f5e;
+          --ink: #f1f4f9;
+          --ink2: #b9c0cc;
+          --link: #e5ebff;
+          --accent: #a8baff;
+          --on-accent: #1b2e5d;
         }
       }
       * {
@@ -36,10 +40,10 @@
       }
       body {
         margin: 0;
-        background: var(--md-sys-color-background);
-        color: var(--md-sys-color-on-background);
+        background: var(--shell);
+        color: var(--ink);
         font-family: 'Google Sans Flex', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
-        font-size: 1rem;
+        font-size: 14px;
         line-height: 1.6;
       }
       .skip {
@@ -47,78 +51,105 @@
         left: 0.5rem;
         top: -4rem;
         padding: 0.5rem 1rem;
-        border-radius: 1rem;
-        background: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--on-accent);
       }
       .skip:focus {
         top: 0.5rem;
       }
+      .bar {
+        padding: 14px 1.25rem;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+      }
+      .page {
+        max-width: 48rem;
+        margin: 0 auto 2rem;
+        background: var(--panel);
+        border-radius: 20px 20px 0 0;
+        border: 1px solid var(--divider);
+        border-bottom: 0;
+      }
       header,
       main,
       footer {
-        max-width: 46rem;
-        margin: 0 auto;
-        padding: 0 1.25rem;
+        padding: 0 1.75rem;
       }
       header {
-        padding-top: 2.5rem;
+        padding-top: 2rem;
       }
       h1 {
-        font-size: 2.25rem;
-        line-height: 1.2;
-        letter-spacing: -0.005em;
-        margin: 0 0 0.5rem;
+        font-size: 22px;
+        font-weight: 400;
+        line-height: 28px;
+        margin: 0 0 0.25rem;
       }
       h2 {
-        font-size: 1.375rem;
-        margin: 2.25rem 0 0.5rem;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+        margin: 2rem 0 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--divider);
+      }
+      main h2:first-child {
+        border-top: 0;
+        padding-top: 0;
       }
       p,
       li {
-        color: var(--md-sys-color-on-background);
+        color: var(--ink);
       }
       .meta {
-        color: var(--md-sys-color-on-surface-variant);
+        color: var(--ink2);
         margin: 0;
       }
       .summary {
-        margin-top: 1.5rem;
+        margin-top: 1.25rem;
         padding: 1rem 1.25rem;
-        border-radius: 1rem;
-        background: var(--md-sys-color-primary-container);
-        color: var(--md-sys-color-on-primary-container);
+        border-radius: 16px;
+        background: var(--active);
+        color: var(--ink);
       }
       .summary p {
         margin: 0;
         color: inherit;
       }
       a {
-        color: var(--md-sys-color-primary);
+        color: var(--link);
+        text-decoration: underline;
       }
       a:focus-visible,
       .skip:focus-visible {
-        outline: 3px solid var(--md-sys-color-primary);
+        outline: 2px solid var(--accent);
         outline-offset: 2px;
       }
       code {
         font-family: 'Google Sans Code', 'JetBrains Mono', ui-monospace, monospace;
         font-size: 0.9em;
         padding: 0.1em 0.4em;
-        border-radius: 0.5rem;
-        background: var(--md-sys-color-surface-container);
+        border-radius: 4px;
+        background: var(--head);
       }
       footer {
-        margin-top: 3rem;
+        margin-top: 2.5rem;
         padding-top: 1rem;
-        padding-bottom: 2.5rem;
-        border-top: 1px solid var(--md-sys-color-outline-variant);
-        color: var(--md-sys-color-on-surface-variant);
+        padding-bottom: 2rem;
+        border-top: 1px solid var(--divider);
+        color: var(--ink2);
+      }
+      footer p {
+        margin: 0;
+        color: inherit;
       }
     </style>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
+    <div class="bar">IAM Lens</div>
+    <div class="page">
     <header>
       <h1>IAM Lens privacy policy</h1>
       <p class="meta">Last updated: <time datetime="2026-11-21">21 November 2026</time></p>
@@ -208,7 +239,8 @@
       <p>Questions about privacy: <code>&lt;CONTACT_EMAIL&gt;</code></p>
     </main>
     <footer>
-      <p>IAM Lens. Not affiliated with Google. Google Cloud is a trademark of Google LLC.</p>
+      <p>IAM Lens. Not affiliated with Google. Google Cloud and related icons are trademarks of Google LLC.</p>
     </footer>
+    </div>
   </body>
 </html>

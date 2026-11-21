@@ -65,9 +65,6 @@ export function ServiceSection({
                     <Icon name={RISK_ICON[risk]} size={16} filled className={styles.riskIcon} />
                     {RISK_LABEL[risk]}
                   </span>
-                  <span className={styles.svc} title={service}>
-                    {service}
-                  </span>
                 </button>
               </li>
             );

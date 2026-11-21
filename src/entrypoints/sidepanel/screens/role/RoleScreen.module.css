@@ -61,7 +61,7 @@
 /* Table header row: 29px, table-header tone, 1px border; bleeds to the panel edges. */
 .thead {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 62px 64px;
+  grid-template-columns: minmax(0, 1fr) 62px;
   align-items: center;
   column-gap: 6px;
   height: 29px;

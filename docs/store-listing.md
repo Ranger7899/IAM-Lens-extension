@@ -34,7 +34,14 @@ IAM Lens is a fast two-way lookup for Google Cloud IAM.
 
 Privacy: no analytics, no tracking, no remote code. Full policy: <PRIVACY_POLICY_URL>
 
-IAM Lens is an independent project and is not affiliated with or endorsed by Google. Google Cloud is a trademark of Google LLC.
+IAM Lens is an independent project. Not affiliated with Google. Google Cloud and related icons are trademarks of Google LLC.
+
+## Branding & trademarks
+
+- Not affiliated with Google. Google Cloud and related icons are trademarks of Google LLC.
+- Google Cloud service icons appear inside the extension only to identify the services a role or permission belongs to. They are not used as the extension's own logo or in its name.
+- No Google or Google Cloud logo or wordmark appears in the icon, name or store images. The store screenshots show the extension's own UI.
+- The same line is shown in the detailed description above, the options page About card and the footer of `site/privacy.html`.
 
 ## Single-purpose statement
 

@@ -2,7 +2,7 @@
  * Chrome Web Store listing images, generated from the real build:
  *   npm run build && npm run store:assets
  * Gated by STORE_ASSETS=1 (see playwright.config.ts), so the default e2e run skips it.
- * Output: docs/store-assets/ (+ copies in docs/screens/IAM-26/). Templates: e2e/store-templates/*.html.
+ * Output: docs/store-assets/ (+ copies in docs/screens/IAM-37/). Templates: e2e/store-templates/*.html.
  */
 import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -11,7 +11,7 @@ import { test } from './fixtures';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'docs', 'store-assets');
-const COPY = path.join(ROOT, 'docs', 'screens', 'IAM-26');
+const COPY = path.join(ROOT, 'docs', 'screens', 'IAM-37');
 const TPL = path.join(import.meta.dirname, 'store-templates');
 const FONT_DIR = path.join(ROOT, 'node_modules', '@fontsource-variable');
 const b64 = (f: string) => readFileSync(f).toString('base64');
@@ -65,7 +65,7 @@ const SHOTS: Shot[] = [
     headline: 'Find the role.<br><em>Or the permission.</em>',
     sub: 'One box, two directions. Search from the toolbar, the side panel or the address bar.',
     token: '',
-    accent: 'var(--blue)',
+    accent: '',
     hash: '#/',
     wait: 'main',
     popup: true,
@@ -81,7 +81,7 @@ const SHOTS: Shot[] = [
     headline: 'Every permission,<br><em>grouped by service.</em>',
     sub: 'Open any role and see what it can really do, colour-coded by privilege.',
     token: '<span class="s">roles/storage</span><span class="r">.objectViewer</span>',
-    accent: 'var(--read)',
+    accent: '',
     hash: `#/role/${encodeURIComponent('roles/storage.objectViewer')}`,
     wait: 'main article',
   },
@@ -92,7 +92,7 @@ const SHOTS: Shot[] = [
     headline: 'Smallest role<br><em>first.</em>',
     sub: 'See every role that grants a permission, with a least-privilege hint.',
     token: tok('storage', 'objects', 'get', 'read'),
-    accent: 'var(--read)',
+    accent: '',
     hash: '#/permission/storage.objects.get',
     wait: 'article',
   },
@@ -103,7 +103,7 @@ const SHOTS: Shot[] = [
     headline: 'Fewest roles<br><em>that cover it all.</em>',
     sub: 'Paste the permissions you need. Get the smallest set of roles that grants them all.',
     token: tok('pubsub', 'topics', 'publish', 'write'),
-    accent: 'var(--write)',
+    accent: '',
     hash: `#/minimal?perms=${encodeURIComponent(FIVE.join(','))}`,
     wait: 'main textarea',
   },
@@ -115,7 +115,7 @@ const SHOTS: Shot[] = [
     sub: 'Spot exactly what an upgrade adds, before you grant it.',
     token:
       '<span class="s">roles/viewer</span><span class="r">&nbsp;→&nbsp;</span><span class="v write">roles/editor</span>',
-    accent: 'var(--blue)',
+    accent: '',
     hash: '#/compare?a=roles%2Fviewer&b=roles%2Feditor',
     wait: 'main article',
   },
@@ -240,7 +240,7 @@ test('marquee 1400x560', async ({ context, extensionId }) => {
     'main article',
   );
   const extraCss = `
-.p{position:absolute;width:400px;border-radius:26px 26px 0 0;overflow:hidden;box-shadow:0 1px 2px rgba(15,30,70,.12),0 18px 40px -8px rgba(15,40,110,.28),0 50px 100px -20px rgba(15,40,110,.28);background:#fff}
+.p{position:absolute;width:400px;border-radius:20px 20px 0 0;overflow:hidden;box-shadow:0 0 0 1px #b7c3e0,0 24px 48px -24px rgba(27,46,93,.28);background:#fff}
 .p img{display:block;width:400px}
 .p1{left:570px;top:120px;height:440px}.p2{left:1000px;top:44px;height:516px}`;
   const extraHtml = `<div class="p p1"><img src="${dataUri(a)}"></div><div class="p p2"><img src="${dataUri(b)}"></div>`;

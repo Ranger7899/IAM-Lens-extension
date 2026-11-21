@@ -174,7 +174,6 @@ function RoleView({ index, name }: { index: NonNullable<ReturnType<typeof useIam
         <div className={styles.thead} aria-hidden="true">
           <span>Permission</span>
           <span>Type</span>
-          <span>Service</span>
         </div>
       )}
       {visible.map(({ group, indices }, gi) => (

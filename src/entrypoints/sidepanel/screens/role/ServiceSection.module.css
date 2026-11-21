@@ -58,7 +58,7 @@
 .row {
   composes: layer from '../../../../ui/components/state-layer.module.css';
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 62px 64px;
+  grid-template-columns: minmax(0, 1fr) 62px;
   align-items: center;
   column-gap: 6px;
   min-height: 29px;
@@ -81,14 +81,6 @@
   align-items: center;
   gap: 4px;
   font: var(--md-sys-typescale-body-medium);
-}
-.svc {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font: var(--md-sys-typescale-body-medium);
-  color: var(--md-sys-color-on-surface-variant);
 }
 .riskIcon {
   flex: none;

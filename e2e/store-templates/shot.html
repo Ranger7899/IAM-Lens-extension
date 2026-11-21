@@ -13,37 +13,42 @@
         font-weight: 100 900;
         src: url(data:font/woff2;base64,{{CODE}}) format('woff2');
       }
+      /* Console tokens (docs/design.md), light and dark. Flat tonal layers, hairlines, no glow. */
       :root {
-        --bg: #f5f7fd;
-        --ink: #14181f;
-        --ink2: #4a5365;
-        --dot: #aab6d3;
-        --card: #fff;
-        --line: rgba(20, 40, 90, 0.12);
-        --blue: #1a56c8;
-        --read: #1e8e3e;
-        --write: #b86e00;
-        --admin: #d93025;
-        --pill: #fff;
-        --shadow:
-          0 1px 2px rgba(15, 30, 70, 0.12), 0 18px 40px -8px rgba(15, 40, 110, 0.28),
-          0 50px 100px -20px rgba(15, 40, 110, 0.28);
+        --shell: #f0f5fe;
+        --panel: #ffffff;
+        --head: #e9eef6;
+        --border: #b7c3e0;
+        --line: #d3dbec;
+        --active: #dbedfc;
+        --ink: #1b2e5d;
+        --ink2: #475569;
+        --accent: #314f9b;
+        --read: #17703f;
+        --write: #8f5200;
+        --admin: #b3261e;
+        --read-bg: #dff2e6;
+        --write-bg: #fbebcc;
+        --admin-bg: #fce4e1;
+        --win: 0 0 0 1px #b7c3e0, 0 24px 48px -24px rgba(27, 46, 93, 0.28);
       }
       .dark {
-        --bg: #0d1017;
-        --ink: #f1f3f8;
-        --ink2: #a7b0c2;
-        --dot: #5a6788;
-        --card: #171b25;
-        --line: rgba(255, 255, 255, 0.12);
-        --blue: #8ab4ff;
-        --read: #6dd58c;
-        --write: #ffc94d;
-        --admin: #ff8a80;
-        --pill: #1b2030;
-        --shadow:
-          0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 40px -8px rgba(0, 0, 0, 0.6),
-          0 50px 100px -20px rgba(0, 0, 0, 0.7);
+        --shell: #282c32;
+        --panel: #353b43;
+        --head: #414d5e;
+        --border: #50638b;
+        --line: #4a5568;
+        --active: #2a3f5e;
+        --ink: #f1f4f9;
+        --ink2: #b9c0cc;
+        --accent: #a8baff;
+        --read: #7fd4a2;
+        --write: #f0b865;
+        --admin: #ffa59c;
+        --read-bg: #2c4a3d;
+        --write-bg: #54432a;
+        --admin-bg: #5c3335;
+        --win: 0 0 0 1px #50638b, 0 24px 48px -24px rgba(0, 0, 0, 0.6);
       }
       * {
         box-sizing: border-box;
@@ -56,111 +61,72 @@
         overflow: hidden;
       }
       body {
-        background: var(--bg);
+        background: var(--shell);
         color: var(--ink);
         font-family: 'Google Sans Flex', sans-serif;
         position: relative;
       }
-      .dots {
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(circle, var(--dot) 1.3px, transparent 1.6px);
-        background-size: 24px 24px;
-        background-position: 12px 12px;
-        opacity: 0.55;
-        -webkit-mask-image: radial-gradient(ellipse 70% 90% at 78% 50%, #000 0, transparent 78%);
-        mask-image: radial-gradient(ellipse 70% 90% at 78% 50%, #000 0, transparent 78%);
-      }
-      .glow {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(90px);
-        opacity: 0.5;
-      }
-      .dark .glow {
-        opacity: 0.28;
-      }
-      .g1 {
-        width: 520px;
-        height: 520px;
-        left: 700px;
-        top: -120px;
-        background: #9cc0ff;
-      }
-      .g2 {
-        width: 320px;
-        height: 320px;
-        left: 1000px;
-        top: 480px;
-        background: #9be3b3;
-      }
-      .g3 {
-        width: 260px;
-        height: 260px;
-        left: 560px;
-        top: 560px;
-        background: #ffd98a;
-      }
       .text {
         position: absolute;
         left: 84px;
-        top: 78px;
-        width: 690px;
+        top: 150px;
+        width: 600px;
       }
       .eyebrow {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 14px;
-        font: 600 15px/1 'Google Sans Flex';
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
+        gap: 10px;
+        height: 32px;
+        padding: 0 14px 0 6px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        font: 500 16px/1 'Google Sans Flex';
         color: var(--ink2);
       }
       .eyebrow i {
         font-style: normal;
-        color: var(--blue);
-      }
-      .eyebrow b {
-        display: block;
-        width: 44px;
-        height: 2px;
-        border-radius: 2px;
-        background: linear-gradient(90deg, var(--read), var(--write), var(--admin));
+        display: grid;
+        place-items: center;
+        min-width: 24px;
+        height: 22px;
+        border-radius: 3px;
+        background: var(--active);
+        color: var(--accent);
+        font-variant-numeric: tabular-nums;
       }
       h1 {
-        margin-top: 30px;
-        font-weight: 760;
-        font-size: 68px;
-        line-height: 1.02;
-        letter-spacing: -0.035em;
-        font-variation-settings: 'wght' 760;
+        margin-top: 32px;
+        font-weight: 500;
+        font-size: 64px;
+        line-height: 1.08;
+        letter-spacing: -0.01em;
+        font-variation-settings: 'wght' 500;
       }
       h1 em {
         font-style: normal;
-        color: var(--accent, var(--blue));
+        color: var(--accent);
       }
       .sub {
-        margin-top: 26px;
-        font-size: 23px;
-        line-height: 1.4;
+        margin-top: 24px;
+        font-size: 22px;
+        line-height: 1.45;
         color: var(--ink2);
-        max-width: 470px;
-        font-weight: 420;
+        max-width: 480px;
+        font-weight: 400;
       }
       .tok {
-        margin-top: 40px;
+        margin-top: 36px;
         display: inline-flex;
         font:
-          500 22px/1 'Google Sans Code',
+          500 21px/1 'Google Sans Code',
           monospace;
-        padding: 15px 22px;
-        border-radius: 999px;
-        background: var(--pill);
-        border: 1px solid var(--line);
-        box-shadow: 0 8px 24px -10px rgba(15, 40, 110, 0.3);
+        padding: 12px 16px;
+        border-radius: 4px;
+        background: var(--head);
+        border: 1px solid var(--border);
       }
       .tok .s {
-        color: var(--blue);
+        color: var(--accent);
         font-weight: 650;
       }
       .tok .r {
@@ -179,38 +145,45 @@
         color: var(--admin);
       }
       .legend {
-        position: absolute;
-        left: 84px;
-        bottom: 56px;
+        margin-top: 28px;
         display: flex;
-        gap: 26px;
-        font-size: 16px;
-        font-weight: 550;
-        color: var(--ink2);
+        gap: 10px;
+        font-size: 15px;
+        font-weight: 500;
       }
       .legend span {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: 8px;
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 4px;
       }
       .legend s {
         display: block;
-        width: 26px;
-        height: 8px;
-        border-radius: 4px;
+        width: 18px;
+        height: 6px;
+        border-radius: 2px;
+        background: currentColor;
       }
-      .brand {
-        position: absolute;
-        left: 84px;
-        top: 34px;
-        display: none;
+      .legend .lr {
+        background: var(--read-bg);
+        color: var(--read);
+      }
+      .legend .lw {
+        background: var(--write-bg);
+        color: var(--write);
+      }
+      .legend .la {
+        background: var(--admin-bg);
+        color: var(--admin);
       }
       .shot {
         position: absolute;
-        border-radius: 28px 28px 0 0;
+        border-radius: 20px 20px 0 0;
         overflow: hidden;
-        box-shadow: var(--shadow);
-        background: var(--card);
+        box-shadow: var(--win);
+        background: var(--panel);
       }
       .shot img {
         display: block;
@@ -228,15 +201,14 @@
         top: 430px;
         width: 380px;
         height: 560px;
-        border-radius: 24px;
-        transform: rotate(0);
+        border-radius: 20px;
       }
       .has-popup .text {
         top: 64px;
         width: 540px;
       }
       .has-popup h1 {
-        font-size: 60px;
+        font-size: 58px;
       }
       .has-popup .tok,
       .has-popup .legend {
@@ -255,36 +227,31 @@
       .pill-mark {
         position: absolute;
         right: 84px;
-        top: 22px;
+        top: 20px;
         display: flex;
         align-items: center;
         gap: 10px;
-        font-weight: 650;
-        font-size: 15px;
+        font-weight: 500;
+        font-size: 16px;
         color: var(--ink2);
       }
       .pill-mark svg {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
       }
     </style>
   </head>
   <body class="{{LAYOUT}}">
-    <div class="glow g1"></div>
-    <div class="glow g2"></div>
-    <div class="glow g3"></div>
-    <div class="dots"></div>
-    <div class="text" style="--accent:{{ACCENT}}">
-      <div class="eyebrow"><i>{{NUM}}</i><b></b>{{EYEBROW}}</div>
+    <div class="text">
+      <div class="eyebrow"><i>{{NUM}}</i>{{EYEBROW}}</div>
       <h1>{{HEADLINE}}</h1>
       <p class="sub">{{SUB}}</p>
       <div class="tok">{{TOKEN}}</div>
-    </div>
-    <div class="legend">
-      <span><s style="background: var(--read)"></s>Read</span
-      ><span><s style="background: var(--write)"></s>Write</span
-      ><span><s style="background: var(--admin)"></s>Admin</span>
+      <div class="legend">
+        <span class="lr"><s></s>Read</span><span class="lw"><s></s>Write</span
+        ><span class="la"><s></s>Admin</span>
+      </div>
     </div>
     <div class="pill-mark">{{ICON}}IAM Lens</div>
     <div class="shot panel"><img src="{{PANEL}}" /></div>

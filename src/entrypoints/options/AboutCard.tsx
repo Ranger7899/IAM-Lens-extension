@@ -21,6 +21,10 @@ export function AboutCard({ version }: { version: string }) {
         </a>
         . Icons: Material Symbols, Apache License 2.0.
       </p>
+      <p>
+        Not affiliated with Google. Google Cloud and related icons are trademarks of Google LLC. Service icons
+        are used only to identify services.
+      </p>
     </Section>
   );
 }
