@@ -5,3 +5,4 @@ export * from './query';
 export * from './leastPrivilege';
 export * from './diff';
 export * from './snapshot';
+export * from './gcp';
