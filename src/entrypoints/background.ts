@@ -1,6 +1,10 @@
+import { registerRefresh } from '../background/refresh';
+
 const MENU_ID = 'iam-lens-lookup';
 
 export default defineBackground(() => {
+  registerRefresh();
+
   chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
       id: MENU_ID,
