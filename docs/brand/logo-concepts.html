@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>IAM Lens: logo concepts</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--ink:#1b2e5d;--ink2:#475569;--paper:#f6f8fc;--rule:#d3dbec;--panel:#fff;--shell:#282c32;
+ --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+ --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:1240px;margin:0 auto;padding:72px 40px 96px}
+.top{border-bottom:1px solid var(--ink);padding-bottom:32px;margin-bottom:8px}
+.top .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.top h1{font:400 46px/1.1 var(--serif);margin:12px 0 14px;letter-spacing:-.01em}
+.top p{max-width:62ch;color:var(--ink2);margin:0}
+nav{display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;font-size:13px}
+nav a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule)}
+.concept{display:grid;grid-template-columns:300px 1fr;gap:48px;padding:56px 0;border-bottom:1px solid var(--rule)}
+.concept header .num{font:400 15px var(--serif);font-style:italic;color:var(--ink2)}
+.concept h2{font:400 32px/1.15 var(--serif);margin:6px 0 14px}
+.why{margin:0 0 20px}
+dl{margin:0;font-size:13.5px;color:var(--ink2)}
+dt{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-top:12px}
+dd{margin:2px 0 0}
+.board{display:flex;flex-direction:column;gap:20px;min-width:0}
+.row{display:flex;gap:16px;flex-wrap:wrap}
+.tile{border-radius:12px;border:1px solid var(--rule)}
+.tile.light,.lockup.light,.toolbar.light{background:#fff}
+.tile.dark,.lockup.dark,.toolbar.dark{background:#282c32;border-color:#282c32}
+.tile.big{width:208px;height:208px;display:grid;place-items:center}
+.stack{display:flex;flex-direction:column;gap:16px}
+.tile.sm{width:208px;height:96px;display:flex;align-items:center;gap:20px;padding:0 20px;position:relative}
+.tile.sm span{display:flex}
+.tile em,.tile.zoom em{position:absolute;right:10px;bottom:6px;font:11px var(--sans);font-style:normal;color:#8a96ad}
+.tile.zoom{width:260px;height:170px;display:flex;align-items:center;gap:20px;padding:0 20px;position:relative}
+.tile.zoom img{image-rendering:pixelated;width:64px;height:64px}
+.tile.zoom img+img{width:128px;height:128px}
+.lockup{display:flex;align-items:center;gap:14px;padding:22px 28px;border-radius:12px;border:1px solid var(--rule);flex:1 1 300px}
+.lockup .wm{font:600 30px/1 var(--sans);letter-spacing:-.01em}
+.lockup.light .wm{color:#1b2e5d}.lockup.dark .wm{color:#f1f4f9}
+.toolbar{display:flex;align-items:center;gap:14px;height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--rule);flex:1 1 300px}
+.toolbar .dots{display:flex;gap:5px}.toolbar .dots i{width:8px;height:8px;border-radius:50%;background:#c3cad8}
+.toolbar .omni{flex:1;height:26px;border-radius:13px;background:#e9eef6}
+.toolbar.dark .omni{background:#414d5e}.toolbar.dark .dots i{background:#5b6677}
+.toolbar .ph{display:block;width:16px;height:16px;background:#9ca6b2}
+.toolbar .ph.c{border-radius:50%}.toolbar .ph.s{border-radius:3px}.toolbar .ph.d{border-radius:3px;transform:rotate(45deg) scale(.8)}
+.toolbar.dark .ph{background:#7c8696}
+.toolbar .us{display:flex}
+.toolbar .kebab{width:3px;height:14px;background:radial-gradient(circle,#9ca6b2 1.4px,transparent 1.6px) 0 0/3px 5px}
+.tile svg,.lockup svg{display:block}
+.rank{padding:56px 0 0;color:var(--ink2);font-size:13px;max-width:70ch}
+@media(max-width:980px){.concept{grid-template-columns:1fr;gap:24px}}
+</style></head><body><main>
+<div class="top"><span class="kicker">IAM-38 &middot; Brand exploration</span>
+<h1>IAM Lens: six logo concepts</h1>
+<p>Six original marks for a two-way GCP IAM lookup. Each is built on a 128 grid with the artwork inside the central 96, shown on light and dark, at real toolbar sizes, and as a 4x pixel preview. Colour comes from the product: console blue for the mark, read / write / admin hues only where the idea needs them.</p>
+<nav><a href="#c1">01 Keyhole lens</a><a href="#c2">02 Permission anatomy</a><a href="#c3">03 Prism</a><a href="#c4">04 Shield lens</a><a href="#c5">05 Two-way link</a><a href="#c6">06 Viewfinder IL</a></nav></div>
+
+  <section class="concept" id="c1">
+    <header>
+      <span class="num">01</span>
+      <h2>Keyhole lens</h2>
+      <p class="why">A solid lens disc with a keyhole cut out of it: the thing you look through is also the thing that grants access. One shape, one cut, one handle.</p>
+      <dl><dt>Strengths</dt><dd>Strongest silhouette at 16 px. Instantly says "lookup" and "access".</dd><dt>Risks</dt><dd>Closest cousin to the old lens-and-key icon; magnifier plus keyhole is a familiar security trope.</dd></dl>
+    </header>
+    <div class="board">
+      <div class="row">
+        <div class="tile big light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs><mask id="kh-u18"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u18)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg></div>
+        <div class="tile big dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs><mask id="kh-u19"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u19)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg></div>
+        <div class="stack">
+    <div class="tile sm light">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="kh-u20"><rect width="16" height="16" fill="#fff"/><path d="M4.4 5.6A2 2 0 1 1 7.6 5.6L8.4 9H3.6Z" fill="#000"/></mask></defs>
+  <circle cx="6" cy="6" r="6" fill="#3f6ddb" mask="url(#kh-u20)"/>
+  <path d="M10.6 10.6L14 14" stroke="#3f6ddb" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <defs><mask id="kh-u21"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u21)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="kh-u22"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u22)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div>
+    <div class="tile sm dark">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="kh-u23"><rect width="16" height="16" fill="#fff"/><path d="M4.4 5.6A2 2 0 1 1 7.6 5.6L8.4 9H3.6Z" fill="#000"/></mask></defs>
+  <circle cx="6" cy="6" r="6" fill="#3f6ddb" mask="url(#kh-u23)"/>
+  <path d="M10.6 10.6L14 14" stroke="#3f6ddb" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <defs><mask id="kh-u24"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u24)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="kh-u25"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u25)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div></div>
+      </div>
+      <div class="row">
+    <div class="tile zoom light">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABiklEQVR4nJRSTUsCURS99zlBkUT/QAjHdbvETINAt7Vq1aJFtfCDqP9RMFZE22pvQRBtSg2pRdQi+poKpFWbFoVW5sztPcfRcXRKD7yPc+fcc++dGQksCCfVGSKaBAJ/NYBwhojpjCJvgwNQbIHYs0di2hYnkXYiAjiq6K75/PpQwf6MiU1CbdeSXOIZS9x6uXo3qkR6WGWnnTkLxx9mEWG0Xo1oLrMmr/K2V5BgwdJsUGhbDAhw2sIrxbI7bZJPhH1jAnOUJq1hwKsPW7jk7i1FTdJnjIX1Hpq1hoE9oBPdN7rGO/gHjAiuLPwjl5JvTHKieK9FzOQ2bc0AcLNRETJ2AX8B+cbdoq2ncITi6iGfLwpOoOoqEIOpbEq+bOrA2KRFfnw759MPF3kQKDeeUP0tHZhw+pU1HV5cCMc1szcdWeRU8V60GPyFsdjTBGPaHk/pFyagQTC74bvt2EAglHwMINEBvw7y9foF4GPdGGQVb15nrrBI5p+0LBU16qoDEyMJdUCc5yn5/RcAAP//yBEi/gAAAAZJREFUAwCF3oxhRnGz1AAAAABJRU5ErkJggg==" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACj0lEQVR4nOyXy08TURTGz7lTQokh0UQT4galRYkSXWAUCdbu1D8AdWli3GjaFRvdYEyMjxUU3ZgY1+rShY+NtRWFRVONWkNaQViRuDGRBX3MHM8FiuPMXOZhazd8SXsf891zfnNncu8dAS2WgBZrCyDkxRRPlvqJjDNEcAwBBmUfAUwz/7QQ8CKdin6GgMLNLsYvzIeNztp1JBhlp+ZoItD5/+5yJTqWe4BVaBTAcGLusAa1x2zZDx7EM5Ln4mJmsjcPPuQIcGh0aduO8q+PXI2AP337sVQ+UHjaX/E6wPEl3L6yfDNAcqnIzq72G34G2GYgliwNAVEWneE+kUbnSEfki0+4fdBq4EdhEGEsey86BR5kT2JQUpGchNBHMuP7vmYnewsMMrKWz3ZHAsG4BB4l7AGoT+FNv57om603JAhnzyi8qhjuAIywR+E9ciJR3FVvxC/Pd/HdHnUyIuA/ACCsKLydAvF8vUFa9SwXHeBMoIrhDsCr3Qe1GQsbddS+qHybxbDHtArVg/ktzDnV/cRwBdCF9oiLsoN3MT2+92e9sV5ftJoIqAIoHkJQgKmJnlmewtv2wJD30geEY5lUpAge5bgURxPF9t3MwhcHTN3vGezlX4MRTnFxfDUvrUarINErDLUleIa+Q1AAqeFkaUAzaEa5C5q1ltzcXqiSdvLd/Z4Ft6HKA8nbVDTHW2wHB7u1vuWqkuuEcIdn4M+ihNDdhvqboStz3eAiBA+SBxLDgNO8Tg+aDyT8CGZ4V3guDyQymUwqk5vgXGfCE4BXBYFoKEAQiIYD+IVoyqlYJpHJZNKNToYJidpVq7dpx3JHCIIw/C+AOkRNiBhXn8mfDuFrVk9T3gE/2vo0aznAbwAAAP//jOusYQAAAAZJREFUAwAYivxAAbhlaQAAAABJRU5ErkJggg==" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div>
+    <div class="tile zoom dark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABiklEQVR4nJRSTUsCURS99zlBkUT/QAjHdbvETINAt7Vq1aJFtfCDqP9RMFZE22pvQRBtSg2pRdQi+poKpFWbFoVW5sztPcfRcXRKD7yPc+fcc++dGQksCCfVGSKaBAJ/NYBwhojpjCJvgwNQbIHYs0di2hYnkXYiAjiq6K75/PpQwf6MiU1CbdeSXOIZS9x6uXo3qkR6WGWnnTkLxx9mEWG0Xo1oLrMmr/K2V5BgwdJsUGhbDAhw2sIrxbI7bZJPhH1jAnOUJq1hwKsPW7jk7i1FTdJnjIX1Hpq1hoE9oBPdN7rGO/gHjAiuLPwjl5JvTHKieK9FzOQ2bc0AcLNRETJ2AX8B+cbdoq2ncITi6iGfLwpOoOoqEIOpbEq+bOrA2KRFfnw759MPF3kQKDeeUP0tHZhw+pU1HV5cCMc1szcdWeRU8V60GPyFsdjTBGPaHk/pFyagQTC74bvt2EAglHwMINEBvw7y9foF4GPdGGQVb15nrrBI5p+0LBU16qoDEyMJdUCc5yn5/RcAAP//yBEi/gAAAAZJREFUAwCF3oxhRnGz1AAAAABJRU5ErkJggg==" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACj0lEQVR4nOyXy08TURTGz7lTQokh0UQT4galRYkSXWAUCdbu1D8AdWli3GjaFRvdYEyMjxUU3ZgY1+rShY+NtRWFRVONWkNaQViRuDGRBX3MHM8FiuPMXOZhazd8SXsf891zfnNncu8dAS2WgBZrCyDkxRRPlvqJjDNEcAwBBmUfAUwz/7QQ8CKdin6GgMLNLsYvzIeNztp1JBhlp+ZoItD5/+5yJTqWe4BVaBTAcGLusAa1x2zZDx7EM5Ln4mJmsjcPPuQIcGh0aduO8q+PXI2AP337sVQ+UHjaX/E6wPEl3L6yfDNAcqnIzq72G34G2GYgliwNAVEWneE+kUbnSEfki0+4fdBq4EdhEGEsey86BR5kT2JQUpGchNBHMuP7vmYnewsMMrKWz3ZHAsG4BB4l7AGoT+FNv57om603JAhnzyi8qhjuAIywR+E9ciJR3FVvxC/Pd/HdHnUyIuA/ACCsKLydAvF8vUFa9SwXHeBMoIrhDsCr3Qe1GQsbddS+qHybxbDHtArVg/ktzDnV/cRwBdCF9oiLsoN3MT2+92e9sV5ftJoIqAIoHkJQgKmJnlmewtv2wJD30geEY5lUpAge5bgURxPF9t3MwhcHTN3vGezlX4MRTnFxfDUvrUarINErDLUleIa+Q1AAqeFkaUAzaEa5C5q1ltzcXqiSdvLd/Z4Ft6HKA8nbVDTHW2wHB7u1vuWqkuuEcIdn4M+ihNDdhvqboStz3eAiBA+SBxLDgNO8Tg+aDyT8CGZ4V3guDyQymUwqk5vgXGfCE4BXBYFoKEAQiIYD+IVoyqlYJpHJZNKNToYJidpVq7dpx3JHCIIw/C+AOkRNiBhXn8mfDuFrVk9T3gE/2vo0aznAbwAAAP//jOusYQAAAAZJREFUAwAYivxAAbhlaQAAAABJRU5ErkJggg==" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div></div>
+      <div class="row">
+    <div class="lockup light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="kh-u26"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u26)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg><span class="wm">IAM Lens</span></div>
+    <div class="lockup dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="kh-u27"><rect width="128" height="128" fill="#fff"/><path d="M46 52.7A9 9 0 1 1 58 52.7L62 74H42Z" fill="#000"/></mask></defs>
+  <circle cx="52" cy="52" r="36" fill="#3f6ddb" mask="url(#kh-u27)"/>
+  <path d="M79 79L104 104" stroke="#3f6ddb" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg><span class="wm">IAM Lens</span></div></div>
+      <div class="row">
+    <div class="toolbar light">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="kh-u28"><rect width="16" height="16" fill="#fff"/><path d="M4.4 5.6A2 2 0 1 1 7.6 5.6L8.4 9H3.6Z" fill="#000"/></mask></defs>
+  <circle cx="6" cy="6" r="6" fill="#3f6ddb" mask="url(#kh-u28)"/>
+  <path d="M10.6 10.6L14 14" stroke="#3f6ddb" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div>
+    <div class="toolbar dark">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="kh-u29"><rect width="16" height="16" fill="#fff"/><path d="M4.4 5.6A2 2 0 1 1 7.6 5.6L8.4 9H3.6Z" fill="#000"/></mask></defs>
+  <circle cx="6" cy="6" r="6" fill="#3f6ddb" mask="url(#kh-u29)"/>
+  <path d="M10.6 10.6L14 14" stroke="#3f6ddb" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div></div>
+    </div>
+  </section>
+
+  <section class="concept" id="c2">
+    <header>
+      <span class="num">02</span>
+      <h2>Permission anatomy</h2>
+      <p class="why">The product's signature token, service.resource.verb, drawn as three segments. The verb is lit in the privilege hue and underlined with the anatomy bracket.</p>
+      <dl><dt>Strengths</dt><dd>Unmistakably ours; ties directly to the in-app token and to the risk palette.</dd><dt>Risks</dt><dd>Wide, low shape leaves much of a square slot empty; reads as "a bar" until you know the token.</dd></dl>
+    </header>
+    <div class="board">
+      <div class="row">
+        <div class="tile big light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg></div>
+        <div class="tile big dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg></div>
+        <div class="stack">
+    <div class="tile sm light">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <rect x="0" y="3" width="4" height="7" rx="1" fill="#3f6ddb"/>
+  <rect x="5" y="3" width="4" height="7" rx="1" fill="#9db4ee"/>
+  <rect x="10" y="3" width="6" height="7" rx="1" fill="#e8a020"/>
+  <rect x="10" y="12" width="6" height="2" rx="1" fill="#e8a020"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div>
+    <div class="tile sm dark">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <rect x="0" y="3" width="4" height="7" rx="1" fill="#3f6ddb"/>
+  <rect x="5" y="3" width="4" height="7" rx="1" fill="#9db4ee"/>
+  <rect x="10" y="3" width="6" height="7" rx="1" fill="#e8a020"/>
+  <rect x="10" y="12" width="6" height="2" rx="1" fill="#e8a020"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div></div>
+      </div>
+      <div class="row">
+    <div class="tile zoom light">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAgUlEQVR4nMxSsQ2AMAxzUS/gAhbuoN05g5FzGBk4gr3hDh5g4oVCoSodioSUoXhyrMSyrBRgogATbAPZ9KuBgLomC1qGWo/zbgRuzQLUtaXepsrAaxFIhmMHz0W0GHGVCKDyd/AHg7P5MHnumn+kwClxTwLsBEzIr4tvj8ROkL+DAwAA///hNfaSAAAABklEQVQDACQeHPNNSSOGAAAAAElFTkSuQmCC" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABzklEQVR4nOxVv0sDUQxO3p0WFF1ERAr+GNRVUEFUpIiIf4GTIm4q/tzs4qCCm4gughTtJuLg4OYm2EUcKxTF4lBsLSIIrVp7L+ZaWo/eVRxaurzAEfJ9ecl3j+ROQIVNQIVNCVAClAC9EBhcfuzSpLEHQB4kiBPCwdV+51aO3z2Nd0lJe4DkMWMkDKDA2ZWJxlAuJ3rUtsbEArNuMyaAFAIENA1nG6fCIWs/2w1ohuHj5DEErAZEN/vNoaWH8RxPRD7ELJ/NAQ9J6c8397eMMrada54RCVDNzmOkyV/YzyaAi/fakiT1/0Zk47lDd56VYgiKGN9EdyGmO+S54E9D1/8whyy011ZboATYhpAn9ZbXpseKGQLuhhfvzfU8d+J5NYM7JzFeTZiU34NnmpEu0o6ChYh9DSV5ueAVAaW4coQIfOHP2gsEGpFEboHk5bQMn3mIAkLAKiJ28OmBa9f8JZ875GYRy0uZtQJItGrrBxU2NYQ6lNiej1o3TN8887Ruxd/97oYk6Tc1mO6rn468lk0Aj1WLE5qQVXX8KW43PYdlFICU5L/kXPS4bdqR1j6S1rjkAlw1mvcrIU+dOKHjW9NU7MWKqTVUApSAigv4AQAA//9vkXOZAAAABklEQVQDAByGnxyrzS7hAAAAAElFTkSuQmCC" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div>
+    <div class="tile zoom dark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAgUlEQVR4nMxSsQ2AMAxzUS/gAhbuoN05g5FzGBk4gr3hDh5g4oVCoSodioSUoXhyrMSyrBRgogATbAPZ9KuBgLomC1qGWo/zbgRuzQLUtaXepsrAaxFIhmMHz0W0GHGVCKDyd/AHg7P5MHnumn+kwClxTwLsBEzIr4tvj8ROkL+DAwAA///hNfaSAAAABklEQVQDACQeHPNNSSOGAAAAAElFTkSuQmCC" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABzklEQVR4nOxVv0sDUQxO3p0WFF1ERAr+GNRVUEFUpIiIf4GTIm4q/tzs4qCCm4gughTtJuLg4OYm2EUcKxTF4lBsLSIIrVp7L+ZaWo/eVRxaurzAEfJ9ecl3j+ROQIVNQIVNCVAClAC9EBhcfuzSpLEHQB4kiBPCwdV+51aO3z2Nd0lJe4DkMWMkDKDA2ZWJxlAuJ3rUtsbEArNuMyaAFAIENA1nG6fCIWs/2w1ohuHj5DEErAZEN/vNoaWH8RxPRD7ELJ/NAQ9J6c8397eMMrada54RCVDNzmOkyV/YzyaAi/fakiT1/0Zk47lDd56VYgiKGN9EdyGmO+S54E9D1/8whyy011ZboATYhpAn9ZbXpseKGQLuhhfvzfU8d+J5NYM7JzFeTZiU34NnmpEu0o6ChYh9DSV5ueAVAaW4coQIfOHP2gsEGpFEboHk5bQMn3mIAkLAKiJ28OmBa9f8JZ875GYRy0uZtQJItGrrBxU2NYQ6lNiej1o3TN8887Ruxd/97oYk6Tc1mO6rn468lk0Aj1WLE5qQVXX8KW43PYdlFICU5L/kXPS4bdqR1j6S1rjkAlw1mvcrIU+dOKHjW9NU7MWKqTVUApSAigv4AQAA//9vkXOZAAAABklEQVQDAByGnxyrzS7hAAAAAElFTkSuQmCC" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div></div>
+      <div class="row">
+    <div class="lockup light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg><span class="wm">IAM Lens</span></div>
+    <div class="lockup dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <rect x="16" y="32" width="22" height="40" rx="10" fill="#3f6ddb"/>
+  <circle cx="43" cy="68" r="3.5" fill="#3f6ddb"/>
+  <rect x="48" y="32" width="24" height="40" rx="10" fill="#8fa9ea"/>
+  <circle cx="77" cy="68" r="3.5" fill="#8fa9ea"/>
+  <rect x="82" y="32" width="30" height="40" rx="10" fill="#e8a020"/>
+  <path d="M84 86V94H110V86" stroke="#e8a020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg><span class="wm">IAM Lens</span></div></div>
+      <div class="row">
+    <div class="toolbar light">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <rect x="0" y="3" width="4" height="7" rx="1" fill="#3f6ddb"/>
+  <rect x="5" y="3" width="4" height="7" rx="1" fill="#9db4ee"/>
+  <rect x="10" y="3" width="6" height="7" rx="1" fill="#e8a020"/>
+  <rect x="10" y="12" width="6" height="2" rx="1" fill="#e8a020"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div>
+    <div class="toolbar dark">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <rect x="0" y="3" width="4" height="7" rx="1" fill="#3f6ddb"/>
+  <rect x="5" y="3" width="4" height="7" rx="1" fill="#9db4ee"/>
+  <rect x="10" y="3" width="6" height="7" rx="1" fill="#e8a020"/>
+  <rect x="10" y="12" width="6" height="2" rx="1" fill="#e8a020"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div></div>
+    </div>
+  </section>
+
+  <section class="concept" id="c3">
+    <header>
+      <span class="num">03</span>
+      <h2>Prism</h2>
+      <p class="why">A role is a prism: one beam goes in, and it fans out into read, write and admin. The only mark that carries the full risk palette as its idea.</p>
+      <dl><dt>Strengths</dt><dd>Colourful, memorable, explains what a role does. Distinct from every other concept.</dd><dt>Risks</dt><dd>Prism plus rainbow beam resembles well-known album-art imagery; three thin rays are fragile at 16 px.</dd></dl>
+    </header>
+    <div class="board">
+      <div class="row">
+        <div class="tile big light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg></div>
+        <div class="tile big dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg></div>
+        <div class="stack">
+    <div class="tile sm light">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M5.5 2.5L1.5 13H9.5Z" fill="#3f6ddb" fill-opacity=".2" stroke="#3f6ddb" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M8.5 8L14.5 3.5" stroke="#2faa64" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8H15" stroke="#e8a020" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8L14.5 12.5" stroke="#e5483c" stroke-width="1.6" stroke-linecap="round"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div>
+    <div class="tile sm dark">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M5.5 2.5L1.5 13H9.5Z" fill="#3f6ddb" fill-opacity=".2" stroke="#3f6ddb" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M8.5 8L14.5 3.5" stroke="#2faa64" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8H15" stroke="#e8a020" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8L14.5 12.5" stroke="#e5483c" stroke-width="1.6" stroke-linecap="round"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div></div>
+      </div>
+      <div class="row">
+    <div class="tile zoom light">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACB0lEQVR4nKRRz0tUURQ+5973xoGJfqwsbEiaskWN7YyaiRGKbBMuKtMWZTZEv96qqP4GETcGUSSuAhMX0Q8MImrhPMI2OeQiX1MIAyZWKIOoM3Pv8dwRhxlm3Dhnczj3nO8733ePgBpDVHuMOr+OwlYJYne9ixLUt5jjndsM1DjU7W8evXasKgEhxAuZ4E418JHhG6HtAWsCtfxiSMoIjt/80YAAZ4BgFRHaTF3aD49cvyxQTfJMmICeJM8PTZQR2JbsNlkD9Zrss8XVouSR+HMB+AI5FOlLyY7B24BGcKl/Z/o3cZYoLvDQqGn+i/SdFkK9Q8BDXE4pLdq/dz5LbWCKBCcdL8ZyPhNRnxRiWBF1hfxf7z2YH6DF/TnEfcuzQVrykLWXgF8VLXCjh8E5ifbb9c8UY5iXuW3zAoOuH4LjdSDzUBEFBc33/wR2rWT+ElKC5T/caLKK3t3ZuUj/zKMZHmzi00xZgtrrx9yihYKCHdlMF1P5geSbMnqi13O++rpbjY/7uRgExMN5wmS6LdJRRoAaejTAfwWQKMUrkAnzvmgHrjS8T8RBUyd7Iz7Ey/TZ6FNqbbXwhOOFbICfvG2BfacqPJIO8eadOYAD7sDBVPpUtAlsMBcKg8KohUJaoNUnpmU1VPFJ/D6JRBmftpdMvffj+DRvbpn1ZVv2fHBdhBpDQI2xBgAA//94JHeRAAAABklEQVQDAOuCxhmsZrqxAAAAAElFTkSuQmCC" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADyElEQVR4nOxWa0xUVxCeOXfvbtvloVEK9kkiSdEATVNNG8C4bVNik1pr2ihNA9XW2rCLsU0rSdu02TSNafyPhmpCbKUhktpqaEv9oasiKlFRMJgIRlAeRtAoXJR9nDPOvQtxJSy7wI/9w2TPvZM58/hmzpy5KyDBJCDBNAcg4QBsME1yeclGgx1thHhHLMha6fNiCGZB064ADXauBcRsBMiXtzvfh1nSTI7AHWHshlkSTkfZVX4tmzB0GQjkmLUmlXipsXLxlVi2OXWf5wsZGm0trj4fKZ9WDygMlqGFmY4SM/x7SwjpYcHWaDZL97uTdAr8QqTcKLSLLHolcj/uI3h1c99TnPIGkycNa7kJa8M7uCFrS4djMpucuk0unfxtjNmDXDpFattEnbgrkOS4/zG/UgigLxCkJlNm17CP6/HMIoSSToA947p5v5U4wWHfAURlZBWMdoI/UNFW+vvIjAGwk61m9Ylwn91OYVEQa1DQNqHgSxgDYGaNiqr5gDJZuUsK3Hhp3R5fNLdxNaFrS8frHPIUr4C0iQKNpJWJRM2phdRJdmIPPNHvGlm2dx17LAujg11m1q2TZB1JcVVAE/KbkNI4Ifh3PLglZ54U/bfEcWxNenrD/9cUOnRQ/cvkrR1rg70XWGU5VGc+CqZJY2HJjXPcvRRXBbxeEqmZp7891LLgZ6UQcp836tNTgwOROgPDetpXzZ537UN8J7IMEC8PAegU3Smq1RmfXK+PCWB37aklfN33tvc4l7d0J4FA6pECiibTXSOqm9a3n5hn9Ztd3dXy7h2ExSNdE/XYhyHkSFXaZ4PDUQFUVZ3VxTz/d0TEC/S65jQjGBLJBPgDaOrPyQBgSHzooAc/lQ78Ybxx77gzLMRdmhqqyDjcOmUPPDYHqvY35WLKaAsH9/LqPt2Z8rUVnMjwC3EompMAUv0oOozd6Z8m/TP/nQpOq5vFbimSL/WvKnRBvABQye1svJQz3+5Pzci9euvJlaach85fDgwFoznRNRrlDvjb5GsWri/Q1HAOszu51V5UREd6VxVW3izKc8YEIHRRzuGyv/io8PsD9bb5LFptbRDUQAxSAPvCYOG94qyDyc82NHoE4pucVheMVaP37RUFUwLY9EFB9+biFdaHRWlBDzeI4GqcQRtdhxhk6vBRNVs2QlpfyUUNjT7db8vj+1tpVoPv7a8T7aaYA1hqPRFe44nTDvHQeEsjbeTnjyb7tM9n8Ku8pyj/AE/MofgB8Bjl6C/ATIjo8kTRc4ebjsAUmBNGc/+K5wDMAUg4gIcAAAD//yYbdtwAAAAGSURBVAMAKa1+M7SUcIcAAAAASUVORK5CYII=" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div>
+    <div class="tile zoom dark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACB0lEQVR4nKRRz0tUURQ+5973xoGJfqwsbEiaskWN7YyaiRGKbBMuKtMWZTZEv96qqP4GETcGUSSuAhMX0Q8MImrhPMI2OeQiX1MIAyZWKIOoM3Pv8dwRhxlm3Dhnczj3nO8733ePgBpDVHuMOr+OwlYJYne9ixLUt5jjndsM1DjU7W8evXasKgEhxAuZ4E418JHhG6HtAWsCtfxiSMoIjt/80YAAZ4BgFRHaTF3aD49cvyxQTfJMmICeJM8PTZQR2JbsNlkD9Zrss8XVouSR+HMB+AI5FOlLyY7B24BGcKl/Z/o3cZYoLvDQqGn+i/SdFkK9Q8BDXE4pLdq/dz5LbWCKBCcdL8ZyPhNRnxRiWBF1hfxf7z2YH6DF/TnEfcuzQVrykLWXgF8VLXCjh8E5ifbb9c8UY5iXuW3zAoOuH4LjdSDzUBEFBc33/wR2rWT+ElKC5T/caLKK3t3ZuUj/zKMZHmzi00xZgtrrx9yihYKCHdlMF1P5geSbMnqi13O++rpbjY/7uRgExMN5wmS6LdJRRoAaejTAfwWQKMUrkAnzvmgHrjS8T8RBUyd7Iz7Ey/TZ6FNqbbXwhOOFbICfvG2BfacqPJIO8eadOYAD7sDBVPpUtAlsMBcKg8KohUJaoNUnpmU1VPFJ/D6JRBmftpdMvffj+DRvbpn1ZVv2fHBdhBpDQI2xBgAA//94JHeRAAAABklEQVQDAOuCxhmsZrqxAAAAAElFTkSuQmCC" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADyElEQVR4nOxWa0xUVxCeOXfvbtvloVEK9kkiSdEATVNNG8C4bVNik1pr2ihNA9XW2rCLsU0rSdu02TSNafyPhmpCbKUhktpqaEv9oasiKlFRMJgIRlAeRtAoXJR9nDPOvQtxJSy7wI/9w2TPvZM58/hmzpy5KyDBJCDBNAcg4QBsME1yeclGgx1thHhHLMha6fNiCGZB064ADXauBcRsBMiXtzvfh1nSTI7AHWHshlkSTkfZVX4tmzB0GQjkmLUmlXipsXLxlVi2OXWf5wsZGm0trj4fKZ9WDygMlqGFmY4SM/x7SwjpYcHWaDZL97uTdAr8QqTcKLSLLHolcj/uI3h1c99TnPIGkycNa7kJa8M7uCFrS4djMpucuk0unfxtjNmDXDpFattEnbgrkOS4/zG/UgigLxCkJlNm17CP6/HMIoSSToA947p5v5U4wWHfAURlZBWMdoI/UNFW+vvIjAGwk61m9Ylwn91OYVEQa1DQNqHgSxgDYGaNiqr5gDJZuUsK3Hhp3R5fNLdxNaFrS8frHPIUr4C0iQKNpJWJRM2phdRJdmIPPNHvGlm2dx17LAujg11m1q2TZB1JcVVAE/KbkNI4Ifh3PLglZ54U/bfEcWxNenrD/9cUOnRQ/cvkrR1rg70XWGU5VGc+CqZJY2HJjXPcvRRXBbxeEqmZp7891LLgZ6UQcp836tNTgwOROgPDetpXzZ537UN8J7IMEC8PAegU3Smq1RmfXK+PCWB37aklfN33tvc4l7d0J4FA6pECiibTXSOqm9a3n5hn9Ztd3dXy7h2ExSNdE/XYhyHkSFXaZ4PDUQFUVZ3VxTz/d0TEC/S65jQjGBLJBPgDaOrPyQBgSHzooAc/lQ78Ybxx77gzLMRdmhqqyDjcOmUPPDYHqvY35WLKaAsH9/LqPt2Z8rUVnMjwC3EompMAUv0oOozd6Z8m/TP/nQpOq5vFbimSL/WvKnRBvABQye1svJQz3+5Pzci9euvJlaach85fDgwFoznRNRrlDvjb5GsWri/Q1HAOszu51V5UREd6VxVW3izKc8YEIHRRzuGyv/io8PsD9bb5LFptbRDUQAxSAPvCYOG94qyDyc82NHoE4pucVheMVaP37RUFUwLY9EFB9+biFdaHRWlBDzeI4GqcQRtdhxhk6vBRNVs2QlpfyUUNjT7db8vj+1tpVoPv7a8T7aaYA1hqPRFe44nTDvHQeEsjbeTnjyb7tM9n8Ku8pyj/AE/MofgB8Bjl6C/ATIjo8kTRc4ebjsAUmBNGc/+K5wDMAUg4gIcAAAD//yYbdtwAAAAGSURBVAMAKa1+M7SUcIcAAAAASUVORK5CYII=" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div></div>
+      <div class="row">
+    <div class="lockup light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg><span class="wm">IAM Lens</span></div>
+    <div class="lockup dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M16 78L40.5 62" stroke="#9aa8c4" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M40.5 62H72" stroke="#9aa8c4" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/>
+  <path d="M56 24L28 92H84Z" fill="#3f6ddb" fill-opacity=".16" stroke="#3f6ddb" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M72 62L108 38" stroke="#2faa64" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62H110" stroke="#e8a020" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M72 62L108 86" stroke="#e5483c" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg><span class="wm">IAM Lens</span></div></div>
+      <div class="row">
+    <div class="toolbar light">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M5.5 2.5L1.5 13H9.5Z" fill="#3f6ddb" fill-opacity=".2" stroke="#3f6ddb" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M8.5 8L14.5 3.5" stroke="#2faa64" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8H15" stroke="#e8a020" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8L14.5 12.5" stroke="#e5483c" stroke-width="1.6" stroke-linecap="round"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div>
+    <div class="toolbar dark">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M5.5 2.5L1.5 13H9.5Z" fill="#3f6ddb" fill-opacity=".2" stroke="#3f6ddb" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M8.5 8L14.5 3.5" stroke="#2faa64" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8H15" stroke="#e8a020" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M8.5 8L14.5 12.5" stroke="#e5483c" stroke-width="1.6" stroke-linecap="round"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div></div>
+    </div>
+  </section>
+
+  <section class="concept" id="c4">
+    <header>
+      <span class="num">04</span>
+      <h2>Shield lens</h2>
+      <p class="why">A shield whose negative space is a magnifier: least privilege, inspected. The lens is carved out, so it takes the background colour on any surface.</p>
+      <dl><dt>Strengths</dt><dd>Clear security meaning, compact and bold, works as a tile-less mark.</dd><dt>Risks</dt><dd>Shields are the most common security icon; differentiation rests on the cut-out only.</dd></dl>
+    </header>
+    <div class="board">
+      <div class="row">
+        <div class="tile big light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs><mask id="sl-u54"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u54)"/>
+</svg></div>
+        <div class="tile big dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs><mask id="sl-u55"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u55)"/>
+</svg></div>
+        <div class="stack">
+    <div class="tile sm light">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="sl-u56"><rect width="16" height="16" fill="#fff"/>
+    <circle cx="7" cy="6.5" r="2.7" fill="none" stroke="#000" stroke-width="1.7"/>
+    <path d="M9.2 8.7L11.4 10.9" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></mask></defs>
+  <path d="M8 .8L14.8 3V8C14.8 11.4 11.8 13.8 8 15.2C4.2 13.8 1.2 11.4 1.2 8V3Z" fill="#3f6ddb" mask="url(#sl-u56)"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <defs><mask id="sl-u57"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u57)"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="sl-u58"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u58)"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div>
+    <div class="tile sm dark">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="sl-u59"><rect width="16" height="16" fill="#fff"/>
+    <circle cx="7" cy="6.5" r="2.7" fill="none" stroke="#000" stroke-width="1.7"/>
+    <path d="M9.2 8.7L11.4 10.9" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></mask></defs>
+  <path d="M8 .8L14.8 3V8C14.8 11.4 11.8 13.8 8 15.2C4.2 13.8 1.2 11.4 1.2 8V3Z" fill="#3f6ddb" mask="url(#sl-u59)"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <defs><mask id="sl-u60"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u60)"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="sl-u61"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u61)"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div></div>
+      </div>
+      <div class="row">
+    <div class="tile zoom light">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB+ElEQVR4nISTz0tUURTHzzlzR2lRUERUYFS+rDatCtJsmlYRUQuRAv+CqcZwoBYtWrcqqJmx6E9ISCbFhSA8n78WrlwJOuNvBpFRFyo6w3vveO7zqeNzHA9c7nv3nO/nnHvPvQqqWPTd7GU9m503lk+KweDCo/jCVcJSCwK3yu9jf3kIXOiyHewa/W2sHANokYLiG0ZoBYZGxONgbQyC8WEO1naPpK7lSTtCWPwvku+iahJxjpFeKNe+qAe6/FLyzPnZSMYTJEhJwoxeo0CSgogeWj/r+7adcKhEisx0Qy/WOA/Et16pKgqcyN+B9N3VyIfp9+Ew6/Ly0fhUzPx2uyDe7lMBDJj3OAxtemcylGynzXfPnwoghrq9QmDsEAqD/mddNcCmH/zqeft0rZk0PjHTPSLnjpU0vnjQQGekY1tlAJ7w5yuymonEc09dRy2RzYVoPHe/MbF4Bi4sxSSgpwwxcQAgh5LMugCv/GeIPBBSpTWbVIHRHa+xt/th7rrCDfVaoiZFbGvNAcDsNLJycn/gRMNmPmtn4JwTlQznZXtpTwNHrjJjpD2rL1MHVDFm/GGl6hNer+BIF5Ct5K2EtPKjlLlTQVuUe5ywUkbHvjhQwaE1v526SQq/yoNq8bIC/nNt/jz8q2EmGFsRsG9NsewlPQdfYLntAgAA//+frJHUAAAABklEQVQDAHRAuDwh1olSAAAAAElFTkSuQmCC" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADXklEQVR4nOxXXUgUURQ+d7Rfw4RApMDI3dksS8gECWu1l4gog8Aieu/F3dUHn5LIqN6E0BntvR8IloLciAgiZ5XAByMCLXfXHqTCyB8yf1p15/bdnTWNnV1npsCXPpg9d+4995zvnnvuubMSrTMkWmesO4Fccojy5rG87fMzZ0T7+5ZtoXdtRbPkAMyOsjcwIpPOzzLilzij/ej6mRrazDgNcWIPSGJPwh2uqFWbaxLwNkS8MHqeiJ+Deh66NmDSFjNdTjQPsYgWosEe4z3Yq8gaOSFQ4492Q5zAM8855TNmL18wR8ecaTLIvtAUuc5Mz9So1xe9BgNifzfhKbDrXCA1p0DYELZgs9VMz2kSziHeEcMTefC7lRzC9so4522FY+58TZUPiUe0GWPt5BC2IoDsv6qpnpuifbzxw14hg+1sGKIJOTMJeZ1swjIB7GO/cF4dGCnO5fozXacy0Q/Hg0tMOqV1lNzw+mN1yOrDZAPWt4CxYJKxnmiBKFs1Umb0oRIgIGQTlgkg/KmkY8Xpg6k+Tu/JJkwJcOKT6X3MYzT4aPoEow8kS83sGdVGmrJMQCKWIHHU/nRSL8SSlHMLYnCFGGkzC9O+ZJuJimkCTnOcEnGzIdMk1Il9YUyU05XzjcJSVRuItvZ0uFrxesDbFNknLUiLWpc79luH+F38pichAwE955OZL9NSXO0b3ZnL4mLP80yGuyWdrrzqlJNRONb4sVzSE7tRakPivdYf82ELldUTxB0Rl3L29LeXfLVEQAClcwCrrqDMEPu+EU+RYYj5exS3akYCBAbCilxpZiTjKcCk+8atlhHFy84Nfa7U+qNNoi2IYGWdqZFZ4tK9TEayXsdefzQCBZlsAKelObzDdbtmPHoHiXMZLoY1xV2aST9rHdA5tSAS02QDSMS2monYZ+EcUfmhc9aSTT8rgT5VDmJJT8k+jLzgLNSruh5RVsIWgHr/BsE9CHVrdwcOPWrC27DirlxL1VIpxhGr4Jy9hOH4mr6TRYc/t+LcMgGBsCqfRLxC2XJCjOE4dodVz2myCFsfJIhEPb70AnD0Ld05Rx/za6r7ItmArc/yZbj9E/m7aOoh3B5JOufs9bief2Goq3CGbMIRgWUcbYhUCdnX6eknh/grAv8C//+c/gIAAP//udaL0wAAAAZJREFUAwCpNC/gF3WquAAAAABJRU5ErkJggg==" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div>
+    <div class="tile zoom dark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB+ElEQVR4nISTz0tUURTHzzlzR2lRUERUYFS+rDatCtJsmlYRUQuRAv+CqcZwoBYtWrcqqJmx6E9ISCbFhSA8n78WrlwJOuNvBpFRFyo6w3vveO7zqeNzHA9c7nv3nO/nnHvPvQqqWPTd7GU9m503lk+KweDCo/jCVcJSCwK3yu9jf3kIXOiyHewa/W2sHANokYLiG0ZoBYZGxONgbQyC8WEO1naPpK7lSTtCWPwvku+iahJxjpFeKNe+qAe6/FLyzPnZSMYTJEhJwoxeo0CSgogeWj/r+7adcKhEisx0Qy/WOA/Et16pKgqcyN+B9N3VyIfp9+Ew6/Ly0fhUzPx2uyDe7lMBDJj3OAxtemcylGynzXfPnwoghrq9QmDsEAqD/mddNcCmH/zqeft0rZk0PjHTPSLnjpU0vnjQQGekY1tlAJ7w5yuymonEc09dRy2RzYVoPHe/MbF4Bi4sxSSgpwwxcQAgh5LMugCv/GeIPBBSpTWbVIHRHa+xt/th7rrCDfVaoiZFbGvNAcDsNLJycn/gRMNmPmtn4JwTlQznZXtpTwNHrjJjpD2rL1MHVDFm/GGl6hNer+BIF5Ct5K2EtPKjlLlTQVuUe5ywUkbHvjhQwaE1v526SQq/yoNq8bIC/nNt/jz8q2EmGFsRsG9NsewlPQdfYLntAgAA//+frJHUAAAABklEQVQDAHRAuDwh1olSAAAAAElFTkSuQmCC" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADXklEQVR4nOxXXUgUURQ+d7Rfw4RApMDI3dksS8gECWu1l4gog8Aieu/F3dUHn5LIqN6E0BntvR8IloLciAgiZ5XAByMCLXfXHqTCyB8yf1p15/bdnTWNnV1npsCXPpg9d+4995zvnnvuubMSrTMkWmesO4Fccojy5rG87fMzZ0T7+5ZtoXdtRbPkAMyOsjcwIpPOzzLilzij/ej6mRrazDgNcWIPSGJPwh2uqFWbaxLwNkS8MHqeiJ+Deh66NmDSFjNdTjQPsYgWosEe4z3Yq8gaOSFQ4492Q5zAM8855TNmL18wR8ecaTLIvtAUuc5Mz9So1xe9BgNifzfhKbDrXCA1p0DYELZgs9VMz2kSziHeEcMTefC7lRzC9so4522FY+58TZUPiUe0GWPt5BC2IoDsv6qpnpuifbzxw14hg+1sGKIJOTMJeZ1swjIB7GO/cF4dGCnO5fozXacy0Q/Hg0tMOqV1lNzw+mN1yOrDZAPWt4CxYJKxnmiBKFs1Umb0oRIgIGQTlgkg/KmkY8Xpg6k+Tu/JJkwJcOKT6X3MYzT4aPoEow8kS83sGdVGmrJMQCKWIHHU/nRSL8SSlHMLYnCFGGkzC9O+ZJuJimkCTnOcEnGzIdMk1Il9YUyU05XzjcJSVRuItvZ0uFrxesDbFNknLUiLWpc79luH+F38pichAwE955OZL9NSXO0b3ZnL4mLP80yGuyWdrrzqlJNRONb4sVzSE7tRakPivdYf82ELldUTxB0Rl3L29LeXfLVEQAClcwCrrqDMEPu+EU+RYYj5exS3akYCBAbCilxpZiTjKcCk+8atlhHFy84Nfa7U+qNNoi2IYGWdqZFZ4tK9TEayXsdefzQCBZlsAKelObzDdbtmPHoHiXMZLoY1xV2aST9rHdA5tSAS02QDSMS2monYZ+EcUfmhc9aSTT8rgT5VDmJJT8k+jLzgLNSruh5RVsIWgHr/BsE9CHVrdwcOPWrC27DirlxL1VIpxhGr4Jy9hOH4mr6TRYc/t+LcMgGBsCqfRLxC2XJCjOE4dodVz2myCFsfJIhEPb70AnD0Ld05Rx/za6r7ItmArc/yZbj9E/m7aOoh3B5JOufs9bief2Goq3CGbMIRgWUcbYhUCdnX6eknh/grAv8C//+c/gIAAP//udaL0wAAAAZJREFUAwCpNC/gF3WquAAAAABJRU5ErkJggg==" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div></div>
+      <div class="row">
+    <div class="lockup light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="sl-u62"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u62)"/>
+</svg><span class="wm">IAM Lens</span></div>
+    <div class="lockup dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <defs><mask id="sl-u63"><rect width="128" height="128" fill="#fff"/>
+    <circle cx="60" cy="54" r="15" fill="none" stroke="#000" stroke-width="8"/>
+    <path d="M71 65L86 80" stroke="#000" stroke-width="9" stroke-linecap="round"/></mask></defs>
+  <path d="M64 16L104 28V58C104 82 88 100 64 112C40 100 24 82 24 58V28Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#sl-u63)"/>
+</svg><span class="wm">IAM Lens</span></div></div>
+      <div class="row">
+    <div class="toolbar light">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="sl-u64"><rect width="16" height="16" fill="#fff"/>
+    <circle cx="7" cy="6.5" r="2.7" fill="none" stroke="#000" stroke-width="1.7"/>
+    <path d="M9.2 8.7L11.4 10.9" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></mask></defs>
+  <path d="M8 .8L14.8 3V8C14.8 11.4 11.8 13.8 8 15.2C4.2 13.8 1.2 11.4 1.2 8V3Z" fill="#3f6ddb" mask="url(#sl-u64)"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div>
+    <div class="toolbar dark">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="sl-u65"><rect width="16" height="16" fill="#fff"/>
+    <circle cx="7" cy="6.5" r="2.7" fill="none" stroke="#000" stroke-width="1.7"/>
+    <path d="M9.2 8.7L11.4 10.9" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></mask></defs>
+  <path d="M8 .8L14.8 3V8C14.8 11.4 11.8 13.8 8 15.2C4.2 13.8 1.2 11.4 1.2 8V3Z" fill="#3f6ddb" mask="url(#sl-u65)"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div></div>
+    </div>
+  </section>
+
+  <section class="concept" id="c5">
+    <header>
+      <span class="num">05</span>
+      <h2>Two-way link</h2>
+      <p class="why">A filled role node and a ring permission node joined by an L-shaped path with arrowheads at both ends: the role to permission lookup runs both ways.</p>
+      <dl><dt>Strengths</dt><dd>Describes the two-way feature directly; the L hints at the Lens initial.</dd><dt>Risks</dt><dd>Most diagram-like, so least "logo"; the arrowheads vanish at 16 px and leave nodes plus an elbow.</dd></dl>
+    </header>
+    <div class="board">
+      <div class="row">
+        <div class="tile big light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg></div>
+        <div class="tile big dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg></div>
+        <div class="stack">
+    <div class="tile sm light">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <circle cx="3" cy="3" r="3" fill="#3f6ddb"/>
+  <path d="M3 6V11Q3 12 4 12H9" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <circle cx="12.5" cy="12" r="2.4" fill="none" stroke="#e8a020" stroke-width="1.6"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div>
+    <div class="tile sm dark">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <circle cx="3" cy="3" r="3" fill="#3f6ddb"/>
+  <path d="M3 6V11Q3 12 4 12H9" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <circle cx="12.5" cy="12" r="2.4" fill="none" stroke="#e8a020" stroke-width="1.6"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div></div>
+      </div>
+      <div class="row">
+    <div class="tile zoom light">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABT0lEQVR4nKRSvy8EQRT+Znb2jmhE4UTjJH4kKkpRUIhEXKLzo1BoFJKTSORajYpCIdEojkJHoSFRUYj/QAhx0e1uQSSC2z37vD1WVm4vmc19xbyZL/O+ee97o8aWSx1kVDYBTOAH5+JLFS52uy1oQJH0tgExF+EWmDM5zmsJcPJkLR3HxUOiQbAAndXScVw8lPDNVTbRQ9RE3yzoCohwM5q/pyBe7vQKJEDDHqgkl1+K2dZPWelLN6fu2mYeX7UF6LQnbTveURnICVJw331YxexJJqNmtVpwHC/PduVAsEG0V40C07btLv1VwA7esHsDoZn/KsD4ISf6EmKwffHJej7o3HB9swQhhmREYJ2Xh7plCJBqkR/B1vDkW3AmCENrZPZ+1xpf3uJnrviha04aYcVhkL+iJfBr4jEnTUX6qpqY6NMEYywb6E81ydtwjN8AAAD//7/Uxd4AAAAGSURBVAMAY/9x9zSUKGYAAAAASUVORK5CYII=" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACTUlEQVR4nOxWQWgTQRT9f5O0pSLqKVqQBG0rQpFCqoFi1oIgeJC2IF4bQVcl2YMGvHjpQbAUBaEW6an15MGK9aggQgQPohctSjdrsz00pooeeojU1Pn+KYLLmt3aumku+2DY2Tcz+9/8+fP/KtBgKNBgBALCbgN9wxSmr+ZJIjyASHNfyitP3j/o+gE+A2uR7XqhuQ3oFQIestGziwA95ljHCviImkfQRjjgMC7RJXnwGS5HQAc3xm8eLkGIHzbG+yyghDRDQG8d9KzkwWeg20BDb4EdqYwx+mK88yrUCZ6JSNWNEQXxiqoXRmCrBaSyJl85PM8+CgGBdjQzNwhbJSChfdzBQTgoCEok0BIAi4DKQHe6uBN8hmcMqFljChGHiOhe/k5nGuqAoBoGAsJeg1wRv/3u7YI6wdMDAshYM4+Q7EsXW9zm9WaK/U7u0+Tew+XJ+FNuy+WpmMntOj3/e8OeAkIiwkUJvnM3KrZXp1P6/JGERhHnvDBWc2q28KznkrFPvtMERBCVR4RwjPPJDBHwTwxe+2zFzznXrlsLVN3MIdBNrzkyWaFCcTZkCKLcdPK4BSL0jjPo5d1nrdtSULkpzsmM8nvSC6fhXz0gkR9rvwWCTrAn3pA8FS8hSKQI/PNNFJW1xwWockVdrbVmXQ/YkdBKrdtaKt1CUJOdV0iMghJarqxGtNd3Y/Nyx0vNsSKXcsHx85A9sZ8tneL+xeiQNbFpAW7ozRT6X453PLZzMgg5Dm5wN8ltidv9aOvCMJ6Bn74L+B8EmTAQ8AsAAP//QqkxSQAAAAZJREFUAwBqdtrBJTG3WAAAAABJRU5ErkJggg==" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div>
+    <div class="tile zoom dark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABT0lEQVR4nKRSvy8EQRT+Znb2jmhE4UTjJH4kKkpRUIhEXKLzo1BoFJKTSORajYpCIdEojkJHoSFRUYj/QAhx0e1uQSSC2z37vD1WVm4vmc19xbyZL/O+ee97o8aWSx1kVDYBTOAH5+JLFS52uy1oQJH0tgExF+EWmDM5zmsJcPJkLR3HxUOiQbAAndXScVw8lPDNVTbRQ9RE3yzoCohwM5q/pyBe7vQKJEDDHqgkl1+K2dZPWelLN6fu2mYeX7UF6LQnbTveURnICVJw331YxexJJqNmtVpwHC/PduVAsEG0V40C07btLv1VwA7esHsDoZn/KsD4ISf6EmKwffHJej7o3HB9swQhhmREYJ2Xh7plCJBqkR/B1vDkW3AmCENrZPZ+1xpf3uJnrviha04aYcVhkL+iJfBr4jEnTUX6qpqY6NMEYywb6E81ydtwjN8AAAD//7/Uxd4AAAAGSURBVAMAY/9x9zSUKGYAAAAASUVORK5CYII=" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACTUlEQVR4nOxWQWgTQRT9f5O0pSLqKVqQBG0rQpFCqoFi1oIgeJC2IF4bQVcl2YMGvHjpQbAUBaEW6an15MGK9aggQgQPohctSjdrsz00pooeeojU1Pn+KYLLmt3aumku+2DY2Tcz+9/8+fP/KtBgKNBgBALCbgN9wxSmr+ZJIjyASHNfyitP3j/o+gE+A2uR7XqhuQ3oFQIestGziwA95ljHCviImkfQRjjgMC7RJXnwGS5HQAc3xm8eLkGIHzbG+yyghDRDQG8d9KzkwWeg20BDb4EdqYwx+mK88yrUCZ6JSNWNEQXxiqoXRmCrBaSyJl85PM8+CgGBdjQzNwhbJSChfdzBQTgoCEok0BIAi4DKQHe6uBN8hmcMqFljChGHiOhe/k5nGuqAoBoGAsJeg1wRv/3u7YI6wdMDAshYM4+Q7EsXW9zm9WaK/U7u0+Tew+XJ+FNuy+WpmMntOj3/e8OeAkIiwkUJvnM3KrZXp1P6/JGERhHnvDBWc2q28KznkrFPvtMERBCVR4RwjPPJDBHwTwxe+2zFzznXrlsLVN3MIdBNrzkyWaFCcTZkCKLcdPK4BSL0jjPo5d1nrdtSULkpzsmM8nvSC6fhXz0gkR9rvwWCTrAn3pA8FS8hSKQI/PNNFJW1xwWockVdrbVmXQ/YkdBKrdtaKt1CUJOdV0iMghJarqxGtNd3Y/Nyx0vNsSKXcsHx85A9sZ8tneL+xeiQNbFpAW7ozRT6X453PLZzMgg5Dm5wN8ltidv9aOvCMJ6Bn74L+B8EmTAQ8AsAAP//QqkxSQAAAAZJREFUAwBqdtrBJTG3WAAAAABJRU5ErkJggg==" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div></div>
+      <div class="row">
+    <div class="lockup light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg><span class="wm">IAM Lens</span></div>
+    <div class="lockup dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <circle cx="34" cy="30" r="12" fill="#3f6ddb"/>
+  <path d="M34 46L25 58H43Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 58V80Q34 96 50 96H70" stroke="#3f6ddb" stroke-width="9" fill="none"/>
+  <path d="M82 96L70 87V105Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="99" cy="96" r="9" fill="none" stroke="#e8a020" stroke-width="6"/>
+</svg><span class="wm">IAM Lens</span></div></div>
+      <div class="row">
+    <div class="toolbar light">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <circle cx="3" cy="3" r="3" fill="#3f6ddb"/>
+  <path d="M3 6V11Q3 12 4 12H9" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <circle cx="12.5" cy="12" r="2.4" fill="none" stroke="#e8a020" stroke-width="1.6"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div>
+    <div class="toolbar dark">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <circle cx="3" cy="3" r="3" fill="#3f6ddb"/>
+  <path d="M3 6V11Q3 12 4 12H9" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <circle cx="12.5" cy="12" r="2.4" fill="none" stroke="#e8a020" stroke-width="1.6"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div></div>
+    </div>
+  </section>
+
+  <section class="concept" id="c6">
+    <header>
+      <span class="num">06</span>
+      <h2>Viewfinder IL</h2>
+      <p class="why">Four camera-style corner brackets frame an I and an L cut from straight bars: inspecting IAM, with the initials as the subject.</p>
+      <dl><dt>Strengths</dt><dd>Typographic and ownable; calm geometry; no security cliche.</dd><dt>Risks</dt><dd>Needs the label to be understood; the glyphs are small inside the frame at 16 px.</dd></dl>
+    </header>
+    <div class="board">
+      <div class="row">
+        <div class="tile big light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg></div>
+        <div class="tile big dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg></div>
+        <div class="stack">
+    <div class="tile sm light">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M1 5V1H5M11 1H15V5M15 11V15H11M5 15H1V11" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <path d="M4 5H6V11H4ZM8 5H10V9H12V11H8Z" fill="#6b7da3"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div>
+    <div class="tile sm dark">
+      <span class="r16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M1 5V1H5M11 1H15V5M15 11V15H11M5 15H1V11" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <path d="M4 5H6V11H4ZM8 5H10V9H12V11H8Z" fill="#6b7da3"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="32" height="32">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg></span>
+      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg></span>
+      <em>16 / 32 / 48 px</em>
+    </div></div>
+      </div>
+      <div class="row">
+    <div class="tile zoom light">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAbUlEQVR4nMyT0QnAIAxEY8kqnaOTdILSEfrVEUon6CSdw2EUBCVoRCGi3l/gSB7JBbdTG4j0P6sCRpx3AaGwNJWKejyNmEDcIME+rs+hvfeuuLo5wfgGWGvM7UJ+BR+ImiBRzROksET6aV2/0QIAAP//YHrI4AAAAAZJREFUAwDe/iUzmJBK7wAAAABJRU5ErkJggg==" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABSklEQVR4nOyWXW7CMAzHnZKDsIfeYhrdQZD2vDFpB9i0oO0ASHw8I3EQAuIWfaAHCRS7CiikLU1bpPKQnwRNYyv6N7EdB9AxAXSMF8DticFnnJY5H1J43c1CCTd4HsVRj8G6zL6Zhsx8f7wdOIPbsME/eeXMeQJVC6LPUanx1SSDCD97UOgP5QrkdhYKqImcPCX4EObcyygWKKJQgM8C7uL0/r0SjMEvjdMUxov/oaDxx8/qkjHzvyGDBuQEUKplBoeAcyXgfKmUkuAioCrPm6ADMymy+SD0ArwAp0LkglmUCLNg1RJA93lmwEKk87c10de+j4WoT2O7zuSOgJoJ+uGV+gZ3gtY6r2vbnI5Ab6Ww55vWfxOfBeVHgG1U1skY0K1WFZgUcLn4wbWgroCsh7PaKH2lJnADivae7h1c6PwIWkdxW3wWdC7gBAAA//8LdtsHAAAABklEQVQDAG/caUHkUOGHAAAAAElFTkSuQmCC" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div>
+    <div class="tile zoom dark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAbUlEQVR4nMyT0QnAIAxEY8kqnaOTdILSEfrVEUon6CSdw2EUBCVoRCGi3l/gSB7JBbdTG4j0P6sCRpx3AaGwNJWKejyNmEDcIME+rs+hvfeuuLo5wfgGWGvM7UJ+BR+ImiBRzROksET6aV2/0QIAAP//YHrI4AAAAAZJREFUAwDe/iUzmJBK7wAAAABJRU5ErkJggg==" width="64" height="64" alt="" />
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABSklEQVR4nOyWXW7CMAzHnZKDsIfeYhrdQZD2vDFpB9i0oO0ASHw8I3EQAuIWfaAHCRS7CiikLU1bpPKQnwRNYyv6N7EdB9AxAXSMF8DticFnnJY5H1J43c1CCTd4HsVRj8G6zL6Zhsx8f7wdOIPbsME/eeXMeQJVC6LPUanx1SSDCD97UOgP5QrkdhYKqImcPCX4EObcyygWKKJQgM8C7uL0/r0SjMEvjdMUxov/oaDxx8/qkjHzvyGDBuQEUKplBoeAcyXgfKmUkuAioCrPm6ADMymy+SD0ArwAp0LkglmUCLNg1RJA93lmwEKk87c10de+j4WoT2O7zuSOgJoJ+uGV+gZ3gtY6r2vbnI5Ab6Ww55vWfxOfBeVHgG1U1skY0K1WFZgUcLn4wbWgroCsh7PaKH2lJnADivae7h1c6PwIWkdxW3wWdC7gBAAA//8LdtsHAAAABklEQVQDAG/caUHkUOGHAAAAAElFTkSuQmCC" width="128" height="128" alt="" />
+      <em>4x pixels, 16 / 32</em>
+    </div></div>
+      <div class="row">
+    <div class="lockup light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg><span class="wm">IAM Lens</span></div>
+    <div class="lockup dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="48" height="48">
+  <path d="M21 45V21H45M83 21H107V45M107 83V107H83M45 107H21V83" stroke="#3f6ddb" stroke-width="10" fill="none" stroke-linejoin="miter"/>
+  <rect x="38" y="40" width="12" height="48" fill="#6b7da3"/>
+  <path d="M60 40H72V76H90V88H60Z" fill="#6b7da3"/>
+</svg><span class="wm">IAM Lens</span></div></div>
+      <div class="row">
+    <div class="toolbar light">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M1 5V1H5M11 1H15V5M15 11V15H11M5 15H1V11" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <path d="M4 5H6V11H4ZM8 5H10V9H12V11H8Z" fill="#6b7da3"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div>
+    <div class="toolbar dark">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="omni"></span>
+      <i class="ph c"></i><i class="ph s"></i><span class="us"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <path d="M1 5V1H5M11 1H15V5M15 11V15H11M5 15H1V11" stroke="#3f6ddb" stroke-width="2" fill="none"/>
+  <path d="M4 5H6V11H4ZM8 5H10V9H12V11H8Z" fill="#6b7da3"/>
+</svg></span><i class="ph d"></i><i class="ph s"></i>
+      <span class="kebab"></span>
+    </div></div>
+    </div>
+  </section>
+<p class="rank">None of these uses a hexagon, a cloud, a letter G or a four-colour ring. The extension icon (public/icon) is unchanged until a concept is picked.</p>
+</main></body></html>

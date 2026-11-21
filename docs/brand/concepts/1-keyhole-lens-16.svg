@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs><mask id="kh"><rect width="16" height="16" fill="#fff"/><path d="M4.4 5.6A2 2 0 1 1 7.6 5.6L8.4 9H3.6Z" fill="#000"/></mask></defs>
+  <circle cx="6" cy="6" r="6" fill="#3f6ddb" mask="url(#kh)"/>
+  <path d="M10.6 10.6L14 14" stroke="#3f6ddb" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg>
