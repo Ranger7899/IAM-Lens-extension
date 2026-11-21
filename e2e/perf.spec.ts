@@ -1,13 +1,27 @@
+import { chromium, type BrowserContext } from '@playwright/test';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { test, expect } from './fixtures';
-import type { BrowserContext } from '@playwright/test';
 
-// Budgets from the plan; each is enforced with 2x slack for CI/headless noise.
+// Budgets from the plan; each is enforced with 1.25x slack for CI/headless noise.
 const TTI_BUDGET_MS = 150;
 const KEYSTROKE_BUDGET_MS = 16;
-const SLACK = 2;
+const SLACK = 1.25;
+// Keystroke latency is input -> next paint, so it is quantised by the browser's frame pipeline (style, layout,
+// paint of the result list), not by JS: JS is ~1 ms/key. p95 sits at 18-21 ms, so it gets 1.5x.
+const KEYSTROKE_SLACK = 1.5;
+const RUNS = 5;
 
-// The provider does not set data-ready="true" yet (follow-up), so readiness falls back to the
-// search box becoming visible, which is when the loading skeleton is gone.
+const EXTENSION_PATH = path.resolve(import.meta.dirname, '..', process.env.IAM_OUT_DIR ?? '.output', 'chrome-mv3');
+
+const percentile = (xs: number[], p: number) => {
+  const sorted = [...xs].sort((a, b) => a - b);
+  return sorted[Math.min(sorted.length - 1, Math.max(0, Math.ceil(sorted.length * p) - 1))]!;
+};
+const fmt = (xs: number[]) => xs.map((n) => n.toFixed(0)).join('/');
+
+/** Milliseconds from navigation start until the provider sets `data-ready="true"`. */
 async function readyMs(context: BrowserContext, extensionId: string): Promise<number> {
   const page = await context.newPage();
   await page.goto(`chrome-extension://${extensionId}/sidepanel.html`, { waitUntil: 'commit' });
@@ -15,11 +29,7 @@ async function readyMs(context: BrowserContext, extensionId: string): Promise<nu
     () =>
       new Promise<number>((resolve) => {
         const check = () => {
-          const ready =
-            document.querySelector('[data-ready="true"]') ??
-            document.querySelector('[role="searchbox"], input[type="search"]');
-          if (ready)
-            resolve(performance.now()); // ms since navigation start
+          if (document.documentElement.dataset.ready === 'true') resolve(performance.now());
           else requestAnimationFrame(check);
         };
         check();
@@ -29,16 +39,37 @@ async function readyMs(context: BrowserContext, extensionId: string): Promise<nu
   return ms;
 }
 
-test('side panel is interactive within budget (cold and warm)', async ({ context, extensionId }) => {
-  const cold = await readyMs(context, extensionId);
-  const warmRuns: number[] = [];
-  for (let i = 0; i < 3; i++) warmRuns.push(await readyMs(context, extensionId));
-  const warm = Math.min(...warmRuns);
+test('side panel is interactive within budget (cold p50 over 5 fresh profiles)', async () => {
+  const cold: number[] = [];
+  for (let i = 0; i < RUNS; i++) {
+    const context = await chromium.launchPersistentContext(mkdtempSync(path.join(tmpdir(), 'iam-lens-perf-')), {
+      channel: 'chromium',
+      args: [`--disable-extensions-except=${EXTENSION_PATH}`, `--load-extension=${EXTENSION_PATH}`],
+    });
+    try {
+      let [worker] = context.serviceWorkers();
+      worker ??= await context.waitForEvent('serviceworker');
+      cold.push(await readyMs(context, new URL(worker.url()).host));
+    } finally {
+      await context.close();
+    }
+  }
+  const p50 = percentile(cold, 0.5);
   console.log(
-    `[perf] panel ready cold=${cold.toFixed(0)}ms warm=${warm.toFixed(0)}ms (runs ${warmRuns.map((n) => n.toFixed(0)).join('/')}) budget=${TTI_BUDGET_MS}ms (x${SLACK} slack)`,
+    `[perf] panel ready cold p50=${p50.toFixed(0)}ms (runs ${fmt(cold)}) budget=${TTI_BUDGET_MS}ms (x${SLACK} slack)`,
   );
-  expect(cold).toBeLessThan(TTI_BUDGET_MS * SLACK);
-  expect(warm).toBeLessThan(TTI_BUDGET_MS * SLACK);
+  expect(p50).toBeLessThan(TTI_BUDGET_MS * SLACK);
+});
+
+test('side panel is interactive within budget (warm p50 over 5 runs)', async ({ context, extensionId }) => {
+  await readyMs(context, extensionId); // prime caches, then measure
+  const warm: number[] = [];
+  for (let i = 0; i < RUNS; i++) warm.push(await readyMs(context, extensionId));
+  const p50 = percentile(warm, 0.5);
+  console.log(
+    `[perf] panel ready warm p50=${p50.toFixed(0)}ms (runs ${fmt(warm)}) budget=${TTI_BUDGET_MS}ms (x${SLACK} slack)`,
+  );
+  expect(p50).toBeLessThan(TTI_BUDGET_MS * SLACK);
 });
 
 test('search keystrokes render within budget', async ({ context, extensionId }) => {
@@ -67,18 +98,22 @@ test('search keystrokes render within budget', async ({ context, extensionId }) 
     );
   });
 
+  // Three untimed warm-up keystrokes (first render of results = JIT cost, covered by the cold-start
+  // test), then 20 measured ones.
   const text = 'storage.buckets.get';
-  for (let i = 0; i < 20; i++) {
+  const WARMUP = 3;
+  for (let i = 0; i < WARMUP + 20; i++) {
     await page.keyboard.type(text[i % text.length]!);
     await page.waitForTimeout(60); // let the previous measurement settle
   }
-  const samples = await page.evaluate(() => (window as unknown as { __perf: number[] }).__perf);
+  const samples = (await page.evaluate(() => (window as unknown as { __perf: number[] }).__perf)).slice(WARMUP);
   expect(samples.length).toBe(20);
+  console.log('[perf] samples', samples.map((n) => n.toFixed(0)).join(' '));
   const sorted = [...samples].sort((a, b) => a - b);
   const p50 = sorted[Math.floor(sorted.length * 0.5)]!;
   const p95 = sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.95) - 1)]!;
   console.log(
-    `[perf] keystroke p50=${p50.toFixed(1)}ms p95=${p95.toFixed(1)}ms max=${sorted.at(-1)!.toFixed(1)}ms budget=${KEYSTROKE_BUDGET_MS}ms (x${SLACK} slack)`,
+    `[perf] keystroke p50=${p50.toFixed(1)}ms p95=${p95.toFixed(1)}ms max=${sorted.at(-1)!.toFixed(1)}ms budget=${KEYSTROKE_BUDGET_MS}ms (x${KEYSTROKE_SLACK} slack)`,
   );
-  expect(p95).toBeLessThan(KEYSTROKE_BUDGET_MS * SLACK);
+  expect(p95).toBeLessThan(KEYSTROKE_BUDGET_MS * KEYSTROKE_SLACK);
 });

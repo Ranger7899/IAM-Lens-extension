@@ -50,7 +50,8 @@ describe('IamProvider', () => {
     });
     expect(loader).toHaveBeenCalledTimes(1);
     expect(host!.querySelector('#ready')).not.toBeNull();
-    const warm = vi.spyOn(get().index!, 'warmSearch');
+    expect(document.documentElement.dataset.ready).toBe('true');
+    const warm = vi.spyOn(get().index!, 'warmSearchIdle');
     await act(async () => {
       await new Promise((r) => setTimeout(r, 120));
     });

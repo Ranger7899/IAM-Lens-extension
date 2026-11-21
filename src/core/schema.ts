@@ -1,8 +1,25 @@
 /** Zod schemas and integrity checks for the IAM snapshot and the remote manifest. */
 import { z } from 'zod';
+import {
+  SUPPORTED_SCHEMA_VERSION,
+  SnapshotValidationError,
+  canonicalContent,
+  sha256Hex,
+  structuralErrors,
+  type Snapshot,
+  type SnapshotRole,
+} from './schemaLite';
 
-/** The only snapshot schema version this build understands. */
-export const SUPPORTED_SCHEMA_VERSION = 1;
+export {
+  SUPPORTED_SCHEMA_VERSION,
+  SnapshotValidationError,
+  canonicalContent,
+  sha256Hex,
+  structuralErrors,
+  type Snapshot,
+  type SnapshotRole,
+};
+
 
 export const roleStageSchema = z.string().min(1);
 
@@ -40,75 +57,7 @@ export const remoteManifestSchema = z.object({
   url: z.string().optional(),
 });
 
-export type SnapshotRole = z.infer<typeof snapshotRoleSchema>;
-export type Snapshot = z.infer<typeof snapshotSchema>;
 export type RemoteManifest = z.infer<typeof remoteManifestSchema>;
-
-/**
- * Deterministic content string: fixed key order, no `generatedAt`.
- * MUST stay byte-identical to `canonicalContent` in scripts/build-snapshot.ts.
- */
-export function canonicalContent(permissions: readonly string[], roles: readonly SnapshotRole[]): string {
-  return JSON.stringify({
-    permissions,
-    roles: roles.map((r) => ({
-      name: r.name,
-      title: r.title,
-      description: r.description,
-      stage: r.stage,
-      ...(r.deleted ? { deleted: true } : {}),
-      perms: r.perms,
-    })),
-  });
-}
-
-/** SHA-256 hex of a string using WebCrypto (available in extension pages, workers and Node 20+). */
-export async function sha256Hex(text: string): Promise<string> {
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  let out = '';
-  for (const b of new Uint8Array(digest)) out += b.toString(16).padStart(2, '0');
-  return out;
-}
-
-/** Structural checks the zod schema cannot express cheaply (index ranges, ordering, uniqueness). */
-export function structuralErrors(snap: Snapshot): string[] {
-  const errs: string[] = [];
-  const { permissions, roles } = snap;
-  for (let i = 1; i < permissions.length; i++) {
-    if (permissions[i - 1] >= permissions[i]) {
-      errs.push(`permissions not sorted/unique at ${i}`);
-      break;
-    }
-  }
-  const names = new Set<string>();
-  for (const r of roles) {
-    if (names.has(r.name)) errs.push(`duplicate role ${r.name}`);
-    names.add(r.name);
-    for (let j = 0; j < r.perms.length; j++) {
-      const p = r.perms[j];
-      if (p >= permissions.length) {
-        errs.push(`${r.name}: index ${p} out of range`);
-        break;
-      }
-      if (j > 0 && r.perms[j - 1] >= p) {
-        errs.push(`${r.name}: perms not sorted/unique`);
-        break;
-      }
-    }
-    if (errs.length > 20) break;
-  }
-  return errs;
-}
-
-export class SnapshotValidationError extends Error {
-  constructor(
-    message: string,
-    readonly reason: 'schema' | 'structure' | 'hash' | 'version' | 'manifest' | 'size' | 'stale',
-  ) {
-    super(message);
-    this.name = 'SnapshotValidationError';
-  }
-}
 
 /** Validates shape only (zod + structure). Use `verifySnapshotHash` for authenticity. */
 export function parseSnapshot(input: unknown): Snapshot {

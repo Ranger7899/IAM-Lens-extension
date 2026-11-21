@@ -2,13 +2,16 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import type { CustomRoleInput } from './model';
 import {
+  SUPPORTED_SCHEMA_VERSION,
   SnapshotValidationError,
   canonicalContent,
-  parseManifest,
-  parseSnapshot,
   sha256Hex,
   type Snapshot,
-} from './schema';
+} from './schemaLite';
+
+// zod lives behind a dynamic import so the side panel's first paint never loads it: the bundled
+// snapshot is trusted (see `loadBundledSnapshot`) and stored ones were validated when written.
+const loadSchema = () => import('./schema');
 
 /**
  * TODO: the public repo / GitHub Pages URL is not chosen yet. Point this at the directory that
@@ -63,9 +66,25 @@ async function defaultLoadBundled(): Promise<unknown> {
   return mod.loadBundledSnapshotJson();
 }
 
-/** The bundled snapshot, validated. */
+/**
+ * The bundled snapshot. The packaged asset is generated at build time and verified by the unit tests, so
+ * the default path only checks its outline (no zod, no per-role walk); an injected loader gets the full
+ * validation.
+ */
 export async function loadBundledSnapshot(opts: LoaderOptions = {}): Promise<Snapshot> {
-  return parseSnapshot(await (opts.loadBundled ?? defaultLoadBundled)());
+  if (opts.loadBundled) return (await loadSchema()).parseSnapshot(await opts.loadBundled());
+  const raw = (await defaultLoadBundled()) as Partial<Snapshot> | null;
+  if (
+    !raw ||
+    raw.schemaVersion !== SUPPORTED_SCHEMA_VERSION ||
+    !Array.isArray(raw.permissions) ||
+    !raw.permissions.length ||
+    !Array.isArray(raw.roles) ||
+    !raw.roles.length
+  ) {
+    throw new SnapshotValidationError('Invalid bundled snapshot', 'schema');
+  }
+  return raw as Snapshot;
 }
 
 /** A stored snapshot (already validated when it was written), or undefined. */
@@ -169,6 +188,7 @@ export async function checkForUpdate(
   const f = opts.fetch ?? globalThis.fetch.bind(globalThis);
   const now = (opts.now ?? (() => new Date()))().toISOString();
   try {
+    const { parseManifest, parseSnapshot } = await loadSchema();
     const manifest = parseManifest(JSON.parse(await fetchText(f, manifestUrl, opts.signal)));
     const { snapshot: installed, source } = await loadSnapshot(opts);
     await patchMeta({ lastCheckedAt: now });

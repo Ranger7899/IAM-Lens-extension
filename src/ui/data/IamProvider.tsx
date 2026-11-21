@@ -82,13 +82,23 @@ export function IamProvider({ children, loader = () => loadSnapshot() }: IamProv
     void inflight.current.promise.then((next) => {
       if (cancelled) return;
       setState(next);
-      if (next.status === 'ready') cancelIdle = idle(() => next.index.warmSearch());
+      if (next.status === 'ready') cancelIdle = idle(() => void next.index.warmSearchIdle());
     });
     return () => {
       cancelled = true;
       cancelIdle?.();
     };
   }, [attempt]);
+
+  // Perf/e2e hook: true once the index is built and the routed UI can render.
+  useEffect(() => {
+    if (state.status !== 'ready') return;
+    const el = document.documentElement;
+    el.dataset.ready = 'true';
+    return () => {
+      delete el.dataset.ready;
+    };
+  }, [state.status]);
 
   const retry = useCallback(() => {
     setState({ status: 'loading' });

@@ -28,6 +28,8 @@ import './search/highlight.css';
 import styles from './search/SearchScreen.module.css';
 
 const PAGE = 100;
+/** Rows painted on the keystroke that produced them; the rest of the page follows when the thread is idle. */
+const FIRST_PAINT_ROWS = 12;
 const STAGES = new Set(['GA', 'BETA', 'ALPHA', 'DEPRECATED']);
 
 export interface SearchScreenProps {
@@ -97,6 +99,7 @@ function SearchBody({
   const root = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const deferred = useDeferredValue(text);
+  const [filledFor, setFilledFor] = useState('');
   const setText = (v: string) => {
     setQuery(v);
     setShown(PAGE);
@@ -129,6 +132,19 @@ function SearchBody({
         ? 'roles'
         : chosen;
 
+  // Keep the keystroke cheap: show the first rows now, the remainder of the page on idle.
+  const fillKey = `${effectiveTab}\u0000${deferred}`;
+  const filled = filledFor === fillKey;
+  useEffect(() => {
+    const done = () => setFilledFor(fillKey);
+    if (typeof requestIdleCallback === 'function') {
+      const id = requestIdleCallback(done, { timeout: 300 });
+      return () => cancelIdleCallback(id);
+    }
+    const id = setTimeout(done, 0);
+    return () => clearTimeout(id);
+  }, [fillKey]);
+
   const exactRole = parsed.kind === 'role' ? index.role(parsed.id) : undefined;
   const exactPerm =
     parsed.kind === 'permission' && !parsed.partial && index.hasPermission(parsed.permission)
@@ -137,7 +153,7 @@ function SearchBody({
   const multi = parsed.kind === 'multi' ? parsed.perms : undefined;
 
   const terms = useMemo(() => highlightTerms(deferred), [deferred]);
-  useHighlights(panel, terms, [effectiveTab, shown, results]);
+  useHighlights(panel, terms, [effectiveTab, shown, results, filled]);
 
   const openRole = (name: string) => go({ name: 'role', id: name });
   const openPerm = (p: string) => go({ name: 'permission', id: p });
@@ -194,7 +210,7 @@ function SearchBody({
 
   const profileOf = (r: RoleRecord) => index.profile(r);
   const list = effectiveTab === 'roles' ? results.roles : results.permissions;
-  const visible = list.slice(0, shown);
+  const visible = list.slice(0, filled ? shown : Math.min(shown, FIRST_PAINT_ROWS));
   const q = deferred.trim();
 
   let body: ReactNode;

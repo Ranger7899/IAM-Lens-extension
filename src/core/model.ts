@@ -103,6 +103,35 @@ function roleServiceSegment(lowerName: string): string {
   return dot < 0 ? '' : lowerName.slice(6, dot);
 }
 
+interface RoleSearchDoc {
+  id: number;
+  name: string;
+  title: string;
+  description: string;
+}
+interface PermSearchDoc {
+  id: number;
+  text: string;
+}
+interface SearchBuild<T extends { id: number }> {
+  ms: MiniSearch<T>;
+  docs: T[];
+  next: number;
+}
+
+/** Adds documents until `budgetMs` has passed; true once all are in. */
+function advance<T extends { id: number }>(b: SearchBuild<T>, budgetMs: number): boolean {
+  const deadline = performance.now() + budgetMs;
+  while (b.next < b.docs.length) {
+    const end = Math.min(b.docs.length, b.next + 100);
+    for (; b.next < end; b.next++) b.ms.add(b.docs[b.next]);
+    if (b.next < b.docs.length && performance.now() >= deadline) return false;
+  }
+  return true;
+}
+
+const yieldToEventLoop = () => new Promise<void>((r) => setTimeout(r, 0));
+
 export class IamIndex {
   readonly version: string;
   /** Permission names; the snapshot's table first, then any extra permissions only custom roles use. */
@@ -117,8 +146,8 @@ export class IamIndex {
   private readonly roleIndex: Map<string, number>;
   private readonly offsets: Int32Array;
   private readonly data: Int32Array;
-  private roleSearch?: MiniSearch<{ id: number; name: string; title: string; description: string }>;
-  private permSearch?: MiniSearch<{ id: number; text: string }>;
+  private roleSearch?: MiniSearch<RoleSearchDoc>;
+  private permSearch?: MiniSearch<PermSearchDoc>;
 
   constructor(snapshot: Snapshot, customRoles: readonly CustomRoleInput[] = []) {
     this.version = snapshot.version;
@@ -274,35 +303,72 @@ export class IamIndex {
 
   // ---- search ----
 
+  /** Role search under construction; `ensureRoleSearch` finishes it synchronously if a query arrives. */
+  private roleBuild?: SearchBuild<RoleSearchDoc>;
+  private permBuild?: SearchBuild<PermSearchDoc>;
+
+  private startRoleBuild(): SearchBuild<RoleSearchDoc> {
+    return (this.roleBuild ??= {
+      ms: new MiniSearch<RoleSearchDoc>({
+        fields: [...NUMBER_FIELDS],
+        storeFields: [],
+        tokenize,
+        searchOptions: { boost: { title: 3, name: 2, description: 1 }, prefix: true, combineWith: 'AND' },
+      }),
+      docs: this.roles.map((r) => ({ id: r.idx, name: r.name, title: r.title, description: r.description })),
+      next: 0,
+    });
+  }
+
+  private startPermBuild(): SearchBuild<PermSearchDoc> {
+    return (this.permBuild ??= {
+      ms: new MiniSearch<PermSearchDoc>({
+        fields: ['text'],
+        storeFields: [],
+        tokenize,
+        searchOptions: { prefix: true, combineWith: 'AND' },
+      }),
+      docs: this.permissions.map((p, i) => ({ id: i, text: p })),
+      next: 0,
+    });
+  }
+
   private ensureRoleSearch() {
     if (this.roleSearch) return this.roleSearch;
-    const ms = new MiniSearch<{ id: number; name: string; title: string; description: string }>({
-      fields: [...NUMBER_FIELDS],
-      storeFields: [],
-      tokenize,
-      searchOptions: { boost: { title: 3, name: 2, description: 1 }, prefix: true, combineWith: 'AND' },
-    });
-    ms.addAll(
-      this.roles.map((r) => ({ id: r.idx, name: r.name, title: r.title, description: r.description })),
-    );
-    this.roleSearch = ms;
-    return ms;
+    const b = this.startRoleBuild();
+    advance(b, Infinity);
+    return (this.roleSearch = b.ms);
   }
 
   private ensurePermSearch() {
     if (this.permSearch) return this.permSearch;
-    const ms = new MiniSearch<{ id: number; text: string }>({
-      fields: ['text'],
-      storeFields: [],
-      tokenize,
-      searchOptions: { prefix: true, combineWith: 'AND' },
-    });
-    ms.addAll(this.permissions.map((p, i) => ({ id: i, text: p })));
-    this.permSearch = ms;
-    return ms;
+    const b = this.startPermBuild();
+    advance(b, Infinity);
+    return (this.permSearch = b.ms);
   }
 
-  /** Builds the search indexes now (otherwise they are built on the first `search`). */
+  /**
+   * Builds the search indexes in ~5 ms slices that yield to the event loop, so typing right after first
+   * paint is never blocked by one long build. A `search` that arrives mid-build finishes the remainder
+   * synchronously (only the part not yet built).
+   */
+  async warmSearchIdle(sliceMs = 5): Promise<void> {
+    while (!this.roleSearch) {
+      const b = this.startRoleBuild();
+      if (advance(b, sliceMs)) this.roleSearch ??= b.ms;
+      else await yieldToEventLoop();
+    }
+    while (!this.permSearch) {
+      const b = this.startPermBuild();
+      if (advance(b, sliceMs)) this.permSearch ??= b.ms;
+      else await yieldToEventLoop();
+    }
+    // One throwaway query so the first real keystroke doesn't pay for cold code paths.
+    await yieldToEventLoop();
+    this.search('storage.objects', { limit: 1000 });
+  }
+
+  /** Builds the search indexes now, in one go (otherwise they are built on the first `search`). */
   warmSearch(): void {
     this.ensureRoleSearch();
     this.ensurePermSearch();
