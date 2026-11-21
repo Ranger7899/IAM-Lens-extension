@@ -54,7 +54,7 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   await expect(stub('Nothing to compare yet')).toBeVisible();
 
   await page.evaluate(() => (location.hash = '#/permission/storage.objects.get'));
-  await expect(stub(/^Smallest first/)).toBeVisible();
+  await expect(stub(/^Roles/)).toBeVisible();
   await page.keyboard.press('Alt+ArrowLeft');
   await expect(stub('Nothing to compare yet')).toBeVisible();
 });
