@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IconButton, LensMark, SegmentedButton, TopAppBar, type IconName } from '@/ui/components';
-import { IamGate } from '@/ui/data';
+import { IamGate, usePendingRoute } from '@/ui/data';
 import { navigateWithTransition, type NavDirection } from '@/ui/motion/navigate';
 import { CompareScreen } from './screens/CompareScreen';
 import { MinimalScreen } from './screens/MinimalScreen';
@@ -129,6 +129,7 @@ function Screen({ route, go }: { route: Route; go: NavigationApi['go'] }) {
 export function SidePanelRouter() {
   const { route, go, back, href } = useHashRoute();
   const api = useMemo<NavigationApi>(() => ({ go, back, href }), [go, back, href]);
+  usePendingRoute(go); // popup hand-off (IAM-15)
   // Back arrow only where there is somewhere to go back to; the root Search route shows the mark.
   const detail = isDetail(route);
   return (
