@@ -1,10 +1,16 @@
-import { Button, Card, Chip, IdToken, Label, PrivilegeBar, SourceBadge, StageChip } from '@/ui/components';
+import { Button, IdToken, Label, PrivilegeBar, SourceBadge, StageChip } from '@/ui/components';
 import type { PrivilegeProfile, RoleRecord } from '@/core';
 import { LocalIcon } from './LocalIcon';
 import styles from './RoleHeader.module.css';
 
 const STAGES = ['GA', 'BETA', 'ALPHA', 'DEPRECATED'] as const;
 type Stage = (typeof STAGES)[number];
+const STAGE_LABEL: Record<Stage, string> = {
+  GA: 'General availability',
+  BETA: 'Beta',
+  ALPHA: 'Alpha',
+  DEPRECATED: 'Deprecated',
+};
 const asStage = (s: string): Stage => ((STAGES as readonly string[]).includes(s) ? (s as Stage) : 'GA');
 
 export interface RoleHeaderProps {
@@ -17,7 +23,7 @@ export interface RoleHeaderProps {
   onCompare: () => void;
 }
 
-/** Large header card: title, ID token, stage, description, spectrum bar and the action row. */
+/** Console role details: title row, outlined action buttons, key/value block, then the permission total. */
 export function RoleHeader({
   role,
   profile,
@@ -28,50 +34,62 @@ export function RoleHeader({
   onCompare,
 }: RoleHeaderProps) {
   const total = profile.read + profile.write + profile.admin;
+  const stage = asStage(role.stage);
   return (
-    <Card variant="filled" className={styles.root} aria-label={`${role.title || role.name} summary`}>
-      <div className={styles.eyebrow}>
-        <StageChip stage={asStage(role.stage)} />
+    <section className={styles.root} aria-label={`${role.title || role.name} summary`}>
+      <div className={styles.titleRow}>
+        <h2 className={styles.title}>{role.title || role.name}</h2>
+        {stage !== 'GA' && <StageChip stage={stage} />}
         {role.deleted && <Label>Deleted</Label>}
-        {role.source.kind === 'custom' ? (
-          <SourceBadge parent={role.source.parent} />
-        ) : (
-          <span>Predefined role</span>
-        )}
-      </div>
-      <h2 className={styles.title}>{role.title || role.name}</h2>
-      <IdToken value={role.name} onCopied={onCopyId} />
-      {role.description && <p className={styles.desc}>{role.description}</p>}
-
-      <div className={styles.spectrum}>
-        <div className={styles.total}>
-          <strong className={styles.number}>{total.toLocaleString('en-US')}</strong>
-          <span>{total === 1 ? 'permission' : 'permissions'}</span>
-        </div>
-        <PrivilegeBar {...profile} legendStyle="full" />
       </div>
 
       <div className={styles.actions} role="group" aria-label="Role actions">
-        <Button variant="tonal" icon="compare_arrows" onClick={onCompare} className={styles.compare}>
-          Compare…
-        </Button>
-        <Chip
-          icon="content_copy"
+        <Button onClick={onCompare}>Compare…</Button>
+        <Button
+          variant="text"
           onClick={onCopyPermissions}
           disabled={total === 0}
           aria-label="Copy all permissions"
         >
           Copy all
-        </Chip>
-        <Chip onClick={onCopyGcloud} aria-label="Copy gcloud describe command">
+        </Button>
+        <Button variant="text" onClick={onCopyGcloud} aria-label="Copy gcloud describe command">
           <LocalIcon name="terminal" />
           gcloud
-        </Chip>
-        <Chip onClick={onOpenDocs} aria-label="Open official docs">
+        </Button>
+        <Button variant="text" onClick={onOpenDocs} aria-label="Open official docs">
           <LocalIcon name="open_in_new" />
           Docs
-        </Chip>
+        </Button>
       </div>
-    </Card>
+
+      <dl className={styles.kv}>
+        <dt>ID</dt>
+        <dd>
+          <IdToken value={role.name} onCopied={onCopyId} />
+        </dd>
+        <dt>Role launch stage</dt>
+        <dd>{STAGE_LABEL[stage]}</dd>
+        {role.source.kind === 'custom' && (
+          <>
+            <dt>Source</dt>
+            <dd>
+              <SourceBadge parent={role.source.parent} />
+            </dd>
+          </>
+        )}
+        {role.description && (
+          <>
+            <dt>Description</dt>
+            <dd>{role.description}</dd>
+          </>
+        )}
+      </dl>
+
+      <h3 className={styles.assigned}>
+        <strong>{total.toLocaleString('en-US')}</strong> assigned {total === 1 ? 'permission' : 'permissions'}
+      </h3>
+      <PrivilegeBar {...profile} legendStyle="full" />
+    </section>
   );
 }

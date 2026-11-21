@@ -7,33 +7,29 @@
 .stat {
   display: grid;
   gap: 2px;
-  padding: 14px 16px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-surface-container-high);
+  padding: 12px 16px;
+  border: 1px solid var(--console-divider);
+  border-radius: var(--console-radius-button);
 }
 .stat dt {
-  font: var(--md-sys-typescale-label-medium);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-large);
+  color: var(--md-sys-color-on-surface);
 }
 .stat dd {
   margin: 0;
-  font: var(--md-sys-typescale-headline-medium);
-  letter-spacing: var(--tracking-display);
-  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-headline-small);
+  color: var(--md-sys-color-on-surface-variant);
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .mono {
   font-family: var(--font-mono);
-  font-size: 22px;
-  line-height: 36px;
+  font-size: 18px;
+  line-height: 28px;
 }
 .stat dd.note {
   margin: 0;
   color: var(--md-sys-color-on-surface-variant);
-  letter-spacing: normal;
   font: var(--md-sys-typescale-body-small);
 }
 .row {

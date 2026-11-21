@@ -35,7 +35,8 @@ async function seed(page: Page, extensionId: string) {
       r.onupgradeneeded = () => {
         const d = r.result;
         if (!d.objectStoreNames.contains('snapshots')) d.createObjectStore('snapshots');
-        if (!d.objectStoreNames.contains('custom-roles')) d.createObjectStore('custom-roles', { keyPath: 'name' });
+        if (!d.objectStoreNames.contains('custom-roles'))
+          d.createObjectStore('custom-roles', { keyPath: 'name' });
         if (!d.objectStoreNames.contains('meta')) d.createObjectStore('meta');
       };
       r.onsuccess = () => res(r.result);

@@ -1,68 +1,59 @@
+/* Console role details page: flat, no card. */
 .root {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   justify-items: start;
-  padding: 18px 18px 16px;
-  border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-high);
-  animation: headerIn var(--motion-emphasized) backwards;
+  padding-top: 4px;
 }
-@keyframes headerIn {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-}
-.eyebrow {
+.titleRow {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  font: var(--md-sys-typescale-label-medium);
-  color: var(--md-sys-color-on-surface-variant);
+  min-width: 0;
 }
 .title {
   margin: 0;
-  font: var(--md-sys-typescale-display-small);
-  letter-spacing: -0.015em;
-  text-wrap: balance;
+  font: var(--md-sys-typescale-title-large);
   overflow-wrap: anywhere;
-}
-.desc {
-  margin: 0;
-  color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-body-medium);
-  text-wrap: pretty;
-}
-.spectrum {
-  display: grid;
-  gap: 10px;
-  width: 100%;
-  margin-top: 4px;
-  padding-top: 16px;
-  border-top: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 70%, transparent);
-}
-.total {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font: var(--md-sys-typescale-label-large);
-  color: var(--md-sys-color-on-surface-variant);
-}
-.number {
-  font: 650 28px/32px var(--font-sans);
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  color: var(--md-sys-color-on-surface);
 }
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
   width: 100%;
-  padding-top: 4px;
 }
-.actions .compare {
-  height: 32px;
-  padding-inline: 14px 16px;
+.kv {
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+  gap: 8px 12px;
+  align-items: start;
+  width: 100%;
+  margin: 0;
+}
+.kv dt {
+  margin: 0;
+  font: var(--md-sys-typescale-label-large);
+  color: var(--md-sys-color-on-surface);
+}
+.kv dd {
+  min-width: 0;
+  margin: 0;
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+.assigned {
+  margin: 8px 0 0;
+  font: var(--md-sys-typescale-headline-small);
+  color: var(--md-sys-color-on-surface);
+}
+.assigned strong {
+  font-weight: inherit;
+  font-variant-numeric: tabular-nums;
+}
+/* Four console buttons in one 368px row: tighter horizontal padding. */
+.actions > button {
+  padding-inline: 8px;
 }

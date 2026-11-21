@@ -20,7 +20,6 @@ export {
   type SnapshotRole,
 };
 
-
 export const roleStageSchema = z.string().min(1);
 
 export const snapshotRoleSchema = z.object({

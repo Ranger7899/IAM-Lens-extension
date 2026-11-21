@@ -9,6 +9,8 @@ export const PAGE = 100;
 
 const RISK_ICON = { read: 'visibility', write: 'edit', admin: 'shield' } as const;
 
+const RISK_LABEL = { read: 'Read', write: 'Write', admin: 'Admin' } as const;
+
 export interface ServiceSectionProps {
   index: IamIndex;
   service: string;
@@ -51,11 +53,7 @@ export function ServiceSection({
             const name = index.permissions[idx];
             const risk = index.classOf(idx);
             return (
-              <li
-                key={idx}
-                className={`${styles.perm} ${i < 8 ? 'reveal' : ''}`}
-                style={{ '--i': i + order } as CSSProperties}
-              >
+              <li key={idx} className={styles.perm} style={{ '--i': i + order } as CSSProperties}>
                 <button
                   type="button"
                   className={styles.row}
@@ -63,12 +61,13 @@ export function ServiceSection({
                   aria-label={`${name}, ${risk} permission`}
                 >
                   <PermissionToken permission={name} risk={risk} static />
-                  <Icon
-                    name={RISK_ICON[risk]}
-                    size={16}
-                    filled
-                    className={`${styles.riskIcon} ${styles[risk]}`}
-                  />
+                  <span className={`${styles.type} ${styles[risk]}`}>
+                    <Icon name={RISK_ICON[risk]} size={16} filled className={styles.riskIcon} />
+                    {RISK_LABEL[risk]}
+                  </span>
+                  <span className={styles.svc} title={service}>
+                    {service}
+                  </span>
                 </button>
               </li>
             );

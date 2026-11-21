@@ -1,25 +1,40 @@
+/* Console frame: shell tone page, content panel with 20px top corners. */
 .root {
+  display: flex;
+  flex-direction: column;
   min-height: 100%;
+  background: var(--console-shell);
 }
 .top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  max-width: 720px;
+  gap: 12px;
+  width: 100%;
+  max-width: 768px;
   margin: 0 auto;
-  padding: 40px 16px 8px;
+  padding: 16px 24px 12px;
+}
+.top > div {
+  display: grid;
 }
 .top h1 {
-  font: var(--md-sys-typescale-headline-medium);
+  font: 500 14px/24px var(--font-sans);
+  color: var(--md-sys-color-on-surface-variant);
 }
 .top p {
   margin: 0;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-title-large);
+}
+.panel {
+  flex: 1;
+  border-radius: var(--console-radius-panel) var(--console-radius-panel) 0 0;
+  background: var(--console-panel);
 }
 .main {
-  max-width: 720px;
+  max-width: 768px;
   margin: 0 auto;
-  padding: 16px 16px 48px;
+  padding: 8px 24px 48px;
   display: grid;
-  gap: 8px;
+  gap: 0;
 }

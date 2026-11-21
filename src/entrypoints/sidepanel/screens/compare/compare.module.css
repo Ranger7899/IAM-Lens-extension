@@ -3,9 +3,10 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   align-content: start;
+  padding-top: 4px;
 }
 
-/* ---- pickers ---- */
+/* ---- pickers: console outlined text fields ---- */
 .pickers {
   display: grid;
   gap: 0;
@@ -19,12 +20,9 @@
 }
 .swapIcon {
   transform: rotate(90deg);
-  border: 3px solid var(--md-sys-color-surface);
+  border: 3px solid var(--console-panel);
   box-sizing: content-box;
-  transition: transform var(--motion-spring-fast);
-}
-.swapIcon:active:not(:disabled) {
-  transform: rotate(270deg);
+  background: var(--console-panel);
 }
 .swapIcon:disabled {
   opacity: 0.5;
@@ -32,42 +30,41 @@
 }
 .picker {
   position: relative;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-high);
-  transition: border-radius var(--motion-spring-fast);
+  border: 1px solid var(--console-border);
+  border-radius: var(--console-radius-button);
+  background: transparent;
 }
 .pickerOpen {
-  border-radius: var(--md-sys-shape-corner-large);
-  box-shadow: var(--md-sys-elevation-2);
   z-index: 4;
+  border-color: var(--console-accent);
+  background: var(--console-panel);
 }
 .picker:focus-within {
-  outline: 3px solid var(--md-sys-color-primary);
-  outline-offset: 2px;
+  border-color: var(--console-accent);
+  box-shadow: 0 0 0 1px var(--console-accent);
 }
 .pickerError {
-  outline: 2px solid var(--md-sys-color-error);
-  outline-offset: -2px;
+  border-color: var(--md-sys-color-error);
 }
 .pickerField {
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 56px;
-  padding: 0 8px 0 10px;
+  gap: 8px;
+  height: 40px;
+  padding: 0 4px 0 8px;
 }
 .side {
   display: grid;
   place-items: center;
   flex: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 12px;
-  font: 700 14px/1 var(--font-mono);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--console-radius-chip);
+  font: 700 12px/1 var(--font-mono);
 }
 .sideA {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background: var(--console-nav-active);
+  color: var(--md-sys-color-on-secondary-container);
 }
 .sideB {
   background: var(--md-sys-color-tertiary-container);
@@ -94,36 +91,26 @@
   align-items: center;
   gap: 6px;
   margin: 0;
-  padding: 0 16px 10px 52px;
+  padding: 0 12px 8px 40px;
   color: var(--md-sys-color-error);
-  font: var(--md-sys-typescale-label-medium);
+  font: var(--md-sys-typescale-body-small);
 }
 .options {
   display: grid;
   margin: 0;
-  padding: 0 8px 8px;
+  padding: 4px 0;
   list-style: none;
-  border-top: 1px solid var(--md-sys-color-outline-variant);
-  padding-top: 8px;
+  border-top: 1px solid var(--console-divider);
 }
 .option {
   display: grid;
-  gap: 2px;
-  padding: 8px 14px;
-  border-radius: var(--md-sys-shape-corner-medium);
+  gap: 0;
+  padding: 4px 16px;
   cursor: pointer;
-  animation: optionIn var(--motion-emphasized) backwards;
-  animation-delay: calc(var(--i) * 40ms);
-}
-@keyframes optionIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
 }
 .option:hover,
 .optionActive {
-  background: var(--md-sys-color-secondary-container);
+  background: var(--console-nav-active);
 }
 .optionTitle {
   font: var(--md-sys-typescale-body-large);
@@ -135,7 +122,7 @@
   overflow-wrap: anywhere;
 }
 
-/* ---- role heads ---- */
+/* ---- role heads: flat outlined panels ---- */
 .heads {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -145,9 +132,10 @@
   display: grid;
   gap: 8px;
   align-content: start;
-  padding: 12px 14px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-surface-container-high);
+  padding: 12px 16px;
+  border: 1px solid var(--console-divider);
+  border-radius: var(--console-radius-button);
+  background: transparent;
 }
 .headTop {
   display: flex;
@@ -156,9 +144,8 @@
   min-width: 0;
 }
 .headTop .side {
-  width: 24px;
-  height: 24px;
-  border-radius: 8px;
+  width: 20px;
+  height: 20px;
   font-size: 12px;
 }
 .headTitle {
@@ -170,16 +157,16 @@
   font: var(--md-sys-typescale-title-small);
 }
 .headTotal {
-  font: var(--md-sys-typescale-label-large);
+  font: var(--md-sys-typescale-body-medium);
   font-variant-numeric: tabular-nums;
   color: var(--md-sys-color-on-surface-variant);
 }
 .same {
   margin: 0;
-  padding: 10px 14px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  padding: 12px 16px;
+  border-radius: var(--console-radius-banner);
+  background: var(--console-table-header);
+  color: var(--md-sys-color-on-surface);
   font: var(--md-sys-typescale-body-medium);
 }
 
@@ -187,30 +174,21 @@
 .overview {
   display: grid;
   gap: 8px;
-  padding: 4px 2px 0;
 }
 .strip {
   display: flex;
-  gap: 3px;
-  height: 14px;
+  gap: 2px;
+  height: 8px;
 }
 .strip > span {
   min-width: 6px;
-  border-radius: 4px;
-}
-.strip > span:first-child {
-  border-start-start-radius: 999px;
-  border-end-start-radius: 999px;
-}
-.strip > span:last-child {
-  border-start-end-radius: 999px;
-  border-end-end-radius: 999px;
+  border-radius: 2px;
 }
 .segA {
-  background: var(--md-sys-color-primary);
+  background: var(--console-accent);
 }
 .segS {
-  background: var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-outline);
 }
 .segB {
   background: var(--md-sys-color-tertiary);
@@ -223,45 +201,42 @@
   padding: 0;
   list-style: none;
   color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-medium);
+  font: var(--md-sys-typescale-body-medium);
 }
 .stripLegend b {
-  font-size: 14px;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 .lA b {
-  color: var(--md-sys-color-primary);
+  color: var(--console-accent);
 }
 .lB b {
-  color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-surface);
 }
 .lS b {
   color: var(--md-sys-color-on-surface);
 }
 
-/* ---- diff sections ---- */
+/* ---- diff sections: heading + console table, bleeding to the panel edges ---- */
 .diff {
   display: block;
-  padding: 4px 8px 12px;
-  border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-low);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  padding: 8px 0 0;
 }
 .diffHead {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 4px 4px 8px;
+  gap: 8px;
+  padding: 0 0 4px;
 }
 .diffDot {
   flex: none;
-  width: 10px;
-  height: 36px;
-  border-radius: 999px;
+  width: 4px;
+  height: 28px;
+  border-radius: 2px;
   background: var(--md-sys-color-outline);
 }
 .onlyA .diffDot {
-  background: var(--md-sys-color-primary);
+  background: var(--console-accent);
 }
 .onlyB .diffDot {
   background: var(--md-sys-color-tertiary);
@@ -280,18 +255,18 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-medium);
+  font: var(--md-sys-typescale-body-medium);
 }
 .diffCount {
-  padding: 2px 12px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-highest);
-  font: 700 18px/28px var(--font-mono);
+  padding: 0 4px;
+  border-radius: var(--console-radius-chip);
+  background: var(--md-sys-color-surface-container-high);
+  font: var(--md-sys-typescale-label-large);
   font-variant-numeric: tabular-nums;
 }
 .onlyA .diffCount {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background: var(--console-nav-active);
+  color: var(--md-sys-color-on-secondary-container);
 }
 .onlyB .diffCount {
   background: var(--md-sys-color-tertiary-container);
@@ -299,7 +274,7 @@
 }
 .diffEmpty {
   margin: 0;
-  padding: 4px 8px 4px 28px;
+  padding: 4px 0 8px;
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-body-medium);
 }
@@ -307,46 +282,54 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px 0 8px;
   color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-medium);
+  font: var(--md-sys-typescale-body-medium);
 }
 .link {
-  padding: 4px 8px;
+  padding: 0 12px;
+  height: var(--console-control);
   border: 0;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--console-radius-button);
   background: transparent;
-  color: var(--md-sys-color-primary);
+  color: var(--console-accent);
   font: var(--md-sys-typescale-label-large);
   cursor: pointer;
 }
 .link:hover {
-  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--console-accent) 8%, transparent);
+}
+.thead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 62px 64px;
+  align-items: center;
+  column-gap: 6px;
+  height: 29px;
+  margin-inline: -16px;
+  padding: 0 16px;
+  background: var(--console-table-header);
+  border-bottom: 1px solid var(--console-border);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-label-large);
 }
 .moreServices {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  min-height: 44px;
-  margin-top: 6px;
-  padding: 0 14px;
+  width: calc(100% + 32px);
+  min-height: 32px;
+  margin-inline: -16px;
+  padding: 0 16px;
   border: 0;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background: transparent;
+  color: var(--console-accent);
   font: var(--md-sys-typescale-label-large);
   cursor: pointer;
 }
 .moreServices span {
-  font: var(--md-sys-typescale-label-small);
-  opacity: 0.8;
+  font: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.zero {
-  background: transparent;
-  border-style: dashed;
-}
 .zero .diffDot {
   background: var(--md-sys-color-outline-variant);
 }

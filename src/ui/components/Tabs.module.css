@@ -7,7 +7,8 @@
   composes: layer from './state-layer.module.css';
   flex: 1;
   height: var(--console-tab);
-  padding: 0 16px;
+  padding: 0 8px;
+  white-space: nowrap;
   border: 0;
   background: transparent;
   cursor: pointer;

@@ -1,32 +1,35 @@
 .root {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 4px;
+  gap: 0;
   align-content: start;
 }
+/* Console filter bar: funnel, "Filter", property input; 1px divider underneath. No fill. */
 .toolbar {
   display: grid;
-  gap: 10px;
+  gap: 4px;
   margin-top: 8px;
 }
 .filter {
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 16px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-high);
-  color: var(--md-sys-color-on-surface-variant);
-  transition: border-radius var(--motion-spring-fast);
+  gap: 8px;
+  height: 40px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--console-divider);
+  color: var(--console-icon);
 }
 .filter:focus-within {
-  border-radius: var(--md-sys-shape-corner-large);
-  outline: 3px solid var(--md-sys-color-primary);
-  outline-offset: 0;
+  border-bottom-color: var(--console-accent);
+  box-shadow: 0 1px 0 var(--console-accent);
 }
 .filterIcon {
   flex: none;
+}
+.filterLabel {
+  flex: none;
+  font: var(--md-sys-typescale-label-large);
+  color: var(--md-sys-color-on-surface);
 }
 .filterInput {
   flex: 1;
@@ -45,36 +48,35 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-.chipCount {
-  font-variant-numeric: tabular-nums;
-  opacity: 0.75;
+  padding: 4px 0;
 }
 .summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
+  min-height: 32px;
   color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-medium);
+  font: var(--md-sys-typescale-body-medium);
 }
-.link {
-  padding: 4px 8px;
-  border: 0;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: transparent;
-  color: var(--md-sys-color-primary);
+/* Table header row: 29px, table-header tone, 1px border; bleeds to the panel edges. */
+.thead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 62px 64px;
+  align-items: center;
+  column-gap: 6px;
+  height: 29px;
+  margin: 4px -16px 0;
+  padding: 0 16px;
+  background: var(--console-table-header);
+  border-bottom: 1px solid var(--console-border);
+  color: var(--md-sys-color-on-surface);
   font: var(--md-sys-typescale-label-large);
-  cursor: pointer;
-}
-.link:hover {
-  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
 }
 .empty {
   display: grid;
-  justify-items: center;
+  justify-items: start;
   gap: 4px;
-  margin: 24px 0;
+  margin: 16px 0;
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-body-medium);
 }

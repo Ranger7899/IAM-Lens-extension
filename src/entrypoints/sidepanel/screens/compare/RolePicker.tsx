@@ -12,7 +12,7 @@ export interface RolePickerProps {
   onPick: (roleName: string | undefined) => void;
 }
 
-/** Role autocomplete in the shape of the M3 search bar: a pill that morphs into a sheet while its results are open. */
+/** Role autocomplete: a console outlined text field whose results open beneath the input. */
 export function RolePicker({ index, side, value, onPick }: RolePickerProps) {
   const listId = useId();
   const [text, setText] = useState(value ?? '');
@@ -117,7 +117,6 @@ export function RolePicker({ index, side, value, onPick }: RolePickerProps) {
               role="option"
               aria-selected={i === active}
               className={`${styles.option} ${i === active ? styles.optionActive : ''}`}
-              style={{ '--i': i } as React.CSSProperties}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => choose(role.name)}
             >

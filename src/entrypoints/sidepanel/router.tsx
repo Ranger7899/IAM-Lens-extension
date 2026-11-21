@@ -3,7 +3,7 @@
  * navigation for free; every route renders one file in ./screens inside a shared-axis transition.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { IconButton, LensMark, SegmentedButton, TopAppBar, type IconName } from '@/ui/components';
+import { IconButton, LensMark, Tabs, TopAppBar } from '@/ui/components';
 import { IamGate, usePendingRoute } from '@/ui/data';
 import { navigateWithTransition, type NavDirection } from '@/ui/motion/navigate';
 import { CompareScreen } from './screens/CompareScreen';
@@ -19,11 +19,11 @@ import styles from './App.module.css';
 export { NavigationContext, useNavigate, parseRoute, routeHref };
 export type { Route, TopLevelRoute, NavigationApi, NavigateOptions };
 
-const MODES: { id: TopLevelRoute; label: string; icon: IconName }[] = [
-  { id: 'search', label: 'Search', icon: 'search' },
-  { id: 'minimal', label: 'Minimal', icon: 'target' },
-  { id: 'compare', label: 'Compare', icon: 'compare_arrows' },
-  { id: 'whatsnew', label: "What's new", icon: 'new_releases' },
+const MODES: { id: TopLevelRoute; label: string }[] = [
+  { id: 'search', label: 'Search' },
+  { id: 'minimal', label: 'Minimal' },
+  { id: 'compare', label: 'Compare' },
+  { id: 'whatsnew', label: "What's new" },
 ];
 
 /** The segment a route belongs to; detail routes are reached from Search. */
@@ -134,7 +134,7 @@ export function SidePanelRouter() {
   const detail = isDetail(route);
   return (
     <NavigationContext.Provider value={api}>
-      <div className={`${styles.root} dot-grid`}>
+      <div className={styles.root}>
         <TopAppBar
           title="IAM Lens"
           leading={
@@ -153,18 +153,19 @@ export function SidePanelRouter() {
               onClick={() => void chrome.runtime.openOptionsPage()}
             />
           }
-        >
-          <SegmentedButton
-            label="Mode"
-            segments={MODES}
-            value={modeOf(route)}
-            onChange={(id) => {
-              if (id === 'search') go({ name: 'search', query: '' });
-              else go({ name: id as 'minimal' | 'compare' | 'whatsnew' });
-            }}
-          />
-        </TopAppBar>
+        ></TopAppBar>
         <main className={styles.main}>
+          <div className={styles.tabs}>
+            <Tabs
+              label="Mode"
+              tabs={MODES}
+              value={modeOf(route)}
+              onChange={(id) => {
+                if (id === 'search') go({ name: 'search', query: '' });
+                else go({ name: id as 'minimal' | 'compare' | 'whatsnew' });
+              }}
+            />
+          </div>
           <div className={`${styles.view} route-view`}>
             <IamGate>
               <Screen route={route} go={go} />

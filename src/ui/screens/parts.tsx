@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ListItem, ServiceIcon, PrivilegeBar, SourceBadge, StageChip } from '../components';
+import { List, ListItem, ServiceIcon, PrivilegeBar, SourceBadge, StageChip } from '../components';
 import type { RoleSummary } from '../types';
 import styles from './parts.module.css';
 
@@ -23,6 +23,31 @@ export function SectionHeader({
   );
 }
 
+export interface ConsoleTableProps {
+  /** Accessible name of the list of rows. */
+  label: string;
+  first: string;
+  last?: string;
+  children: ReactNode;
+}
+
+/**
+ * Console table frame: a 29px header row (visual only, the list below carries the semantics) over the
+ * rows, bleeding to the panel edges like the console's tables.
+ */
+export function ConsoleTable({ label, first, last, children }: ConsoleTableProps) {
+  return (
+    <div className={styles.table}>
+      <div className={styles.thead} aria-hidden="true">
+        <span />
+        <span>{first}</span>
+        <span className={styles.theadLast}>{last}</span>
+      </div>
+      <List label={label}>{children}</List>
+    </div>
+  );
+}
+
 export function total(c: { read: number; write: number; admin: number }) {
   return c.read + c.write + c.admin;
 }
@@ -42,7 +67,7 @@ export function RoleRow({ role, index, onOpen, badge }: RoleRowProps) {
     <ListItem
       index={index}
       onClick={onOpen && (() => onOpen(role.id))}
-      leading={<ServiceIcon id={role.id} size={32} />}
+      leading={<ServiceIcon id={role.id} size={24} />}
       headline={role.title}
       supporting={<span className={styles.mono}>{role.id}</span>}
       trailing={

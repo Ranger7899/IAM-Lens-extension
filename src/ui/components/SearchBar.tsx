@@ -27,12 +27,15 @@ export function SearchBar({ label = 'Search roles and permissions', className, .
   useSlashFocus(ref);
   return (
     <div className={`${styles.root} ${className ?? ''}`} role="search">
-      <Icon name="search" className={styles.icon} />
+      <Icon name="filter_alt" className={styles.icon} />
+      <span className={styles.label} aria-hidden="true">
+        Filter
+      </span>
       <input
         ref={ref}
         type="search"
         aria-label={label}
-        placeholder="Search permissions and roles"
+        placeholder="Enter property name or value"
         aria-keyshortcuts="/"
         className={styles.input}
         {...rest}

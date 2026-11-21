@@ -5,41 +5,9 @@
   align-content: start;
 }
 .header {
-  position: relative;
   display: grid;
-  gap: 18px;
-  padding: 22px 20px 20px;
-  border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-high);
-  overflow: hidden;
-  animation: headerIn var(--motion-emphasized) backwards;
-}
-/* A soft risk-coloured wash in the top corner so the class reads before the label does. */
-.header::before {
-  content: '';
-  position: absolute;
-  inset: -40% -20% auto auto;
-  width: 70%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, var(--wash), transparent);
-  opacity: 0.55;
-  pointer-events: none;
-}
-.read {
-  --wash: var(--md-custom-color-read-container);
-}
-.write {
-  --wash: var(--md-custom-color-write-container);
-}
-.admin {
-  --wash: var(--md-custom-color-admin-container);
-}
-@keyframes headerIn {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
+  gap: 12px;
+  padding-top: 4px;
 }
 .kindRow {
   display: flex;
@@ -48,10 +16,7 @@
   gap: 8px;
 }
 .kind {
-  font: var(--md-sys-typescale-label-medium);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-title-large);
 }
 .meta {
   display: flex;
@@ -61,20 +26,19 @@
 }
 .granted {
   margin: 0;
-  font: var(--md-sys-typescale-title-medium);
-  letter-spacing: -0.005em;
+  font: var(--md-sys-typescale-headline-small);
 }
 .granted b {
-  font-family: var(--font-mono);
+  font-weight: inherit;
   font-variant-numeric: tabular-nums;
 }
 .risk {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 24px;
-  padding: 0 10px 0 7px;
-  border-radius: var(--md-sys-shape-corner-full);
+  height: 20px;
+  padding: 0 4px;
+  border-radius: var(--console-radius-chip);
   font: var(--md-sys-typescale-label-medium);
 }
 .risk.read {
@@ -94,40 +58,32 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 20px 8px 8px;
+  padding: 20px 0 8px;
 }
 .toolbarTitle {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
-  font: var(--md-sys-typescale-label-large);
-  letter-spacing: 0.02em;
-  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-title-medium);
+  color: var(--md-sys-color-on-surface);
 }
 .count {
-  display: inline-grid;
-  place-items: center;
-  min-width: 22px;
-  height: 20px;
-  padding: 0 7px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-highest);
-  font: var(--md-sys-typescale-label-small);
+  font: var(--md-sys-typescale-body-medium);
   font-variant-numeric: tabular-nums;
+  color: var(--md-sys-color-on-surface-variant);
 }
 .note {
-  margin: 4px 8px 0;
+  margin: 4px 0 8px;
   font: var(--md-sys-typescale-body-small);
   color: var(--md-sys-color-on-surface-variant);
 }
 .pickerHead {
   display: grid;
   gap: 6px;
-  padding: 12px 8px 4px;
+  padding: 12px 0 4px;
 }
 .pickerTitle {
   font: var(--md-sys-typescale-headline-small);
-  letter-spacing: var(--tracking-display);
   text-wrap: balance;
 }
 .pickerHint {
@@ -140,16 +96,16 @@
   color: var(--md-sys-color-on-surface);
 }
 .num {
-  font: 600 12px/16px var(--font-mono);
+  font: var(--md-sys-typescale-body-medium);
   font-variant-numeric: tabular-nums;
   color: var(--md-sys-color-on-surface-variant);
 }
 .empty {
-  padding: 16px 8px;
+  padding: 16px 0;
   color: var(--md-sys-color-on-surface-variant);
 }
 /* The shared List is an auto-column grid: without this a long role ID widens every row past the panel. */
-.root > ul {
+.root > div > ul {
   grid-template-columns: minmax(0, 1fr);
 }
 .toolbarTitle {
@@ -165,11 +121,11 @@
   overflow-x: auto;
   scrollbar-width: none;
 }
-.root > ul > li {
+.root > div > ul > li {
   grid-template-columns: minmax(0, 1fr);
   min-width: 0;
 }
-.root > ul > li > div > button > span:nth-child(2) {
+.root > div > ul > li > div > button > span:nth-child(2) {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -179,11 +135,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 8px 8px;
+  padding: 0 0 8px;
 }
 .orderLabel {
   font: var(--md-sys-typescale-label-large);
-  letter-spacing: 0.02em;
   color: var(--md-sys-color-on-surface-variant);
 }
 .orderRow > div {

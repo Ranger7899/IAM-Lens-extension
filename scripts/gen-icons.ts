@@ -18,6 +18,7 @@ const ICONS = [
   'content_copy',
   'edit',
   'error',
+  'filter_alt',
   'info',
   'key',
   'login',

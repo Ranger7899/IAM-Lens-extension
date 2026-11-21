@@ -94,11 +94,7 @@ export function RoleRows({
           </>
         );
         return (
-          <li
-            key={r.name}
-            className={`${styles.row} reveal`}
-            style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
-          >
+          <li key={r.name} className={styles.row} style={{ '--i': Math.min(i, 8) } as React.CSSProperties}>
             {linked ? (
               <a className={styles.rowMain} href={routeHref({ name: 'role', id: r.name })}>
                 {body}
@@ -161,7 +157,7 @@ export function ChangedRoles({ changes }: { changes: readonly RoleChange[] }) {
       render={(c, i) => (
         <li
           key={c.name}
-          className={`${styles.changedItem} reveal`}
+          className={styles.changedItem}
           style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
         >
           <a className={styles.changedHead} href={routeHref({ name: 'role', id: c.name })}>

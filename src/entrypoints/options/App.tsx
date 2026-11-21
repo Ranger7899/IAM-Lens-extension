@@ -11,22 +11,24 @@ import styles from './App.module.css';
 export function App({ deps }: { deps: OptionsDeps }) {
   useThemePreference();
   return (
-    <div className={`${styles.root} dot-grid`}>
+    <div className={styles.root}>
       <header className={styles.top}>
-        <LensMark size={40} />
+        <LensMark size={32} />
         <div>
           <h1>IAM Lens</h1>
           <p>Options</p>
         </div>
       </header>
-      <main className={styles.main}>
-        <IamGate>
-          <DataCard deps={deps} />
-        </IamGate>
-        <CustomRolesCard deps={deps} />
-        <AppearanceCard />
-        <AboutCard version={deps.version} />
-      </main>
+      <div className={styles.panel}>
+        <main className={styles.main}>
+          <IamGate>
+            <DataCard deps={deps} />
+          </IamGate>
+          <CustomRolesCard deps={deps} />
+          <AppearanceCard />
+          <AboutCard version={deps.version} />
+        </main>
+      </div>
     </div>
   );
 }

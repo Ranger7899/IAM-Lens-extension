@@ -6,7 +6,7 @@
   height: 40px;
   padding: 0 8px;
   background: transparent;
-  border-bottom: 1px solid var(--console-border);
+  border-bottom: 1px solid var(--console-divider);
   border-radius: 0;
 }
 .root:focus-within {
@@ -15,6 +15,11 @@
 }
 .icon {
   color: var(--console-icon);
+}
+.label {
+  flex: none;
+  font: var(--md-sys-typescale-label-large);
+  color: var(--md-sys-color-on-surface);
 }
 .input {
   flex: 1;

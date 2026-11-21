@@ -83,6 +83,11 @@ export function DiffSection({ index, kind, title, caption, permissions, onCopy }
               </button>
             )}
           </div>
+          <div className={styles.thead} aria-hidden="true">
+            <span>Permission</span>
+            <span>Type</span>
+            <span>Service</span>
+          </div>
           {groups.slice(0, services).map(([service, indices], gi) => (
             <ServiceSection
               key={service}

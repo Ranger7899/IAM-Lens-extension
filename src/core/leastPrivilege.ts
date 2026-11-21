@@ -94,7 +94,11 @@ export function rolesGranting(
   for (const i of idxs) {
     const r = index.roles[i];
     if (opts.excludeDiscouraged && isDiscouraged(r)) continue;
-    out.push({ r, cls: discouragedClass(r), tier: service !== undefined && roleService(r) === service ? 0 : 1 });
+    out.push({
+      r,
+      cls: discouragedClass(r),
+      tier: service !== undefined && roleService(r) === service ? 0 : 1,
+    });
   }
   const within = preferService ? byStageThenSize : bySizeThenStage;
   return out.sort((a, b) => a.cls - b.cls || a.tier - b.tier || within(a.r, b.r)).map((x) => x.r);

@@ -6,9 +6,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 32px;
-  padding: 0 12px 0 10px;
-  border-radius: var(--md-sys-shape-corner-small);
+  height: 20px;
+  padding: 0 4px;
+  border-radius: var(--console-radius-chip);
   background: var(--md-custom-color-read-container);
   color: var(--md-custom-color-on-read-container);
   font: var(--md-sys-typescale-label-large);
@@ -19,9 +19,9 @@
   gap: 12px;
   flex-wrap: wrap;
   padding: 12px 16px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  border-radius: var(--console-radius-banner);
+  background: var(--console-table-header);
+  color: var(--md-sys-color-on-surface);
 }
 .banner span {
   flex: 1 1 220px;
@@ -33,7 +33,7 @@
   gap: 8px;
   margin-top: 6px;
   padding: 8px 12px;
-  border-radius: var(--md-sys-shape-corner-medium);
+  border-radius: var(--console-radius-button);
   background: var(--md-sys-color-error-container);
   color: var(--md-sys-color-on-error-container);
   font: var(--md-sys-typescale-body-small);

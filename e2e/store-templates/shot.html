@@ -1,61 +1,293 @@
 <!doctype html>
 <html lang="en" class="{{THEME}}">
-<head>
-<meta charset="utf-8">
-<style>
-@font-face{font-family:"Google Sans Flex";font-weight:100 1000;src:url(data:font/woff2;base64,{{FLEX}}) format("woff2")}
-@font-face{font-family:"Google Sans Code";font-weight:100 900;src:url(data:font/woff2;base64,{{CODE}}) format("woff2")}
-:root{--bg:#f5f7fd;--ink:#14181f;--ink2:#4a5365;--dot:#aab6d3;--card:#fff;--line:rgba(20,40,90,.12);
- --blue:#1a56c8;--read:#1e8e3e;--write:#b86e00;--admin:#d93025;--pill:#fff;--shadow:0 1px 2px rgba(15,30,70,.12),0 18px 40px -8px rgba(15,40,110,.28),0 50px 100px -20px rgba(15,40,110,.28)}
-.dark{--bg:#0d1017;--ink:#f1f3f8;--ink2:#a7b0c2;--dot:#5a6788;--card:#171b25;--line:rgba(255,255,255,.12);
- --blue:#8ab4ff;--read:#6dd58c;--write:#ffc94d;--admin:#ff8a80;--pill:#1b2030;--shadow:0 0 0 1px rgba(255,255,255,.08),0 18px 40px -8px rgba(0,0,0,.6),0 50px 100px -20px rgba(0,0,0,.7)}
-*{box-sizing:border-box;margin:0}
-html,body{width:1280px;height:800px;overflow:hidden}
-body{background:var(--bg);color:var(--ink);font-family:"Google Sans Flex",sans-serif;position:relative}
-.dots{position:absolute;inset:0;background-image:radial-gradient(circle,var(--dot) 1.3px,transparent 1.6px);background-size:24px 24px;background-position:12px 12px;opacity:.55;
- -webkit-mask-image:radial-gradient(ellipse 70% 90% at 78% 50%,#000 0,transparent 78%);mask-image:radial-gradient(ellipse 70% 90% at 78% 50%,#000 0,transparent 78%)}
-.glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
-.dark .glow{opacity:.28}
-.g1{width:520px;height:520px;left:700px;top:-120px;background:#9cc0ff}
-.g2{width:320px;height:320px;left:1000px;top:480px;background:#9be3b3}
-.g3{width:260px;height:260px;left:560px;top:560px;background:#ffd98a}
-.text{position:absolute;left:84px;top:78px;width:690px}
-.eyebrow{display:flex;align-items:center;gap:14px;font:600 15px/1 "Google Sans Flex";letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
-.eyebrow i{font-style:normal;color:var(--blue)}
-.eyebrow b{display:block;width:44px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--read),var(--write),var(--admin))}
-h1{margin-top:30px;font-weight:760;font-size:68px;line-height:1.02;letter-spacing:-.035em;font-variation-settings:"wght" 760}
-h1 em{font-style:normal;color:var(--accent,var(--blue))}
-.sub{margin-top:26px;font-size:23px;line-height:1.4;color:var(--ink2);max-width:470px;font-weight:420}
-.tok{margin-top:40px;display:inline-flex;font:500 22px/1 "Google Sans Code",monospace;padding:15px 22px;border-radius:999px;background:var(--pill);border:1px solid var(--line);box-shadow:0 8px 24px -10px rgba(15,40,110,.3)}
-.tok .s{color:var(--blue);font-weight:650}.tok .r{color:var(--ink2)}.tok .v{font-weight:700}
-.tok .v.read{color:var(--read)}.tok .v.write{color:var(--write)}.tok .v.admin{color:var(--admin)}
-.legend{position:absolute;left:84px;bottom:56px;display:flex;gap:26px;font-size:16px;font-weight:550;color:var(--ink2)}
-.legend span{display:flex;align-items:center;gap:9px}
-.legend s{display:block;width:26px;height:8px;border-radius:4px}
-.brand{position:absolute;left:84px;top:34px;display:none}
-.shot{position:absolute;border-radius:28px 28px 0 0;overflow:hidden;box-shadow:var(--shadow);background:var(--card)}
-.shot img{display:block;width:100%;height:100%}
-.panel{left:798px;top:60px;width:400px;height:740px}
-.popup{left:84px;top:430px;width:380px;height:560px;border-radius:24px;transform:rotate(0)}
-.has-popup .text{top:64px;width:540px}
-.has-popup h1{font-size:60px}
-.has-popup .tok,.has-popup .legend{display:none}
-.has-popup .sub{margin-top:20px}
-.has-popup .panel{left:640px}
-.has-popup .popup{left:84px;top:400px}
-.pill-mark{position:absolute;right:84px;top:22px;display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;color:var(--ink2)}
-.pill-mark svg{width:30px;height:30px;border-radius:8px}
-</style></head>
-<body class="{{LAYOUT}}">
-<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div><div class="dots"></div>
-<div class="text" style="--accent:{{ACCENT}}">
- <div class="eyebrow"><i>{{NUM}}</i><b></b>{{EYEBROW}}</div>
- <h1>{{HEADLINE}}</h1>
- <p class="sub">{{SUB}}</p>
- <div class="tok">{{TOKEN}}</div>
-</div>
-<div class="legend"><span><s style="background:var(--read)"></s>Read</span><span><s style="background:var(--write)"></s>Write</span><span><s style="background:var(--admin)"></s>Admin</span></div>
-<div class="pill-mark">{{ICON}}IAM Lens</div>
-<div class="shot panel"><img src="{{PANEL}}"></div>
-{{POPUPHTML}}
-</body></html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Google Sans Flex';
+        font-weight: 100 1000;
+        src: url(data:font/woff2;base64,{{FLEX}}) format('woff2');
+      }
+      @font-face {
+        font-family: 'Google Sans Code';
+        font-weight: 100 900;
+        src: url(data:font/woff2;base64,{{CODE}}) format('woff2');
+      }
+      :root {
+        --bg: #f5f7fd;
+        --ink: #14181f;
+        --ink2: #4a5365;
+        --dot: #aab6d3;
+        --card: #fff;
+        --line: rgba(20, 40, 90, 0.12);
+        --blue: #1a56c8;
+        --read: #1e8e3e;
+        --write: #b86e00;
+        --admin: #d93025;
+        --pill: #fff;
+        --shadow:
+          0 1px 2px rgba(15, 30, 70, 0.12), 0 18px 40px -8px rgba(15, 40, 110, 0.28),
+          0 50px 100px -20px rgba(15, 40, 110, 0.28);
+      }
+      .dark {
+        --bg: #0d1017;
+        --ink: #f1f3f8;
+        --ink2: #a7b0c2;
+        --dot: #5a6788;
+        --card: #171b25;
+        --line: rgba(255, 255, 255, 0.12);
+        --blue: #8ab4ff;
+        --read: #6dd58c;
+        --write: #ffc94d;
+        --admin: #ff8a80;
+        --pill: #1b2030;
+        --shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 40px -8px rgba(0, 0, 0, 0.6),
+          0 50px 100px -20px rgba(0, 0, 0, 0.7);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 1280px;
+        height: 800px;
+        overflow: hidden;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Google Sans Flex', sans-serif;
+        position: relative;
+      }
+      .dots {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle, var(--dot) 1.3px, transparent 1.6px);
+        background-size: 24px 24px;
+        background-position: 12px 12px;
+        opacity: 0.55;
+        -webkit-mask-image: radial-gradient(ellipse 70% 90% at 78% 50%, #000 0, transparent 78%);
+        mask-image: radial-gradient(ellipse 70% 90% at 78% 50%, #000 0, transparent 78%);
+      }
+      .glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.5;
+      }
+      .dark .glow {
+        opacity: 0.28;
+      }
+      .g1 {
+        width: 520px;
+        height: 520px;
+        left: 700px;
+        top: -120px;
+        background: #9cc0ff;
+      }
+      .g2 {
+        width: 320px;
+        height: 320px;
+        left: 1000px;
+        top: 480px;
+        background: #9be3b3;
+      }
+      .g3 {
+        width: 260px;
+        height: 260px;
+        left: 560px;
+        top: 560px;
+        background: #ffd98a;
+      }
+      .text {
+        position: absolute;
+        left: 84px;
+        top: 78px;
+        width: 690px;
+      }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font: 600 15px/1 'Google Sans Flex';
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink2);
+      }
+      .eyebrow i {
+        font-style: normal;
+        color: var(--blue);
+      }
+      .eyebrow b {
+        display: block;
+        width: 44px;
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--read), var(--write), var(--admin));
+      }
+      h1 {
+        margin-top: 30px;
+        font-weight: 760;
+        font-size: 68px;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+        font-variation-settings: 'wght' 760;
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--accent, var(--blue));
+      }
+      .sub {
+        margin-top: 26px;
+        font-size: 23px;
+        line-height: 1.4;
+        color: var(--ink2);
+        max-width: 470px;
+        font-weight: 420;
+      }
+      .tok {
+        margin-top: 40px;
+        display: inline-flex;
+        font:
+          500 22px/1 'Google Sans Code',
+          monospace;
+        padding: 15px 22px;
+        border-radius: 999px;
+        background: var(--pill);
+        border: 1px solid var(--line);
+        box-shadow: 0 8px 24px -10px rgba(15, 40, 110, 0.3);
+      }
+      .tok .s {
+        color: var(--blue);
+        font-weight: 650;
+      }
+      .tok .r {
+        color: var(--ink2);
+      }
+      .tok .v {
+        font-weight: 700;
+      }
+      .tok .v.read {
+        color: var(--read);
+      }
+      .tok .v.write {
+        color: var(--write);
+      }
+      .tok .v.admin {
+        color: var(--admin);
+      }
+      .legend {
+        position: absolute;
+        left: 84px;
+        bottom: 56px;
+        display: flex;
+        gap: 26px;
+        font-size: 16px;
+        font-weight: 550;
+        color: var(--ink2);
+      }
+      .legend span {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .legend s {
+        display: block;
+        width: 26px;
+        height: 8px;
+        border-radius: 4px;
+      }
+      .brand {
+        position: absolute;
+        left: 84px;
+        top: 34px;
+        display: none;
+      }
+      .shot {
+        position: absolute;
+        border-radius: 28px 28px 0 0;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background: var(--card);
+      }
+      .shot img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .panel {
+        left: 798px;
+        top: 60px;
+        width: 400px;
+        height: 740px;
+      }
+      .popup {
+        left: 84px;
+        top: 430px;
+        width: 380px;
+        height: 560px;
+        border-radius: 24px;
+        transform: rotate(0);
+      }
+      .has-popup .text {
+        top: 64px;
+        width: 540px;
+      }
+      .has-popup h1 {
+        font-size: 60px;
+      }
+      .has-popup .tok,
+      .has-popup .legend {
+        display: none;
+      }
+      .has-popup .sub {
+        margin-top: 20px;
+      }
+      .has-popup .panel {
+        left: 640px;
+      }
+      .has-popup .popup {
+        left: 84px;
+        top: 400px;
+      }
+      .pill-mark {
+        position: absolute;
+        right: 84px;
+        top: 22px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 650;
+        font-size: 15px;
+        color: var(--ink2);
+      }
+      .pill-mark svg {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body class="{{LAYOUT}}">
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+    <div class="dots"></div>
+    <div class="text" style="--accent:{{ACCENT}}">
+      <div class="eyebrow"><i>{{NUM}}</i><b></b>{{EYEBROW}}</div>
+      <h1>{{HEADLINE}}</h1>
+      <p class="sub">{{SUB}}</p>
+      <div class="tok">{{TOKEN}}</div>
+    </div>
+    <div class="legend">
+      <span><s style="background: var(--read)"></s>Read</span
+      ><span><s style="background: var(--write)"></s>Write</span
+      ><span><s style="background: var(--admin)"></s>Admin</span>
+    </div>
+    <div class="pill-mark">{{ICON}}IAM Lens</div>
+    <div class="shot panel"><img src="{{PANEL}}" /></div>
+    {{POPUPHTML}}
+  </body>
+</html>

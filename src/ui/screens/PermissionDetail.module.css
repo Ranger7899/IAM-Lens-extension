@@ -13,20 +13,11 @@
   display: grid;
   gap: 16px;
   padding: 20px 20px 22px;
-  border-radius: var(--md-sys-shape-corner-extra-large);
+  border-radius: var(--console-radius-banner);
   background: var(--md-sys-color-surface-container-high);
-  animation: headerIn var(--motion-emphasized) backwards;
-}
-@keyframes headerIn {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
 }
 .kind {
   font: var(--md-sys-typescale-label-medium);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--md-sys-color-on-surface-variant);
 }
 .desc {

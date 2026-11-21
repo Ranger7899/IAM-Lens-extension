@@ -6,14 +6,13 @@ import {
   Icon,
   Label,
   LeastPrivilegeBadge,
-  List,
   PermissionAnatomy,
   SegmentedButton,
   Snackbar,
   useCopy,
   type IconName,
 } from '@/ui/components';
-import { RoleRow } from '@/ui/screens/parts';
+import { ConsoleTable, RoleRow } from '@/ui/screens/parts';
 import type { RoleSummary, Stage } from '@/ui/types';
 import { grantingRoles, isHiddenByDefault } from './resolve';
 import styles from './permission.module.css';
@@ -54,11 +53,10 @@ export function PermissionDetailView({
 
   return (
     <article className={styles.root} aria-label={permission}>
-      <div className={`${styles.header} ${styles[risk]}`}>
+      <div className={styles.header}>
         <div className={styles.kindRow}>
           <span className={styles.kind}>Permission</span>
           <Button
-            variant="tonal"
             icon="content_copy"
             aria-label={`Copy ${permission}`}
             onClick={async () => {
@@ -110,7 +108,7 @@ export function PermissionDetailView({
       {shown.length === 0 ? (
         <p className={styles.empty}>No role grants this permission.</p>
       ) : (
-        <List label="Roles granting this permission">
+        <ConsoleTable label="Roles granting this permission" first="Role" last="Permissions">
           {shown.map((role, i) => {
             const c = index.profile(role);
             const summary: RoleSummary = {
@@ -130,7 +128,7 @@ export function PermissionDetailView({
               />
             );
           })}
-        </List>
+        </ConsoleTable>
       )}
       <Snackbar message={toast} onClose={() => setToast(null)} />
     </article>

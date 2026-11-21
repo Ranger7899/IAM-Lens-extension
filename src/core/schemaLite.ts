@@ -92,4 +92,3 @@ export class SnapshotValidationError extends Error {
     this.name = 'SnapshotValidationError';
   }
 }
-

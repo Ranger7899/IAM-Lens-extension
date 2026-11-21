@@ -13,6 +13,4 @@
 }
 .risk {
   font: var(--md-sys-typescale-label-small);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }

@@ -1,21 +1,29 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
 import { IamIndex } from '../model';
-import { isDiscouraged, isLegacyRole, isServiceAgentRole, minimalRoles, rolesGranting } from '../leastPrivilege';
+import {
+  isDiscouraged,
+  isLegacyRole,
+  isServiceAgentRole,
+  minimalRoles,
+  rolesGranting,
+} from '../leastPrivilege';
 import type { RoleRecord } from '../model';
 import { makeSnapshot, realSnapshot } from './fixtures';
 
 describe('real snapshot', () => {
   const index = new IamIndex(realSnapshot());
 
-  it('rolesGranting puts the permission\'s own service first', () => {
+  it("rolesGranting puts the permission's own service first", () => {
     const roles = rolesGranting(index, 'storage.objects.get');
     const names = roles.map((r) => r.name);
     expect(names[0]).toMatch(/^roles\/storage\./);
     expect(names).toContain('roles/storage.objectViewer');
     // storage.* roles come before any ordinary non-storage role
     const firstOther = roles.findIndex((r) => !r.name.startsWith('roles/storage.') && !isServiceAgentRole(r));
-    const lastStorage = roles.map((r) => r.name.startsWith('roles/storage.') && !isServiceAgentRole(r)).lastIndexOf(true);
+    const lastStorage = roles
+      .map((r) => r.name.startsWith('roles/storage.') && !isServiceAgentRole(r))
+      .lastIndexOf(true);
     expect(lastStorage).toBeLessThan(firstOther);
     expect(rolesGranting(index, 'nope.nope.nope')).toEqual([]);
   });
@@ -63,9 +71,9 @@ describe('real snapshot', () => {
   });
 
   it('minimalRoles prefers GA people roles over BETA and agent roles', () => {
-    expect(minimalRoles(index, ['storage.objects.get', 'storage.objects.list']).roles.map((c) => c.role.name)).toEqual([
-      'roles/storage.objectViewer',
-    ]);
+    expect(
+      minimalRoles(index, ['storage.objects.get', 'storage.objects.list']).roles.map((c) => c.role.name),
+    ).toEqual(['roles/storage.objectViewer']);
     const bq = minimalRoles(index, ['bigquery.tables.getData']).roles;
     expect(bq).toHaveLength(1);
     expect(bq[0].role.name).toMatch(/^roles\/bigquery\./);

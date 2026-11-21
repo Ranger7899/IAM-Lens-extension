@@ -62,7 +62,10 @@ describe('IamIndex (real snapshot)', () => {
 
   it('search: query token equal to the role service ranks that service first', () => {
     expect(index.search('storage').roles[0].role.name).toMatch(/^roles\/storage\./);
-    const top = index.search('storage').roles.slice(0, 3).map((h) => h.role.name);
+    const top = index
+      .search('storage')
+      .roles.slice(0, 3)
+      .map((h) => h.role.name);
     expect(top.every((n) => n.startsWith('roles/storage.'))).toBe(true);
   });
 

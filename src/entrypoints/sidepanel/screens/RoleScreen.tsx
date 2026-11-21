@@ -1,5 +1,5 @@
 import { useCallback, useDeferredValue, useMemo, useState } from 'react';
-import { Chip, Icon, Snackbar } from '@/ui/components';
+import { Button, Chip, Icon, Snackbar } from '@/ui/components';
 import { useIam } from '@/ui/data';
 import type { PrivilegeClass, ServiceGroup } from '@/core';
 import { RoleHeader } from './role/RoleHeader';
@@ -109,12 +109,15 @@ function RoleView({ index, name }: { index: NonNullable<ReturnType<typeof useIam
       {total > 0 && (
         <div className={styles.toolbar}>
           <label className={styles.filter}>
-            <Icon name="search" size={20} className={styles.filterIcon} />
+            <Icon name="filter_alt" className={styles.filterIcon} />
+            <span className={styles.filterLabel} aria-hidden="true">
+              Filter
+            </span>
             <input
               type="search"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder={`Filter ${total.toLocaleString('en-US')} permissions`}
+              placeholder="Enter property name or value"
               aria-label="Filter permissions in this role"
               className={styles.filterInput}
               autoComplete="off"
@@ -143,9 +146,9 @@ function RoleView({ index, name }: { index: NonNullable<ReturnType<typeof useIam
                 : `${groups.length} ${groups.length === 1 ? 'service' : 'services'}`}
             </span>
             {visible.length > 1 && (
-              <button type="button" className={styles.link} onClick={() => setAll(!allOpen)}>
+              <Button variant="text" onClick={() => setAll(!allOpen)}>
                 {allOpen ? 'Collapse all' : 'Expand all'}
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -155,19 +158,25 @@ function RoleView({ index, name }: { index: NonNullable<ReturnType<typeof useIam
       {total > 0 && visible.length === 0 && (
         <div className={styles.empty}>
           <p>No permissions match{query ? ` “${text.trim()}”` : ''}.</p>
-          <button
-            type="button"
-            className={styles.link}
+          <Button
+            variant="text"
             onClick={() => {
               setText('');
               setRisks(new Set());
             }}
           >
             Clear filters
-          </button>
+          </Button>
         </div>
       )}
 
+      {visible.length > 0 && (
+        <div className={styles.thead} aria-hidden="true">
+          <span>Permission</span>
+          <span>Type</span>
+          <span>Service</span>
+        </div>
+      )}
       {visible.map(({ group, indices }, gi) => (
         <ServiceSection
           key={group.service}

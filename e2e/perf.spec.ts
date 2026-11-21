@@ -18,12 +18,10 @@ const ENFORCE = !process.env.CI || !!process.env.PERF_ENFORCE;
 const within = (value: number, limit: number, label: string) => {
   if (ENFORCE) expect(value).toBeLessThan(limit);
   else if (value >= limit)
-    test
-      .info()
-      .annotations.push({
-        type: 'perf-over-budget',
-        description: `${label}: ${value.toFixed(1)} >= ${limit}`,
-      });
+    test.info().annotations.push({
+      type: 'perf-over-budget',
+      description: `${label}: ${value.toFixed(1)} >= ${limit}`,
+    });
 };
 
 const EXTENSION_PATH = path.resolve(

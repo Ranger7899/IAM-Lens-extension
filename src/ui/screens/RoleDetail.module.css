@@ -12,7 +12,7 @@
   gap: 12px;
   justify-items: start;
   padding: 20px 20px 22px;
-  border-radius: var(--md-sys-shape-corner-extra-large);
+  border-radius: var(--console-radius-banner);
   background: var(--md-sys-color-surface-container-high);
   animation: headerIn var(--motion-emphasized) backwards;
 }
@@ -31,7 +31,6 @@
 }
 .title {
   font: var(--md-sys-typescale-display-small);
-  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 .desc {
@@ -79,7 +78,7 @@
   height: 40px;
   padding: 0 8px 0 12px;
   border: 0;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--console-radius-chip);
   background: transparent;
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-label-large);

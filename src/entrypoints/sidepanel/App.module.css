@@ -1,11 +1,20 @@
+/* Console frame: the shell tone is the page; the content sits on a panel with 20px top corners. */
 .root {
+  --stick: 37px; /* height of the sticky mode tabs (36px + 1px divider) */
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--console-shell);
 }
 .root > header {
-  background: color-mix(in srgb, var(--md-sys-color-surface-container) 86%, transparent);
-  backdrop-filter: blur(12px);
+  background: transparent;
+  padding: 4px 8px 6px;
+}
+/* The app name reads as the console's breadcrumb label: 14/24 500 secondary. */
+.root > header h1 {
+  margin-inline: 4px;
+  font: 500 14px/24px var(--font-sans);
+  color: var(--md-sys-color-on-surface-variant);
 }
 .mark {
   display: inline-grid;
@@ -16,12 +25,24 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 12px 12px 32px;
+  padding: 0 16px 32px;
+  border-radius: var(--console-radius-panel) var(--console-radius-panel) 0 0;
+  background: var(--console-panel);
   scrollbar-width: thin;
+}
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  margin-inline: -16px;
+  padding-inline: 16px;
+  padding-top: 4px;
+  background: var(--console-panel);
 }
 .view {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   align-content: start;
+  padding-top: 8px;
 }

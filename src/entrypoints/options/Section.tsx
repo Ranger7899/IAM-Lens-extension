@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Card, Icon, type IconName } from '@/ui/components';
+import { Icon, type IconName } from '@/ui/components';
 import styles from './Section.module.css';
 
 export interface SectionProps {
@@ -11,13 +11,13 @@ export interface SectionProps {
   children: ReactNode;
 }
 
-/** One options card: icon tile, title, optional subtitle, then free-form content. */
+/** One options section: icon, 18/24 title, optional subtitle, then free-form content; sections are divided by a hairline. */
 export function Section({ icon, title, subtitle, aside, children }: SectionProps) {
   return (
-    <Card variant="filled" className={styles.card} aria-label={title} role="region">
+    <section className={styles.card} aria-label={title} role="region">
       <header className={styles.head}>
         <span className={styles.tile}>
-          <Icon name={icon} size={22} />
+          <Icon name={icon} size={20} />
         </span>
         <div className={styles.titles}>
           <h2>{title}</h2>
@@ -26,6 +26,6 @@ export function Section({ icon, title, subtitle, aside, children }: SectionProps
         {aside}
       </header>
       <div className={styles.body}>{children}</div>
-    </Card>
+    </section>
   );
 }

@@ -46,7 +46,7 @@ export function App() {
   };
 
   return (
-    <main className={`${styles.root} dot-grid`}>
+    <main className={styles.root}>
       <TopAppBar
         title="IAM Lens"
         leading={
@@ -55,15 +55,17 @@ export function App() {
           </span>
         }
       />
-      <IamGate>
-        <Body query={query} setQuery={setQuery} open={open} />
-      </IamGate>
-      <Fab
-        className={styles.fab}
-        icon="side_navigation"
-        label="Open side panel"
-        onClick={() => open({ name: 'search', query: query.trim() })}
-      />
+      <div className={styles.panel}>
+        <IamGate>
+          <Body query={query} setQuery={setQuery} open={open} />
+        </IamGate>
+        <Fab
+          className={styles.fab}
+          icon="side_navigation"
+          label="Open side panel"
+          onClick={() => open({ name: 'search', query: query.trim() })}
+        />
+      </div>
     </main>
   );
 }
@@ -175,7 +177,7 @@ function Row({
         index={i}
         selected={active}
         onClick={() => open(routeOf(r))}
-        leading={<ServiceIcon id={r.id} size={32} />}
+        leading={<ServiceIcon id={r.id} size={24} />}
         headline={
           <span className={styles.title}>
             <span className={styles.titleText}>{r.title}</span>
@@ -194,7 +196,7 @@ function Row({
       index={i}
       selected={active}
       onClick={() => open(routeOf(r))}
-      leading={<ServiceIcon id={r.id} size={32} />}
+      leading={<ServiceIcon id={r.id} size={24} />}
       headline={
         <span className={styles.tokenWrap}>
           <PermissionToken permission={r.id} risk={r.risk} static />

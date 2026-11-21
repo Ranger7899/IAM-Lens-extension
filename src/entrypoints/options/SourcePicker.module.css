@@ -2,9 +2,9 @@
   display: grid;
   gap: 12px;
   padding: 16px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-surface-container-lowest);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--console-radius-button);
+  background: transparent;
+  border: 1px solid var(--console-divider);
 }
 .search {
   width: 100%;
@@ -19,7 +19,7 @@
   align-items: flex-start;
   margin: 0;
   padding: 12px 14px;
-  border-radius: var(--md-sys-shape-corner-medium);
+  border-radius: var(--console-radius-button);
   background: var(--md-sys-color-error-container);
   color: var(--md-sys-color-on-error-container);
   text-wrap: pretty;

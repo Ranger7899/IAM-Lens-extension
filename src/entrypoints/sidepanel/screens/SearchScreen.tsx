@@ -12,7 +12,6 @@ import {
   Button,
   EmptyState,
   Icon,
-  List,
   ListItem,
   ServiceIcon,
   PermissionToken,
@@ -21,7 +20,7 @@ import {
   type ExampleQuery,
 } from '@/ui/components';
 import { useIam } from '@/ui/data';
-import { RoleRow } from '@/ui/screens';
+import { ConsoleTable, RoleRow } from '@/ui/screens';
 import type { RoleSummary, Stage } from '@/ui/types';
 import type { Route } from '../router';
 import { highlightTerms, useHighlights } from './search/useHighlights';
@@ -70,7 +69,7 @@ function JumpCard({
   enter?: boolean;
 }) {
   return (
-    <button type="button" className={`${styles.jump} reveal`} onClick={onClick} data-jump>
+    <button type="button" className={styles.jump} onClick={onClick} data-jump>
       <span className={styles.jumpText}>
         <span className={styles.eyebrow}>{eyebrow}</span>
         <span className={styles.jumpValue}>{value}</span>
@@ -261,7 +260,7 @@ function SearchBody({
     body = (
       <div ref={panel} className={styles.panel} role="tabpanel" aria-labelledby={`tab-${effectiveTab}`}>
         {effectiveTab === 'roles' ? (
-          <List label="Roles">
+          <ConsoleTable label="Roles" first="Role" last="Permissions">
             {(visible as typeof results.roles).map((h, i) => (
               <RoleRow
                 key={h.role.name}
@@ -270,9 +269,9 @@ function SearchBody({
                 onOpen={openRole}
               />
             ))}
-          </List>
+          </ConsoleTable>
         ) : (
-          <List label="Permissions">
+          <ConsoleTable label="Permissions" first="Permission">
             {(visible as typeof results.permissions).map((h, i) => (
               <ListItem
                 key={h.index}
@@ -286,13 +285,11 @@ function SearchBody({
                 }
               />
             ))}
-          </List>
+          </ConsoleTable>
         )}
         {list.length > shown && (
           <div className={styles.more}>
-            <Button variant="tonal" onClick={() => setShown((n) => n + PAGE)}>
-              Show more ({list.length - shown} left)
-            </Button>
+            <Button onClick={() => setShown((n) => n + PAGE)}>Show more ({list.length - shown} left)</Button>
           </div>
         )}
       </div>

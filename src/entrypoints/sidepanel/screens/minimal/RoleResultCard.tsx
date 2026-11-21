@@ -55,7 +55,7 @@ export function RoleResultCard({
           <IdToken value={role.name} onCopied={onCopyId} />
           {role.source.kind === 'custom' && <SourceBadge parent={role.source.parent} />}
         </div>
-        <StageChip stage={asStage(role.stage)} />
+        {asStage(role.stage) !== 'GA' && <StageChip stage={asStage(role.stage)} />}
       </header>
 
       {chosen.discouraged && (
