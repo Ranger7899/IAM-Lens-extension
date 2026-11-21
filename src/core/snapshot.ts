@@ -17,7 +17,7 @@ const loadSchema = () => import('./schema');
  * TODO: the public repo / GitHub Pages URL is not chosen yet. Point this at the directory that
  * serves `manifest.json` and `roles.snapshot.json`. Until then updates fail closed (network error).
  */
-export const SNAPSHOT_BASE_URL = 'https://example.invalid/iam-lens/data';
+export const SNAPSHOT_BASE_URL = 'https://ranger7899.github.io/IAM-Lens-extension';
 export const DEFAULT_MANIFEST_URL = `${SNAPSHOT_BASE_URL}/manifest.json`;
 /** Hard cap on a downloaded snapshot (bytes of text). The real one is ~2 MB. */
 export const MAX_SNAPSHOT_BYTES = 32 * 1024 * 1024;

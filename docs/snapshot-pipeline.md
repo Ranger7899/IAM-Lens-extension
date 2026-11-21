@@ -65,3 +65,18 @@ If the API answers 403/400 about a missing quota project, the script retries wit
 
 Note: pushes made with `GITHUB_TOKEN` do not trigger other workflows, which is why the Pages deploy lives in the same
 workflow. Pages is deployed only when `data/` changed, so it holds the last changed snapshot.
+
+## Current deployment (configured 2026-11-21)
+
+| Item | Value |
+|---|---|
+| GCP project | `iam-chrome` (number 609543680898) |
+| Service account | `iam-lens-snapshot@iam-chrome.iam.gserviceaccount.com` (no project roles, no user-managed keys) |
+| WIF pool / provider | `github-actions` / `iam-lens-repo` (issuer `https://token.actions.githubusercontent.com`) |
+| Provider condition | `assertion.repository_id=='1466970464' && assertion.repository_owner_id=='42381187' && assertion.ref=='refs/heads/main'` |
+| Impersonation binding | `roles/iam.workloadIdentityUser` for `principalSet://…/github-actions/attribute.repository_id/1466970464` only |
+| Repo variables | `WIF_PROVIDER=projects/609543680898/locations/global/workloadIdentityPools/github-actions/providers/iam-lens-repo`, `WIF_SERVICE_ACCOUNT=iam-lens-snapshot@iam-chrome.iam.gserviceaccount.com` |
+| Pages URL | `https://ranger7899.github.io/IAM-Lens-extension/` (`manifest.json`, `roles.snapshot.json`, `privacy.html`) |
+
+The IDs are numeric on purpose: a renamed or re-created repository with the same name cannot assume the identity.
+`GCP_PROJECT_ID` / quota-project header is no longer used. All of the above is free (no billable resources).

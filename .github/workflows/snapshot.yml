@@ -39,8 +39,8 @@ jobs:
       - name: Build snapshot
         env:
           GCP_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-          # Project that has the IAM API enabled (billing/quota attribution).
-          GCP_QUOTA_PROJECT: ${{ vars.GCP_PROJECT_ID }}
+          # No quota-project header: the service account holds no roles (least privilege), and quota is
+          # attributed to its own project (iam-chrome) automatically.
         run: node scripts/build-snapshot.ts
 
       - name: Validate snapshot
@@ -61,20 +61,20 @@ jobs:
             echo "No snapshot changes."
           fi
 
+      # Pages is redeployed on every run so the first run (and any manual run) publishes even when the
+      # snapshot itself did not change. It serves the snapshot, its manifest and the privacy policy.
       - name: Prepare Pages artifact
-        if: steps.commit.outputs.changed == 'true'
         run: |
           mkdir -p _site
           cp data/roles.snapshot.json data/manifest.json _site/
+          cp site/privacy.html _site/privacy.html
 
       - uses: actions/upload-pages-artifact@v3
-        if: steps.commit.outputs.changed == 'true'
         with:
           path: _site
 
   deploy:
     needs: build
-    if: needs.build.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write
