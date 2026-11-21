@@ -42,7 +42,6 @@ export function PermissionPicker({
               key={i}
               index={n}
               onClick={() => onPick(p)}
-              label={`${p}, ${risk}, granted by ${roles} roles`}
               leading={
                 <span className={`${styles.verbIcon} ${styles[risk]}`} aria-hidden="true">
                   <Icon name={RISK_ICON[risk]} size={20} filled />

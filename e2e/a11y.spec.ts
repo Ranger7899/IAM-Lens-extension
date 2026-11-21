@@ -41,8 +41,6 @@ const PAGES: Target[] = [
     hash: '#/permission/storage.objects.*',
     label: 'permission picker',
     ready: 'h2',
-    fixme:
-      'axe label-content-name-mismatch: picker rows set aria-label "perm, risk, granted by N roles" which drops the visible text (IAM-24 follow-up)',
   },
   { name: 'sidepanel', hash: '#/minimal', label: 'minimal empty', ready: 'textarea' },
   { name: 'sidepanel', hash: `#/minimal?perms=${FIVE}`, label: 'minimal results', ready: 'article' },
