@@ -41,7 +41,7 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   await expect(page.getByRole('searchbox')).toBeVisible(); // waits out the loading skeleton
 
   await page.getByRole('radio', { name: 'Compare' }).click();
-  await expect(stub('Compare roles')).toBeVisible();
+  await expect(stub('Compare two roles')).toBeVisible();
   await page.getByRole('radio', { name: 'Minimal' }).click();
   await expect(stub('Find minimal roles')).toBeVisible();
   await page.getByRole('radio', { name: "What's new" }).click();
