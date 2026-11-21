@@ -1,15 +1,27 @@
 .root {
-  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 .root > header {
-  background: color-mix(in srgb, var(--md-sys-color-surface-container) 92%, transparent);
+  background: color-mix(in srgb, var(--md-sys-color-surface-container) 86%, transparent);
+  backdrop-filter: blur(12px);
+}
+.mark {
+  display: inline-grid;
+  place-items: center;
+  margin-inline: 8px 0;
 }
 .main {
   flex: 1;
-  padding: 16px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 12px 32px;
+  scrollbar-width: thin;
+}
+.view {
   display: grid;
-  align-content: start;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
+  align-content: start;
 }

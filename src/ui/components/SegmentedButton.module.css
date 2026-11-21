@@ -4,13 +4,13 @@
 }
 .seg {
   composes: layer from './state-layer.module.css';
-  flex: 1;
+  flex: 1 1 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   height: 40px;
-  padding: 0 8px;
+  padding: 0 10px;
   border: 1px solid var(--md-sys-color-outline);
   background: transparent;
   cursor: pointer;

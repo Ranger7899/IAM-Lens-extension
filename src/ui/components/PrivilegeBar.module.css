@@ -1,13 +1,18 @@
 .root {
   display: grid;
-  gap: 6px;
+  gap: 10px;
+  min-width: 0;
 }
 .bar {
   display: flex;
   gap: 2px;
-  height: 6px;
+  height: 8px;
   border-radius: var(--md-sys-shape-corner-full);
   overflow: hidden;
+  background: var(--md-sys-color-outline-variant);
+}
+.thin {
+  height: 4px;
 }
 .seg {
   min-width: 4px;
@@ -15,36 +20,50 @@
   transition: flex-grow var(--motion-emphasized);
 }
 .read {
-  background: var(--md-custom-color-read);
+  background: var(--md-custom-color-read-fill);
 }
 .write {
-  background: var(--md-custom-color-write);
+  background: var(--md-custom-color-write-fill);
 }
 .admin {
-  background: var(--md-custom-color-admin);
+  background: var(--md-custom-color-admin-fill);
 }
 .empty {
   background: var(--md-sys-color-outline-variant);
 }
 .legend {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
-  font: var(--md-sys-typescale-label-small);
+  font: var(--md-sys-typescale-label-medium);
 }
 .legend li {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
+  height: 24px;
+  padding: 0 10px 0 7px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-variant-numeric: tabular-nums;
 }
+.legend b {
+  font-weight: 700;
+}
+.legend span {
+  font-weight: 500;
+}
+/* Container + on-container roles keep the amber legible (AA) in both themes */
 .t_read {
-  color: var(--md-custom-color-read);
+  background: var(--md-custom-color-read-container);
+  color: var(--md-custom-color-on-read-container);
 }
 .t_write {
-  color: var(--md-custom-color-write);
+  background: var(--md-custom-color-write-container);
+  color: var(--md-custom-color-on-write-container);
 }
 .t_admin {
-  color: var(--md-custom-color-admin);
+  background: var(--md-custom-color-admin-container);
+  color: var(--md-custom-color-on-admin-container);
 }

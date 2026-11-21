@@ -1,9 +1,9 @@
 import type { ButtonHTMLAttributes } from 'react';
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import styles from './Fab.module.css';
 
 export interface FabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
-  icon: string;
+  icon: IconName;
   label: string;
   /** When true, only the icon is shown (e.g. after scrolling). The label stays as the accessible name. */
   collapsed?: boolean;

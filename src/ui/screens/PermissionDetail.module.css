@@ -1,0 +1,36 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  align-content: start;
+}
+.bar {
+  display: flex;
+  justify-content: space-between;
+  margin: -4px -8px 0;
+}
+.header {
+  display: grid;
+  gap: 16px;
+  padding: 20px 20px 22px;
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background: var(--md-sys-color-surface-container-high);
+  animation: headerIn var(--motion-emphasized) backwards;
+}
+@keyframes headerIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+.kind {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.desc {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  text-wrap: pretty;
+}

@@ -1,0 +1,100 @@
+/* Motion primitives: staggered spring reveal + shared-axis X route transition. */
+
+/* Staggered reveal: set --i (0..n) on the element; step 40 ms, capped at 8 steps. */
+.reveal {
+  animation: reveal var(--md-sys-motion-duration-long) var(--motion-ease-spring-fast) backwards;
+  animation-delay: calc(min(var(--i, 0), 8) * 40ms);
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+}
+
+/*
+ * Shared-axis X. Wrap the routed region in an element with class `route-view`
+ * (see motion/navigate.ts). Forward: old slides out to the left, new slides in from the right.
+ * Back is mirrored. Reduced motion: opacity only, no travel.
+ */
+.route-view {
+  view-transition-name: route;
+}
+::view-transition-group(route) {
+  animation-duration: 0s;
+}
+::view-transition-old(route),
+::view-transition-new(route) {
+  mix-blend-mode: normal;
+  animation-fill-mode: both;
+}
+::view-transition-old(route) {
+  animation: axis-out-fwd 160ms var(--md-sys-motion-easing-emphasized-accelerate) both;
+}
+::view-transition-new(route) {
+  animation: axis-in-fwd 380ms var(--md-sys-motion-easing-emphasized-decelerate) 80ms both;
+}
+:root[data-nav='back']::view-transition-old(route) {
+  animation-name: axis-out-back;
+}
+:root[data-nav='back']::view-transition-new(route) {
+  animation-name: axis-in-back;
+}
+@keyframes axis-out-fwd {
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+@keyframes axis-in-fwd {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+@keyframes axis-out-back {
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+@keyframes axis-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation-name: reveal-fade;
+    animation-delay: 0s;
+  }
+  @keyframes reveal-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  ::view-transition-old(route) {
+    animation: fade-out 100ms linear both;
+  }
+  ::view-transition-new(route) {
+    animation: fade-in 150ms linear both;
+  }
+  :root[data-nav='back']::view-transition-old(route) {
+    animation-name: fade-out;
+  }
+  :root[data-nav='back']::view-transition-new(route) {
+    animation-name: fade-in;
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+}

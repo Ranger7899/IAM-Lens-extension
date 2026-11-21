@@ -1,4 +1,4 @@
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import styles from './PrivilegeBar.module.css';
 
 export interface PrivilegeBarProps {
@@ -7,21 +7,36 @@ export interface PrivilegeBarProps {
   admin: number;
   /** Show the icon + count legend under the bar */
   legend?: boolean;
+  /** "full" adds the words (read / write / admin) next to the counts */
+  legendStyle?: 'compact' | 'full';
+  /** Bar thickness: thin for list rows, regular for headers */
+  size?: 'thin' | 'regular';
 }
 
-const KINDS = [
+const KINDS: { key: 'read' | 'write' | 'admin'; icon: IconName }[] = [
   { key: 'read', icon: 'visibility' },
   { key: 'write', icon: 'edit' },
   { key: 'admin', icon: 'shield' },
-] as const;
+];
 
 /** Segmented read/write/admin share bar. Hue is never the only signal: legend icons + aria-label. */
-export function PrivilegeBar({ read, write, admin, legend = true }: PrivilegeBarProps) {
+export function PrivilegeBar({
+  read,
+  write,
+  admin,
+  legend = true,
+  legendStyle = 'compact',
+  size = 'regular',
+}: PrivilegeBarProps) {
   const counts = { read, write, admin };
   const total = read + write + admin;
   return (
     <div className={styles.root}>
-      <div role="img" aria-label={`${read} read, ${write} write, ${admin} admin`} className={styles.bar}>
+      <div
+        role="img"
+        aria-label={`${read} read, ${write} write, ${admin} admin`}
+        className={`${styles.bar} ${size === 'thin' ? styles.thin : ''}`}
+      >
         {KINDS.map(({ key }) =>
           counts[key] > 0 ? (
             <span key={key} className={`${styles.seg} ${styles[key]}`} style={{ flexGrow: counts[key] }} />
@@ -33,7 +48,9 @@ export function PrivilegeBar({ read, write, admin, legend = true }: PrivilegeBar
         <ul className={styles.legend} aria-hidden="true">
           {KINDS.map(({ key, icon }) => (
             <li key={key} className={styles[`t_${key}`]}>
-              <Icon name={icon} size={14} /> {counts[key]}
+              <Icon name={icon} size={14} filled />
+              <b>{counts[key]}</b>
+              {legendStyle === 'full' && <span>{key}</span>}
             </li>
           ))}
         </ul>

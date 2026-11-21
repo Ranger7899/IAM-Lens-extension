@@ -9,7 +9,7 @@ import {
   DynamicColor,
   Hct,
   MaterialDynamicColors,
-  SchemeTonalSpot,
+  SchemeVibrant,
   TonalPalette,
   argbFromHex,
   hexFromArgb,
@@ -62,7 +62,7 @@ const roleNames = [
 ] as const;
 
 function scheme(dark: boolean): string[] {
-  const s = new SchemeTonalSpot(Hct.fromInt(argbFromHex(SEED)), dark, 0);
+  const s = new SchemeVibrant(Hct.fromInt(argbFromHex(SEED)), dark, 0);
   const lines = roleNames.map((n) => {
     const dc = (MaterialDynamicColors as unknown as Record<string, DynamicColor>)[n];
     return `  --md-sys-color-${kebab(n)}: ${hexFromArgb(dc.getArgb(s))};`;
@@ -74,11 +74,19 @@ function scheme(dark: boolean): string[] {
     const chroma = dark ? h.chroma * DARK_DESAT : h.chroma;
     const p = TonalPalette.fromHueAndChroma(h.hue, chroma);
     const t = dark ? { c: 80, on: 20, cc: 30, occ: 90 } : { c: 40, on: 100, cc: 90, occ: 10 };
+    const raw = Hct.fromInt(argbFromHex(hex));
+    const fill = dark
+      ? hexFromArgb(
+          TonalPalette.fromHueAndChroma(raw.hue, raw.chroma * DARK_DESAT).tone(Math.max(raw.tone, 68)),
+        )
+      : hex.toLowerCase();
     lines.push(
       `  --md-custom-color-${name}: ${hexFromArgb(p.tone(t.c))};`,
       `  --md-custom-color-on-${name}: ${hexFromArgb(p.tone(t.on))};`,
       `  --md-custom-color-${name}-container: ${hexFromArgb(p.tone(t.cc))};`,
       `  --md-custom-color-on-${name}-container: ${hexFromArgb(p.tone(t.occ))};`,
+      // Bright fill for bars/dots (non-text); text uses the base / on-container roles.
+      `  --md-custom-color-${name}-fill: ${fill};`,
     );
   }
   return lines;

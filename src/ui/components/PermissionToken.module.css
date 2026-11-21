@@ -33,3 +33,10 @@
 .admin {
   color: var(--md-custom-color-admin);
 }
+.static {
+  cursor: inherit;
+  pointer-events: none;
+}
+.static:active {
+  transform: none;
+}

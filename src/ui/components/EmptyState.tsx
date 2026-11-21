@@ -22,6 +22,7 @@ export function EmptyState({ title, hint, examples, onPick }: EmptyStateProps) {
     <section className={styles.root} aria-label="Examples">
       <h2 className={styles.title}>{title}</h2>
       {hint && <p className={styles.hint}>{hint}</p>}
+      {examples.length > 0 && <p className={styles.eyebrow}>Try one of these</p>}
       <ul className={styles.list}>
         {examples.map((e) => (
           <li key={e.text}>

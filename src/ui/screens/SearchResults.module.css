@@ -1,0 +1,18 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+.none {
+  margin: 32px 8px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.tokenWrap {
+  display: block;
+  overflow: hidden;
+}
+.risk {
+  font: var(--md-sys-typescale-label-small);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}

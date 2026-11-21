@@ -1,10 +1,10 @@
 import type { ButtonHTMLAttributes } from 'react';
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'filled' | 'tonal' | 'text';
-  icon?: string;
+  icon?: IconName;
 }
 
 export function Button({ variant = 'filled', icon, children, className, ...rest }: ButtonProps) {

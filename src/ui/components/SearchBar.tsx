@@ -32,7 +32,7 @@ export function SearchBar({ label = 'Search roles and permissions', className, .
         ref={ref}
         type="search"
         aria-label={label}
-        placeholder="Search a permission, role, or service"
+        placeholder="Search permissions and roles"
         aria-keyshortcuts="/"
         className={styles.input}
         {...rest}

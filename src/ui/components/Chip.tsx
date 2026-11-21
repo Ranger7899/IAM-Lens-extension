@@ -1,12 +1,12 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import styles from './Chip.module.css';
 
 export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   kind?: 'assist' | 'filter';
   /** Filter chips only */
   selected?: boolean;
-  icon?: string;
+  icon?: IconName;
   children: ReactNode;
 }
 

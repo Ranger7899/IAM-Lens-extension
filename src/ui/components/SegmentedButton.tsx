@@ -1,20 +1,22 @@
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import styles from './SegmentedButton.module.css';
 
 export interface Segment {
   id: string;
   label: string;
-  icon?: string;
+  icon?: IconName;
 }
 export interface SegmentedButtonProps {
   segments: Segment[];
   value: string;
   onChange: (id: string) => void;
   label: string;
+  /** Show icons on unselected segments too (needs roomy widths) */
+  icons?: boolean;
 }
 
 /** Single-select M3 segmented button (radio group semantics, arrow-key navigation). */
-export function SegmentedButton({ segments, value, onChange, label }: SegmentedButtonProps) {
+export function SegmentedButton({ segments, value, onChange, label, icons = false }: SegmentedButtonProps) {
   return (
     <div role="radiogroup" aria-label={label} className={styles.root}>
       {segments.map((s) => {
@@ -46,7 +48,7 @@ export function SegmentedButton({ segments, value, onChange, label }: SegmentedB
             }}
             data-id={s.id}
           >
-            {selected ? <Icon name="check" size={18} /> : s.icon && <Icon name={s.icon} size={18} />}
+            {selected ? <Icon name="check" size={18} /> : icons && s.icon && <Icon name={s.icon} size={18} />}
             <span>{s.label}</span>
           </button>
         );

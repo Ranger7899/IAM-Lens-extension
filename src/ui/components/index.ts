@@ -14,3 +14,8 @@ export * from './Snackbar';
 export * from './Tabs';
 export * from './TopAppBar';
 export * from './EmptyState';
+export * from './Badge';
+export * from './IdToken';
+export * from './Monogram';
+export * from './LensMark';
+export * from './PermissionAnatomy';

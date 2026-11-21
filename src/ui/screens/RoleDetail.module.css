@@ -1,0 +1,162 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  align-content: start;
+}
+.back {
+  margin: -4px 0 0 -8px;
+}
+.header {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 20px 20px 22px;
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background: var(--md-sys-color-surface-container-high);
+  animation: headerIn var(--motion-emphasized) backwards;
+}
+@keyframes headerIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--md-sys-typescale-label-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.title {
+  font: var(--md-sys-typescale-display-small);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.desc {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+  text-wrap: pretty;
+}
+.spectrum {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 70%, transparent);
+}
+.spectrumHead {
+  display: flex;
+  justify-content: space-between;
+  font: var(--md-sys-typescale-label-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.total {
+  color: var(--md-sys-color-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+
+.group {
+  display: block;
+}
+.subheader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 12px -4px 0;
+  padding: 4px;
+  background: color-mix(in srgb, var(--md-sys-color-surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 40px;
+  padding: 0 8px 0 12px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-large);
+  cursor: pointer;
+  text-align: start;
+  transition: background-color var(--motion-spring-fast);
+}
+.toggle:hover {
+  background: var(--md-sys-color-surface-container-high);
+}
+.service {
+  font: 650 13px/20px var(--font-mono);
+  color: var(--md-sys-color-primary);
+}
+.groupCount {
+  flex: 1;
+  font: var(--md-sys-typescale-label-small);
+  font-variant-numeric: tabular-nums;
+}
+.chev {
+  transition: transform var(--motion-spring-fast);
+  transform: rotate(-90deg);
+}
+.open {
+  transform: none;
+}
+.perms {
+  display: grid;
+  gap: 2px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.perm {
+  display: grid;
+}
+.permButton {
+  composes: layer from '../components/state-layer.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  text-align: start;
+  cursor: pointer;
+}
+.token {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--md-sys-typescale-mono-medium);
+  font-size: 12.5px;
+}
+.tService {
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+}
+.tResource {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.tVerb {
+  font-weight: 700;
+}
+.riskIcon {
+  flex: none;
+}
+.read {
+  color: var(--md-custom-color-read);
+}
+.write {
+  color: var(--md-custom-color-write);
+}
+.admin {
+  color: var(--md-custom-color-admin);
+}

@@ -1,24 +1,48 @@
 import { useState } from 'react';
-import { EmptyState, SearchBar, SegmentedButton, Snackbar, TopAppBar, IconButton } from '@/ui/components';
-import { EXAMPLE_QUERIES } from '@/ui/demo';
+import {
+  EmptyState,
+  IconButton,
+  LensMark,
+  SearchBar,
+  SegmentedButton,
+  Snackbar,
+  TopAppBar,
+  type IconName,
+} from '@/ui/components';
+import { DemoRouterProvider, DemoSearch, useDemoRouter } from '@/ui/demo';
 import styles from './App.module.css';
 
-const MODES = [
+const MODES: { id: string; label: string; icon: IconName }[] = [
   { id: 'search', label: 'Search', icon: 'search' },
-  { id: 'minimal', label: 'Minimal roles', icon: 'target' },
+  { id: 'minimal', label: 'Minimal', icon: 'target' },
   { id: 'compare', label: 'Compare', icon: 'compare_arrows' },
   { id: 'new', label: "What's new", icon: 'new_releases' },
 ];
 
+function Body({ onCopied }: { onCopied: (t: string) => void }) {
+  const { route, query, setQuery } = useDemoRouter();
+  return (
+    <div className={`${styles.view} route-view`}>
+      {route.name === 'home' && <SearchBar value={query} onChange={(e) => setQuery(e.target.value)} />}
+      <DemoSearch onCopied={onCopied} />
+    </div>
+  );
+}
+
 export function App() {
   const [mode, setMode] = useState('search');
-  const [query, setQuery] = useState('');
   const [toast, setToast] = useState<string | null>(null);
+  const copied = (t: string) => setToast(`Copied ${t}`);
 
   return (
     <div className={`${styles.root} dot-grid`}>
       <TopAppBar
         title="IAM Lens"
+        leading={
+          <span className={styles.mark}>
+            <LensMark size={28} />
+          </span>
+        }
         actions={
           <IconButton
             icon="settings"
@@ -31,17 +55,15 @@ export function App() {
       </TopAppBar>
       <main className={styles.main}>
         {mode === 'search' ? (
-          <>
-            <SearchBar value={query} onChange={(e) => setQuery(e.target.value)} />
-            <EmptyState
-              title="Look up any permission or role"
-              hint="Find which roles grant a permission, or which permissions a role has."
-              examples={EXAMPLE_QUERIES}
-              onPick={(q) => setToast(`Copied ${q}`)}
-            />
-          </>
+          <DemoRouterProvider>
+            <Body onCopied={copied} />
+          </DemoRouterProvider>
         ) : (
-          <EmptyState title={MODES.find((m) => m.id === mode)!.label} hint="Coming soon." examples={[]} />
+          <EmptyState
+            title={MODES.find((m) => m.id === mode)!.label}
+            hint="Coming in a later phase."
+            examples={[]}
+          />
         )}
       </main>
       <Snackbar message={toast} onClose={() => setToast(null)} />

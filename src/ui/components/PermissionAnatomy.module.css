@@ -1,0 +1,66 @@
+.root {
+  margin: 0;
+  width: 100%;
+}
+.parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  font: 600 20px/28px var(--font-mono);
+  letter-spacing: -0.02em;
+}
+.part {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.text {
+  padding-bottom: 2px;
+}
+/* Bracket under each segment, with end ticks */
+.label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  padding: 8px 4px 0;
+  border-top: 2px solid currentColor;
+  font: var(--md-sys-typescale-label-small);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.label::before,
+.label::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 7px;
+  background: currentColor;
+}
+.label::before {
+  left: 0;
+}
+.label::after {
+  right: 0;
+}
+.part + .part .label {
+  margin-inline-start: 2px;
+}
+.service {
+  color: var(--md-sys-color-primary);
+}
+.resource {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.verb.read {
+  color: var(--md-custom-color-read);
+}
+.verb.write {
+  color: var(--md-custom-color-write);
+}
+.verb.admin {
+  color: var(--md-custom-color-admin);
+}

@@ -1,0 +1,31 @@
+.root {
+  composes: layer from './state-layer.module.css';
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  gap: 0;
+  padding: 4px 8px 4px 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-mono-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--motion-spring-fast);
+}
+.root:active {
+  transform: scale(0.97);
+}
+.prefix {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.rest {
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.icon {
+  margin-inline-start: 8px;
+  color: var(--md-sys-color-on-surface-variant);
+}
