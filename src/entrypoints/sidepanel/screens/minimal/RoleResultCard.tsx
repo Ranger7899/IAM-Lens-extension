@@ -3,6 +3,7 @@ import {
   IdToken,
   PermissionToken,
   PrivilegeBar,
+  ServiceIcon,
   SourceBadge,
   StageChip,
   Icon,
@@ -48,6 +49,7 @@ export function RoleResultCard({
         <span className={styles.num} aria-hidden="true">
           {n}
         </span>
+        <ServiceIcon id={role.name} size={24} />
         <div className={styles.roleTitle}>
           <h3>{role.title || role.name}</h3>
           <IdToken value={role.name} onCopied={onCopyId} />

@@ -10,6 +10,7 @@
     "zip": "wxt zip",
     "postinstall": "wxt prepare",
     "gen:theme": "tsx scripts/gen-theme.ts",
+    "gen:service-icons": "node scripts/build-service-icons.ts",
     "gen:icons": "tsx scripts/gen-icons.ts",
     "gen:brand": "tsx scripts/gen-icon.ts",
     "shots": "SCREENSHOTS=1 playwright test screenshots",

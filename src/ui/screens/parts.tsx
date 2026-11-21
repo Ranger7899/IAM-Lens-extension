@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ListItem, Monogram, PrivilegeBar, SourceBadge, StageChip } from '../components';
+import { ListItem, ServiceIcon, PrivilegeBar, SourceBadge, StageChip } from '../components';
 import type { RoleSummary } from '../types';
 import styles from './parts.module.css';
 
@@ -35,14 +35,14 @@ export interface RoleRowProps {
   badge?: ReactNode;
 }
 
-/** One role in a list: monogram, title, ID in mono, thin spectrum bar, permission count. */
+/** One role in a list: service icon, title, ID in mono, thin spectrum bar, permission count. */
 export function RoleRow({ role, index, onOpen, badge }: RoleRowProps) {
   const n = total(role.counts);
   return (
     <ListItem
       index={index}
       onClick={onOpen && (() => onOpen(role.id))}
-      leading={<Monogram id={role.id} />}
+      leading={<ServiceIcon id={role.id} size={32} />}
       headline={role.title}
       supporting={<span className={styles.mono}>{role.id}</span>}
       trailing={

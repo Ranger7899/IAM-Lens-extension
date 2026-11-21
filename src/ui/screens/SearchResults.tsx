@@ -1,4 +1,4 @@
-import { IconButton, List, ListItem, PermissionToken } from '../components';
+import { IconButton, List, ListItem, PermissionToken, ServiceIcon } from '../components';
 import type { PermissionEntry, RoleSummary } from '../types';
 import { RoleRow, SectionHeader } from './parts';
 import styles from './SearchResults.module.css';
@@ -61,6 +61,7 @@ export function SearchResults({
                 key={perm.id}
                 index={i + r.length}
                 onClick={() => onOpenPermission(perm.id)}
+                leading={<ServiceIcon id={perm.id} size={24} />}
                 headline={
                   <span className={styles.tokenWrap}>
                     <PermissionToken permission={perm.id} risk={perm.risk} static />

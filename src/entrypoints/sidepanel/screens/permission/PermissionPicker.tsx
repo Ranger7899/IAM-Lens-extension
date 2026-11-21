@@ -1,13 +1,7 @@
-import { Icon, List, ListItem, PermissionToken, type IconName } from '@/ui/components';
+import { List, ListItem, PermissionToken, ServiceIcon } from '@/ui/components';
 import type { IamIndex } from '@/core';
 import { PICKER_LIMIT } from './resolve';
 import styles from './permission.module.css';
-
-const RISK_ICON: Record<'read' | 'write' | 'admin', IconName> = {
-  read: 'visibility',
-  write: 'edit',
-  admin: 'shield',
-};
 
 /** Several permissions match the typed fragment: pick one. */
 export function PermissionPicker({
@@ -42,11 +36,7 @@ export function PermissionPicker({
               key={i}
               index={n}
               onClick={() => onPick(p)}
-              leading={
-                <span className={`${styles.verbIcon} ${styles[risk]}`} aria-hidden="true">
-                  <Icon name={RISK_ICON[risk]} size={20} filled />
-                </span>
-              }
+              leading={<ServiceIcon id={p} size={24} />}
               headline={
                 <span className={styles.tokenWrap}>
                   <PermissionToken permission={p} risk={risk} static />

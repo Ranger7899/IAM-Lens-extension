@@ -2,11 +2,10 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState, type KeyboardEv
 import {
   EmptyState,
   Fab,
-  Icon,
   LensMark,
   List,
   ListItem,
-  Monogram,
+  ServiceIcon,
   PermissionToken,
   PrivilegeBar,
   SearchBar,
@@ -176,7 +175,7 @@ function Row({
         index={i}
         selected={active}
         onClick={() => open(routeOf(r))}
-        leading={<Monogram id={r.id} size={36} />}
+        leading={<ServiceIcon id={r.id} size={32} />}
         headline={
           <span className={styles.title}>
             <span className={styles.titleText}>{r.title}</span>
@@ -195,11 +194,7 @@ function Row({
       index={i}
       selected={active}
       onClick={() => open(routeOf(r))}
-      leading={
-        <span className={styles.permTile} aria-hidden="true">
-          <Icon name="key" size={20} />
-        </span>
-      }
+      leading={<ServiceIcon id={r.id} size={32} />}
       headline={
         <span className={styles.tokenWrap}>
           <PermissionToken permission={r.id} risk={r.risk} static />

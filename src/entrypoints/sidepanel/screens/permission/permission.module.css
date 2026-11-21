@@ -144,25 +144,6 @@
   font-variant-numeric: tabular-nums;
   color: var(--md-sys-color-on-surface-variant);
 }
-.verbIcon {
-  display: inline-grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--md-sys-shape-corner-medium);
-}
-.verbIcon.read {
-  background: var(--md-custom-color-read-container);
-  color: var(--md-custom-color-on-read-container);
-}
-.verbIcon.write {
-  background: var(--md-custom-color-write-container);
-  color: var(--md-custom-color-on-write-container);
-}
-.verbIcon.admin {
-  background: var(--md-custom-color-admin-container);
-  color: var(--md-custom-color-on-admin-container);
-}
 .empty {
   padding: 16px 8px;
   color: var(--md-sys-color-on-surface-variant);

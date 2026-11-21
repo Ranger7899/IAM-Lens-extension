@@ -33,7 +33,7 @@ export interface ListItemProps {
   headline: ReactNode;
   supporting?: ReactNode;
   leadingIcon?: IconName;
-  /** Custom leading content (e.g. a monogram tile); wins over leadingIcon */
+  /** Custom leading content (e.g. a service icon); wins over leadingIcon */
   leading?: ReactNode;
   trailing?: ReactNode;
   /** A separate control (e.g. copy) placed beside the row button; never nest buttons in `headline` */

@@ -16,7 +16,7 @@ export * from './TopAppBar';
 export * from './EmptyState';
 export * from './Badge';
 export * from './IdToken';
-export * from './Monogram';
+export * from './ServiceIcon';
 export * from './LensMark';
 export * from './PermissionAnatomy';
 export * from './Skeleton';

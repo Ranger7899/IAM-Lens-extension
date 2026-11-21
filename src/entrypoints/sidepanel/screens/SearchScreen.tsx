@@ -14,6 +14,7 @@ import {
   Icon,
   List,
   ListItem,
+  ServiceIcon,
   PermissionToken,
   SearchBar,
   Tabs,
@@ -277,6 +278,7 @@ function SearchBody({
                 key={h.index}
                 index={i}
                 onClick={() => openPerm(h.permission)}
+                leading={<ServiceIcon id={h.permission} size={24} />}
                 headline={
                   <span className={styles.tokenWrap}>
                     <PermissionToken permission={h.permission} risk={index.classOf(h.index)} static />
