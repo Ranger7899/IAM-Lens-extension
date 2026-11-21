@@ -6,7 +6,7 @@ import { PermissionDetailView } from './permission/PermissionDetailView';
 import { PermissionPicker } from './permission/PermissionPicker';
 import { resolvePermission } from './permission/resolve';
 
-/** `permission/:name`: roles granting the permission, smallest first; partial input shows a picker. */
+/** `permission/:name`: roles granting the permission (same service first, or smallest overall); partial input shows a picker. */
 export function PermissionScreen({ name }: { name: string }) {
   const { go } = useNavigate();
   const { index } = useIam();

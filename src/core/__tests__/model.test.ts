@@ -60,6 +60,12 @@ describe('IamIndex (real snapshot)', () => {
     expect(index.search('storage.objectViewer').roles[0].role.name).toBe('roles/storage.objectViewer');
   });
 
+  it('search: query token equal to the role service ranks that service first', () => {
+    expect(index.search('storage').roles[0].role.name).toMatch(/^roles\/storage\./);
+    const top = index.search('storage').roles.slice(0, 3).map((h) => h.role.name);
+    expect(top.every((n) => n.startsWith('roles/storage.'))).toBe(true);
+  });
+
   it('search: text finds roles by title words', () => {
     const { roles } = index.search('bigquery admin');
     expect(roles.length).toBeGreaterThan(0);

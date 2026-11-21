@@ -14,19 +14,43 @@ export function isDiscouraged(r: RoleRecord): boolean {
 }
 
 /**
- * Roles meant for Google-managed or machine identities (service agents, workers) rather than people.
- * They are often the numerically smallest role granting a permission, so `minimalRoles` only falls back to them.
+ * Roles meant for Google-managed or machine identities (service agents, workers, generator/collector services)
+ * rather than people. They are often the numerically smallest role granting a permission, so they are demoted:
+ * hidden by default on the permission screen and used by `minimalRoles` only as a fallback.
  */
 export function isServiceAgentRole(r: RoleRecord): boolean {
   const n = r.name.toLowerCase();
   return (
     n.includes('serviceagent') ||
     n.includes('serviceoutput') ||
+    n.endsWith('agent') ||
     n.endsWith('.worker') ||
-    /service agent/i.test(r.title)
+    /service agent|generator service|service$/i.test(r.title)
   );
 }
 
+/**
+ * Legacy roles (`roles/storage.legacyObjectReader`, the "(Legacy)" basic roles) still work but Google steers
+ * people to their replacements, so they never get the Least-privilege badge when a non-legacy role exists.
+ */
+export function isLegacyRole(r: RoleRecord): boolean {
+  return /\.legacy/i.test(r.name) || /\blegacy\b/i.test(r.title);
+}
+
+/** 0 = ordinary role, 1 = service-agent-like, 2 = deleted/DEPRECATED. */
+function discouragedClass(r: RoleRecord): number {
+  return isDiscouraged(r) ? 2 : isServiceAgentRole(r) ? 1 : 0;
+}
+
+/** `roles/storage.objectViewer` -> `storage`; undefined for `roles/viewer` and custom roles. */
+export function roleService(r: RoleRecord): string | undefined {
+  if (!r.name.startsWith('roles/')) return undefined;
+  const rest = r.name.slice(6);
+  const dot = rest.indexOf('.');
+  return dot < 0 ? undefined : rest.slice(0, dot).toLowerCase();
+}
+
+/** Strict smallest-first: fewer permissions, then GA before BETA/ALPHA, then name. */
 function bySizeThenStage(a: RoleRecord, b: RoleRecord): number {
   return (
     a.perms.length - b.perms.length ||
@@ -35,27 +59,45 @@ function bySizeThenStage(a: RoleRecord, b: RoleRecord): number {
   );
 }
 
+/** Within a tier: GA before BETA/ALPHA, then fewer permissions, then name. */
+function byStageThenSize(a: RoleRecord, b: RoleRecord): number {
+  return (
+    stageRank(a) - stageRank(b) ||
+    a.perms.length - b.perms.length ||
+    (a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+  );
+}
+
 export interface RolesGrantingOptions {
-  /** Drop deleted and DEPRECATED roles (default false: they sort last among equals). */
+  /** Drop deleted and DEPRECATED roles (default false: they sort last). */
   excludeDiscouraged?: boolean;
+  /** Put roles of the permission's own service (`roles/<service>.*`) first (default true). */
+  preferService?: boolean;
 }
 
 /**
- * Every role granting `perm`, smallest first. Ties: GA before BETA before other stages,
- * non-deprecated/non-deleted first, then by name.
+ * Every role granting `perm`. Ordering, most significant first: ordinary roles, then service-agent-like roles,
+ * then deleted/DEPRECATED; with `preferService` (default) roles of the permission's own service before the rest;
+ * then GA before BETA/ALPHA; then fewest permissions; then name. With `preferService: false` the order is
+ * strictly smallest first (then stage, name) within each class.
  */
 export function rolesGranting(
   index: IamIndex,
   perm: string | number,
   opts: RolesGrantingOptions = {},
 ): RoleRecord[] {
-  const out: RoleRecord[] = [];
-  for (const i of index.roleIdxsGranting(perm)) {
+  const preferService = opts.preferService ?? true;
+  const idxs = index.roleIdxsGranting(perm);
+  const name = typeof perm === 'number' ? index.permissions[perm] : perm;
+  const service = preferService && name ? permissionService(name).toLowerCase() : undefined;
+  const out: { r: RoleRecord; cls: number; tier: number }[] = [];
+  for (const i of idxs) {
     const r = index.roles[i];
     if (opts.excludeDiscouraged && isDiscouraged(r)) continue;
-    out.push(r);
+    out.push({ r, cls: discouragedClass(r), tier: service !== undefined && roleService(r) === service ? 0 : 1 });
   }
-  return out.sort(bySizeThenStage);
+  const within = preferService ? byStageThenSize : bySizeThenStage;
+  return out.sort((a, b) => a.cls - b.cls || a.tier - b.tier || within(a.r, b.r)).map((x) => x.r);
 }
 
 /**
@@ -87,7 +129,7 @@ export interface MinimalRolesResult {
 
 /**
  * Greedy weighted set cover. At every step picks the role maximising
- * `newly covered / (permission count + ROLE_OVERHEAD)` (ties: fewer permissions, GA first, then name).
+ * `newly covered / (permission count + ROLE_OVERHEAD)` (ties: GA first, fewer permissions, then name).
  * Roles of the same service as a requested permission are preferred; then any ordinary role, then
  * service-agent/worker roles, then deleted/DEPRECATED ones, each tier only for what the earlier tiers could not cover.
  * Redundant picks are pruned afterwards.
@@ -106,21 +148,15 @@ export function minimalRoles(index: IamIndex, perms: readonly string[]): Minimal
   const picks: { role: RoleRecord; covers: number[]; discouraged: boolean }[] = [];
 
   const targetServices = new Set(targets.map((t) => permissionService(index.permissions[t])));
-  /** `roles/storage.objectViewer` -> `storage`; undefined for `roles/viewer` and custom roles. */
-  const roleService = (r: RoleRecord): string | undefined => {
-    if (!r.name.startsWith('roles/')) return undefined;
-    const rest = r.name.slice(6);
-    const dot = rest.indexOf('.');
-    return dot < 0 ? undefined : rest.slice(0, dot).toLowerCase();
-  };
   // tier 0: ordinary roles of the same service as a requested permission; tier 1: any ordinary role;
-  // tier 2: + service agents/workers; tier 3: + deleted/DEPRECATED.
-  const runPass = (tier: 0 | 1 | 2 | 3) => {
+  // tier 2: + service agents/workers; tier 3: + deleted/DEPRECATED. Each tier runs a GA-only pass first.
+  const runPass = (tier: 0 | 1 | 2 | 3, gaOnly: boolean) => {
     // candidate role idx -> targets it grants
     const cand = new Map<number, number[]>();
     for (const t of uncovered) {
       for (const ri of index.roleIdxsGranting(t)) {
         const cr = index.roles[ri];
+        if (gaOnly && cr.stage !== 'GA') continue;
         if (tier < 3 && isDiscouraged(cr)) continue;
         if (tier < 2 && isServiceAgentRole(cr)) continue;
         if (tier < 1) {
@@ -144,7 +180,7 @@ export function minimalRoles(index: IamIndex, perms: readonly string[]): Minimal
         if (
           !best ||
           ratio > bestRatio + 1e-12 ||
-          (Math.abs(ratio - bestRatio) <= 1e-12 && bySizeThenStage(role, best) < 0)
+          (Math.abs(ratio - bestRatio) <= 1e-12 && byStageThenSize(role, best) < 0)
         ) {
           best = role;
           bestNew = fresh;
@@ -158,10 +194,11 @@ export function minimalRoles(index: IamIndex, perms: readonly string[]): Minimal
     }
   };
 
-  runPass(0);
-  runPass(1);
-  runPass(2);
-  runPass(3);
+  // Within a tier, GA roles are tried before BETA/ALPHA ones.
+  for (const tier of [0, 1, 2, 3] as const) {
+    runPass(tier, true);
+    runPass(tier, false);
+  }
 
   // Prune picks made redundant by later ones.
   for (let i = picks.length - 1; i >= 0; i--) {

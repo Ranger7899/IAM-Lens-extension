@@ -1,4 +1,4 @@
-import { isDiscouraged, isServiceAgentRole, rolesGranting, type IamIndex, type RoleRecord } from '@/core';
+import { isDiscouraged, isLegacyRole, isServiceAgentRole, rolesGranting, type IamIndex, type RoleRecord } from '@/core';
 
 export type Resolved =
   | { kind: 'exact'; index: number; permission: string }
@@ -39,11 +39,12 @@ export function isHiddenByDefault(r: RoleRecord): boolean {
 }
 
 /**
- * Roles granting `perm`, smallest first, plus the one that gets the Least-privilege badge: the first role
+ * Roles granting `perm` (same service first, or strictly smallest first), plus the one that gets the Least-privilege badge: the first role
  * that is neither deprecated/deleted nor a service agent (those are never a sensible suggestion for a person).
  */
-export function grantingRoles(index: IamIndex, perm: number) {
-  const all = rolesGranting(index, perm);
-  const best = all.find((r) => !isHiddenByDefault(r));
+export function grantingRoles(index: IamIndex, perm: number, preferService = true) {
+  const all = rolesGranting(index, perm, { preferService });
+  const eligible = all.filter((r) => !isHiddenByDefault(r));
+  const best = eligible.find((r) => !isLegacyRole(r)) ?? eligible[0];
   return { all, leastPrivilegeName: best?.name };
 }

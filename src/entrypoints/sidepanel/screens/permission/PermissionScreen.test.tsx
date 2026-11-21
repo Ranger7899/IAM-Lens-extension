@@ -98,11 +98,23 @@ describe('PermissionScreen', () => {
     await act(async () => toggle.click());
     const rows = rowTitles(h);
     expect(rows).toHaveLength(5);
-    expect(rows[0]).toContain('Legacy Object Reader');
-    expect(rows[0]).not.toContain('Least privilege');
+    expect(rows[0]).toContain('Storage Object Viewer'); // deprecated, deleted and agent roles sort last
+    expect(rows[4]).toContain('Gone Role');
+    expect(rows.filter((r) => r.includes('Legacy Object Reader'))).toHaveLength(1);
     expect(rows.findIndex((r) => r.includes('Least privilege'))).toBe(
       rows.findIndex((r) => r.includes('Object Viewer')),
     );
+  });
+
+  it('has an Order toggle (Same service first by default) that switches to Smallest overall', async () => {
+    const h = await mount('storage.objects.get');
+    const group = h.querySelector('[role="radiogroup"][aria-label="Order"]')!;
+    const [svc, size] = [...group.querySelectorAll('button[role="radio"]')] as HTMLButtonElement[];
+    expect(svc.textContent).toContain('Same service first');
+    expect(svc.getAttribute('aria-checked')).toBe('true');
+    await act(async () => size.click());
+    expect(size.getAttribute('aria-checked')).toBe('true');
+    expect(rowTitles(h)[0]).toContain('Storage Object Viewer');
   });
 
   it('opens role/:name when a role is clicked', async () => {

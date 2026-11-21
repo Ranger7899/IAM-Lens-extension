@@ -93,6 +93,16 @@ export function tokenize(text: string): string[] {
 
 const STAGE_FACTOR: Record<string, number> = { GA: 1, BETA: 0.9, ALPHA: 0.8, DEPRECATED: 0.5 };
 
+/** Score added to a role whose ID service segment (`roles/<service>.`) equals a query token. */
+const SERVICE_MATCH_BOOST = 15;
+
+/** `roles/storage.viewer` -> `storage`; empty for `roles/viewer`. */
+function roleServiceSegment(lowerName: string): string {
+  if (!lowerName.startsWith('roles/')) return '';
+  const dot = lowerName.indexOf('.', 6);
+  return dot < 0 ? '' : lowerName.slice(6, dot);
+}
+
 export class IamIndex {
   readonly version: string;
   /** Permission names; the snapshot's table first, then any extra permissions only custom roles use. */
@@ -315,6 +325,7 @@ export class IamIndex {
         scored.set(r.id as number, r.score * 0.5);
     }
     const exact = this.role(q) ?? this.role(`roles/${q}`);
+    const queryTokens = new Set(tokenize(q));
     const hits: RoleHit[] = [];
     for (const [id, base] of scored) {
       const role = this.roles[id];
@@ -322,6 +333,8 @@ export class IamIndex {
       const nm = role.name.toLowerCase();
       if (nm === lower || nm === `roles/${lower}`) score += 1000;
       else if (nm.endsWith(`.${lower}`) || nm.endsWith(`/${lower}`)) score += 20;
+      // `storage` -> roles of the storage service (`roles/storage.*`) beat `roles/compute.storageAdmin`.
+      if (queryTokens.has(roleServiceSegment(nm))) score += SERVICE_MATCH_BOOST;
       hits.push({ role, score });
     }
     if (exact && !scored.has(exact.idx)) hits.push({ role: exact, score: 1000 });

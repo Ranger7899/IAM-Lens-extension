@@ -8,6 +8,7 @@ import {
   LeastPrivilegeBadge,
   List,
   PermissionAnatomy,
+  SegmentedButton,
   Snackbar,
   useCopy,
   type IconName,
@@ -23,6 +24,11 @@ const RISK: Record<'read' | 'write' | 'admin', { icon: IconName; label: string }
   admin: { icon: 'shield', label: 'Admin' },
 };
 
+const ORDERS = [
+  { id: 'service', label: 'Same service first' },
+  { id: 'size', label: 'Smallest overall' },
+];
+
 const STAGES = new Set(['GA', 'BETA', 'ALPHA', 'DEPRECATED']);
 
 export function PermissionDetailView({
@@ -37,9 +43,10 @@ export function PermissionDetailView({
   const permission = index.permissions[permIdx];
   const risk = index.classOf(permIdx);
   const [hide, setHide] = useState(true);
+  const [order, setOrder] = useState<'service' | 'size'>('service');
   const [toast, setToast] = useState<string | null>(null);
   const { copy } = useCopy();
-  const { all, leastPrivilegeName } = grantingRoles(index, permIdx);
+  const { all, leastPrivilegeName } = grantingRoles(index, permIdx, order === 'service');
   const shown = hide ? all.filter((r) => !isHiddenByDefault(r)) : all;
   const hidden = all.length - all.filter((r) => !isHiddenByDefault(r)).length;
   const service = permission.split(/[./]/)[0];
@@ -76,7 +83,7 @@ export function PermissionDetailView({
 
       <div className={styles.toolbar}>
         <h2 className={styles.toolbarTitle}>
-          Smallest first
+          Roles
           <span className={styles.count}>{shown.length}</span>
         </h2>
         {hidden > 0 || !hide ? (
@@ -84,6 +91,17 @@ export function PermissionDetailView({
             Hide deprecated &amp; agents
           </Chip>
         ) : null}
+      </div>
+      <div className={styles.orderRow}>
+        <span className={styles.orderLabel}>
+          Order
+        </span>
+        <SegmentedButton
+          label="Order"
+          segments={ORDERS}
+          value={order}
+          onChange={(id) => setOrder(id as 'service' | 'size')}
+        />
       </div>
       {hide && hidden > 0 && (
         <p className={styles.note}>
