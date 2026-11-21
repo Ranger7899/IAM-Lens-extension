@@ -1,16 +1,14 @@
+/* Flat tonal containers: no shadows. filled = shell tone; outlined/elevated = panel with a hairline. */
 .root {
-  border-radius: var(--md-sys-shape-corner-large);
+  border-radius: var(--md-sys-shape-corner-medium);
   padding: 16px;
   color: var(--md-sys-color-on-surface);
 }
-.elevated {
-  background: var(--md-sys-color-surface-container-low);
-  box-shadow: var(--md-sys-elevation-1);
+.elevated,
+.outlined {
+  background: var(--console-panel);
+  border: 1px solid var(--console-divider);
 }
 .filled {
-  background: var(--md-sys-color-surface-container-highest);
-}
-.outlined {
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--console-shell);
 }

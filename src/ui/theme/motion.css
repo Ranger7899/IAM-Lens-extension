@@ -1,15 +1,8 @@
-/* Motion primitives: staggered spring reveal + shared-axis X route transition. */
+/* Motion primitives: shared-axis X route transition (short, no spring). */
 
-/* Staggered reveal: set --i (0..n) on the element; step 40 ms, capped at 8 steps. */
+/* Console rows do not animate in; `.reveal` is kept as a hook and is a no-op. */
 .reveal {
-  animation: reveal var(--md-sys-motion-duration-long) var(--motion-ease-spring-fast) backwards;
-  animation-delay: calc(min(var(--i, 0), 8) * 40ms);
-}
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.985);
-  }
+  animation: none;
 }
 
 /*
@@ -29,10 +22,10 @@
   animation-fill-mode: both;
 }
 ::view-transition-old(route) {
-  animation: axis-out-fwd 160ms var(--md-sys-motion-easing-emphasized-accelerate) both;
+  animation: axis-out-fwd 100ms var(--md-sys-motion-easing-emphasized-accelerate) both;
 }
 ::view-transition-new(route) {
-  animation: axis-in-fwd 380ms var(--md-sys-motion-easing-emphasized-decelerate) 80ms both;
+  animation: axis-in-fwd 200ms var(--md-sys-motion-easing-emphasized-decelerate) 40ms both;
 }
 :root[data-nav='back']::view-transition-old(route) {
   animation-name: axis-out-back;
@@ -43,38 +36,29 @@
 @keyframes axis-out-fwd {
   to {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-16px);
   }
 }
 @keyframes axis-in-fwd {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(16px);
   }
 }
 @keyframes axis-out-back {
   to {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(16px);
   }
 }
 @keyframes axis-in-back {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-16px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    animation-name: reveal-fade;
-    animation-delay: 0s;
-  }
-  @keyframes reveal-fade {
-    from {
-      opacity: 0;
-    }
-  }
   ::view-transition-old(route) {
     animation: fade-out 100ms linear both;
   }

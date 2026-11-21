@@ -1,3 +1,4 @@
+/* Console outlined button group: 32px, 12px outer radius, selected = nav-active tone. */
 .root {
   display: flex;
   width: 100%;
@@ -9,15 +10,14 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 40px;
+  height: var(--console-control);
   padding: 0 10px;
-  border: 1px solid var(--md-sys-color-outline);
+  border: 1px solid var(--console-border);
   background: transparent;
   cursor: pointer;
   min-width: 0;
-  color: var(--md-sys-color-on-surface);
+  color: var(--console-accent);
   font: var(--md-sys-typescale-label-large);
-  transition: background-color var(--motion-spring-fast);
 }
 .seg span {
   overflow: hidden;
@@ -25,15 +25,15 @@
   white-space: nowrap;
 }
 .seg:first-child {
-  border-radius: var(--md-sys-shape-corner-full) 0 0 var(--md-sys-shape-corner-full);
+  border-radius: var(--console-radius-button) 0 0 var(--console-radius-button);
 }
 .seg:last-child {
-  border-radius: 0 var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) 0;
+  border-radius: 0 var(--console-radius-button) var(--console-radius-button) 0;
 }
 .seg + .seg {
   margin-inline-start: -1px;
 }
 .selected {
-  background: var(--md-sys-color-secondary-container);
+  background: var(--console-nav-active);
   color: var(--md-sys-color-on-secondary-container);
 }

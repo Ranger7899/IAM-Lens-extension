@@ -1,15 +1,15 @@
 .root {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
 }
 .bar {
   display: flex;
   gap: 2px;
   height: 8px;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: 2px;
   overflow: hidden;
-  background: var(--md-sys-color-outline-variant);
+  background: var(--console-divider);
 }
 .thin {
   height: 4px;
@@ -19,6 +19,7 @@
   flex-basis: 0;
   transition: flex-grow var(--motion-emphasized);
 }
+/* Fills are >= 3:1 against the panel and table-header tones in both themes (checked in gen-theme.ts) */
 .read {
   background: var(--md-custom-color-read-fill);
 }
@@ -29,11 +30,11 @@
   background: var(--md-custom-color-admin-fill);
 }
 .empty {
-  background: var(--md-sys-color-outline-variant);
+  background: var(--console-divider);
 }
 .legend {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -43,18 +44,17 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 24px;
-  padding: 0 10px 0 7px;
-  border-radius: var(--md-sys-shape-corner-full);
+  height: 20px;
+  padding: 0 6px 0 4px;
+  border-radius: var(--console-radius-chip);
   font-variant-numeric: tabular-nums;
 }
 .legend b {
-  font-weight: 700;
+  font-weight: 600;
 }
 .legend span {
   font-weight: 500;
 }
-/* Container + on-container roles keep the amber legible (AA) in both themes */
 .t_read {
   background: var(--md-custom-color-read-container);
   color: var(--md-custom-color-on-read-container);

@@ -1,35 +1,24 @@
+/* Console chip: 20px tall, 4px radius, 12/20 500. */
 .root {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 24px;
-  padding: 0 10px 0 7px;
-  border-radius: var(--md-sys-shape-corner-full);
+  height: 20px;
+  padding: 0 4px;
+  border-radius: var(--console-radius-chip);
   font: var(--md-sys-typescale-label-medium);
-  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 .spark {
-  background: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-}
-.spark svg {
-  animation: twinkle 900ms var(--motion-ease-spring-fast) 150ms backwards;
-}
-@keyframes twinkle {
-  from {
-    transform: scale(0) rotate(-90deg);
-  }
+  background: var(--console-chip);
+  color: var(--console-on-chip);
 }
 .stage {
-  padding: 0 8px;
-  border-radius: var(--md-sys-shape-corner-small);
-  font: var(--md-sys-typescale-label-small);
-  letter-spacing: 0.04em;
+  padding: 0 4px;
 }
 .GA {
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
 }
 .BETA,
 .ALPHA {
@@ -41,7 +30,6 @@
   color: var(--md-sys-color-on-error-container);
 }
 .neutral {
-  padding: 0 10px 0 8px;
-  background: var(--md-sys-color-surface-container-highest);
+  background: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface-variant);
 }

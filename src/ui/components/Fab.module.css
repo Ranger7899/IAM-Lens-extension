@@ -1,35 +1,27 @@
+/* No FAB in the console: an outlined 12px-radius pill button on the panel tone, no shadow. */
 .root {
   composes: layer from './state-layer.module.css';
   display: inline-flex;
   align-items: center;
-  height: 56px;
-  padding: 0 16px;
-  gap: 12px;
-  border: 0;
+  height: 36px;
+  padding: 0 14px;
+  gap: 8px;
+  border: 1px solid var(--console-border);
   cursor: pointer;
-  border-radius: var(--md-sys-shape-corner-large);
-  box-shadow: var(--md-sys-elevation-3);
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--console-radius-button);
+  background: var(--console-panel);
+  color: var(--console-accent);
   font: var(--md-sys-typescale-label-large);
-  transition:
-    gap var(--motion-spring-fast),
-    padding var(--motion-spring-fast);
-}
-.root:hover {
-  box-shadow: var(--md-sys-elevation-4);
 }
 .label {
   max-width: 200px;
   overflow: hidden;
   white-space: nowrap;
-  transition:
-    max-width var(--motion-spring-fast),
-    opacity var(--motion-spring-fast);
+  transition: max-width var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
 }
 .collapsed {
   gap: 0;
-  padding: 0 16px;
+  padding: 0 10px;
 }
 .collapsed .label {
   max-width: 0;

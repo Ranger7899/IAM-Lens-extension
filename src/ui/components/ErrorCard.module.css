@@ -1,40 +1,23 @@
-.root {
+/* Console banner: 16px radius, flat error tone (derived; the reference has no error colours). */
+div.root {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr);
-  gap: 4px 16px;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 4px 12px;
   align-items: start;
+  border-radius: var(--console-radius-banner);
   background: var(--md-sys-color-error-container);
   color: var(--md-sys-color-on-error-container);
-}
-/* Dark: soften the saturated #93000a container toward the surface; text stays well above AA */
-:root[data-theme='dark'] .root {
-  background: color-mix(
-    in srgb,
-    var(--md-sys-color-error-container) 55%,
-    var(--md-sys-color-surface-container-high)
-  );
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .root {
-    background: color-mix(
-      in srgb,
-      var(--md-sys-color-error-container) 55%,
-      var(--md-sys-color-surface-container-high)
-    );
-  }
 }
 .tile {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-error);
-  color: var(--md-sys-color-on-error);
+  width: 24px;
+  height: 24px;
+  color: var(--md-sys-color-on-error-container);
 }
 .title {
   margin: 0;
-  font: var(--md-sys-typescale-title-medium);
+  font: var(--md-sys-typescale-label-large);
 }
 .detail {
   margin: 4px 0 0;

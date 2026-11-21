@@ -15,7 +15,7 @@ export interface SegmentedButtonProps {
   icons?: boolean;
 }
 
-/** Single-select M3 segmented button (radio group semantics, arrow-key navigation). */
+/** Single-select console outlined-group button (radio group semantics, arrow-key navigation). */
 export function SegmentedButton({ segments, value, onChange, label, icons = false }: SegmentedButtonProps) {
   return (
     <div role="radiogroup" aria-label={label} className={styles.root}>

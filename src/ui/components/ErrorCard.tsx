@@ -9,12 +9,12 @@ export interface ErrorCardProps {
   onRetry?: () => void;
 }
 
-/** M3 error card with an optional retry action. */
+/** Console error banner with an optional retry action. */
 export function ErrorCard({ title, detail, onRetry }: ErrorCardProps) {
   return (
     <Card variant="filled" className={styles.root} role="alert">
       <span className={styles.tile}>
-        <Icon name="error" size={22} />
+        <Icon name="error" size={20} />
       </span>
       <div>
         <h2 className={styles.title}>{title}</h2>

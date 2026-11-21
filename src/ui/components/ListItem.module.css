@@ -1,6 +1,7 @@
+/* Console list / table rows: flat, no dividers or zebra, dense; hover = header tone, selected = nav-active. */
 .list {
   display: grid;
-  gap: 2px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -12,31 +13,18 @@
 .root {
   display: flex;
   align-items: stretch;
-  border-radius: var(--md-sys-shape-corner-extra-small);
-  background: var(--md-sys-color-surface-container-low);
+  background: transparent;
   color: var(--md-sys-color-on-surface);
-  transition: border-radius var(--motion-spring-fast);
-}
-.li:first-child .root {
-  border-start-start-radius: 20px;
-  border-start-end-radius: 20px;
-}
-.li:last-child .root {
-  border-end-start-radius: 20px;
-  border-end-end-radius: 20px;
-}
-.interactive:hover {
-  border-radius: var(--md-sys-shape-corner-large);
 }
 .main {
   composes: layer from './state-layer.module.css';
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex: 1;
   min-width: 0;
-  min-height: 56px;
-  padding: 10px 16px;
+  min-height: var(--console-row);
+  padding: 6px 16px;
   border: 0;
   border-radius: inherit;
   background: transparent;
@@ -53,26 +41,33 @@ button.main {
   padding-inline-end: 8px;
 }
 .selected {
-  background: var(--md-sys-color-secondary-container);
+  background: var(--console-nav-active);
+  border-radius: var(--console-radius-button);
 }
 .lead {
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--console-icon);
 }
 .text {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 0;
   flex: 1;
   min-width: 0;
 }
+/* First-column link treatment: link colour, underlined */
 .headline {
-  font: var(--md-sys-typescale-title-small);
+  font: var(--md-sys-typescale-body-medium);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.interactive .headline {
+  color: var(--console-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .supporting {
-  font: var(--md-sys-typescale-body-small);
+  font: var(--md-sys-typescale-body-medium);
   color: var(--md-sys-color-on-surface-variant);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -80,7 +75,7 @@ button.main {
 }
 .extra {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .trail {
   display: inline-flex;

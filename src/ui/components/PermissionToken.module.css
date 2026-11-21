@@ -1,23 +1,20 @@
+/* Signature: service.resource.verb with the verb in its risk hue. Console chip shape (4px). */
 .root {
   composes: layer from './state-layer.module.css';
   display: inline-flex;
   align-items: baseline;
   max-width: 100%;
-  padding: 4px 10px;
+  padding: 2px 6px;
   border: 0;
   cursor: pointer;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--console-radius-chip);
   background: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-mono-medium);
   white-space: nowrap;
-  transition: transform var(--motion-spring-fast);
-}
-.root:active {
-  transform: scale(0.96);
 }
 .service {
-  color: var(--md-sys-color-primary);
+  color: var(--console-accent);
   font-weight: 600;
 }
 .verb {
@@ -36,7 +33,4 @@
 .static {
   cursor: inherit;
   pointer-events: none;
-}
-.static:active {
-  transform: none;
 }

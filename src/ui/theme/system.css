@@ -1,69 +1,69 @@
-/* M3 type, shape, elevation, motion tokens. Colour roles live in tokens.css (generated). */
+/* Console type, shape, density, elevation, motion tokens. Colour roles live in tokens.css (generated). */
 :root {
   --font-sans: 'Google Sans Flex Variable', 'Figtree', system-ui, sans-serif;
   --font-mono: 'Google Sans Code Variable', 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Type roles: size / line-height / weight / tracking */
-  --md-sys-typescale-display-large: 700 57px/64px var(--font-sans);
-  --md-sys-typescale-display-medium: 700 45px/52px var(--font-sans);
-  --md-sys-typescale-display-small: 650 36px/44px var(--font-sans);
-  --md-sys-typescale-headline-large: 600 32px/40px var(--font-sans);
-  --md-sys-typescale-headline-medium: 600 28px/36px var(--font-sans);
-  --md-sys-typescale-headline-small: 600 24px/32px var(--font-sans);
-  --md-sys-typescale-title-large: 500 22px/28px var(--font-sans);
-  --md-sys-typescale-title-medium: 600 16px/24px var(--font-sans);
-  --md-sys-typescale-title-small: 600 14px/20px var(--font-sans);
-  --md-sys-typescale-label-large: 600 14px/20px var(--font-sans);
-  --md-sys-typescale-label-medium: 600 12px/16px var(--font-sans);
-  --md-sys-typescale-label-small: 600 11px/16px var(--font-sans);
-  --md-sys-typescale-body-large: 400 16px/24px var(--font-sans);
+  /* Type roles (Console, measured): weight size/line-height family. Body 14/20; page title 18/24 500;
+     section headings 22/28 400; tabs, table headers and buttons 14/20 500; chip 12/20 500. */
+  --md-sys-typescale-display-large: 400 28px/36px var(--font-sans);
+  --md-sys-typescale-display-medium: 400 28px/36px var(--font-sans);
+  --md-sys-typescale-display-small: 400 28px/36px var(--font-sans);
+  --md-sys-typescale-headline-large: 400 28px/36px var(--font-sans);
+  --md-sys-typescale-headline-medium: 400 22px/28px var(--font-sans);
+  --md-sys-typescale-headline-small: 400 22px/28px var(--font-sans);
+  --md-sys-typescale-title-large: 500 18px/24px var(--font-sans);
+  --md-sys-typescale-title-medium: 400 18px/24px var(--font-sans);
+  --md-sys-typescale-title-small: 500 14px/20px var(--font-sans);
+  --md-sys-typescale-label-large: 500 14px/20px var(--font-sans);
+  --md-sys-typescale-label-medium: 500 12px/20px var(--font-sans);
+  --md-sys-typescale-label-small: 500 12px/20px var(--font-sans);
+  --md-sys-typescale-body-large: 400 14px/20px var(--font-sans);
   --md-sys-typescale-body-medium: 400 14px/20px var(--font-sans);
   --md-sys-typescale-body-small: 400 12px/16px var(--font-sans);
-  --md-sys-typescale-mono-medium: 450 13px/20px var(--font-mono);
-  --tracking-display: -0.005em;
+  --md-sys-typescale-mono-medium: 400 13px/20px var(--font-mono);
+  --tracking-display: 0;
 
-  /* Shape */
+  /* Shape (Console radii: button/nav pill 12, banner 16, panel 20 top, chip 4, checkbox 2, icon button round) */
   --md-sys-shape-corner-none: 0;
   --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-small: 4px;
   --md-sys-shape-corner-medium: 12px;
   --md-sys-shape-corner-large: 16px;
-  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-large: 20px;
   --md-sys-shape-corner-full: 9999px;
+  --console-radius-button: 12px;
+  --console-radius-chip: 4px;
+  --console-radius-banner: 16px;
+  --console-radius-panel: 20px;
 
-  /* Elevation (M3 levels 0-5) */
+  /* Density (Console): 29px table rows, 32px buttons, 36px tabs / nav rows */
+  --console-row: 29px;
+  --console-control: 32px;
+  --console-tab: 36px;
+
+  /* Elevation: none. The Console is flat; hierarchy comes from the shell / panel / header tones. */
   --md-sys-elevation-0: none;
-  --md-sys-elevation-1:
-    0 1px 2px color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
-    0 1px 3px 1px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
-  --md-sys-elevation-2:
-    0 1px 2px color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
-    0 2px 6px 2px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
-  --md-sys-elevation-3:
-    0 1px 3px color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
-    0 4px 8px 3px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
-  --md-sys-elevation-4:
-    0 2px 3px color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
-    0 6px 10px 4px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
-  --md-sys-elevation-5:
-    0 4px 4px color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent),
-    0 8px 12px 6px color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  --md-sys-elevation-1: none;
+  --md-sys-elevation-2: none;
+  --md-sys-elevation-3: none;
+  --md-sys-elevation-4: none;
+  --md-sys-elevation-5: none;
 
-  /* Motion */
+  /* Motion: short, linear-ish; no springs */
   --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
   --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
   --md-sys-motion-duration-short: 100ms;
-  --md-sys-motion-duration-medium: 250ms;
-  --md-sys-motion-duration-long: 400ms;
-  --motion-ease-spring-fast: cubic-bezier(0.42, 1.67, 0.21, 0.9);
+  --md-sys-motion-duration-medium: 150ms;
+  --md-sys-motion-duration-long: 200ms;
+  --motion-ease-spring-fast: cubic-bezier(0.2, 0, 0, 1);
   --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
-  --motion-spring-fast: 200ms var(--motion-ease-spring-fast);
-  --motion-emphasized: 500ms var(--motion-ease-emphasized);
+  --motion-spring-fast: 100ms var(--motion-ease-spring-fast);
+  --motion-emphasized: 200ms var(--motion-ease-emphasized);
 
   /* State layer opacities */
-  --md-state-hover: 0.08;
-  --md-state-focus: 0.1;
+  --md-state-hover: 0.06;
+  --md-state-focus: 0.08;
   --md-state-pressed: 0.1;
 }
 

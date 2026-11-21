@@ -1,35 +1,30 @@
+/* Console buttons: flat, 32px, 12px radius. Outlined (default look) = 1px border + accent label; text = no border. */
 .root {
   composes: layer from './state-layer.module.css';
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 40px;
-  padding: 0 24px;
-  border: 0;
+  height: var(--console-control);
+  padding: 0 12px;
+  border: 1px solid transparent;
   cursor: pointer;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--console-radius-button);
   font: var(--md-sys-typescale-label-large);
-  transition:
-    border-radius var(--motion-spring-fast),
-    box-shadow var(--md-sys-motion-duration-short) linear;
+  white-space: nowrap;
 }
-.root:active {
-  border-radius: var(--md-sys-shape-corner-medium);
-}
-.filled {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-}
-.filled:hover {
-  box-shadow: var(--md-sys-elevation-1);
-}
+.outlined,
 .tonal {
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background: transparent;
+  border-color: var(--console-border);
+  color: var(--console-accent);
 }
 .text {
   background: transparent;
-  color: var(--md-sys-color-primary);
-  padding: 0 12px;
+  color: var(--console-accent);
+}
+/* Derived: the reference has no filled primary; accent fill with the on-accent label */
+.filled {
+  background: var(--console-accent);
+  color: var(--md-sys-color-on-primary);
 }

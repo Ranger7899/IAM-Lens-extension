@@ -9,7 +9,7 @@ export interface FabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   collapsed?: boolean;
 }
 
-/** Extended FAB that collapses to a regular FAB. */
+/** Outlined action button that collapses to icon-only (the console has no FAB). */
 export function Fab({ icon, label, collapsed = false, className, ...rest }: FabProps) {
   return (
     <button

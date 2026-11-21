@@ -2,26 +2,16 @@
   min-width: 280px;
   max-width: 560px;
   padding: 24px;
-  border: 0;
+  border: 1px solid var(--console-divider);
   border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-high);
+  background: var(--console-panel);
   color: var(--md-sys-color-on-surface);
-  box-shadow: var(--md-sys-elevation-3);
 }
 .root::backdrop {
-  background: color-mix(in srgb, var(--md-sys-color-scrim) 32%, transparent);
-}
-.root[open] {
-  animation: in var(--md-sys-motion-duration-long) var(--motion-ease-spring-fast);
-}
-@keyframes in {
-  from {
-    opacity: 0;
-    transform: scale(0.92);
-  }
+  background: color-mix(in srgb, var(--md-sys-color-scrim) 50%, transparent);
 }
 .title {
-  font: var(--md-sys-typescale-headline-small);
+  font: var(--md-sys-typescale-title-large);
   margin-bottom: 16px;
 }
 .body {

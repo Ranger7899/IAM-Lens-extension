@@ -6,22 +6,21 @@
   pointer-events: none;
   z-index: 100;
 }
+/* Console tooltip tone: flat, 4px radius */
 .root {
   pointer-events: auto;
-  min-height: 48px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   padding: 0 16px;
-  border-radius: var(--md-sys-shape-corner-extra-small);
-  box-shadow: var(--md-sys-elevation-3);
+  border-radius: var(--console-radius-chip);
   background: var(--md-sys-color-inverse-surface);
   color: var(--md-sys-color-inverse-on-surface);
   font: var(--md-sys-typescale-body-medium);
-  animation: in var(--motion-spring-fast);
+  animation: in var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
 }
 @keyframes in {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.96);
   }
 }

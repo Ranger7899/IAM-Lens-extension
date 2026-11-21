@@ -1,47 +1,37 @@
 .list {
   display: grid;
-  gap: 2px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .row {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr);
+  grid-template-columns: 24px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
-  min-height: 56px;
-  padding: 8px 16px;
-  background: var(--md-sys-color-surface-container-low);
-  border-radius: var(--md-sys-shape-corner-extra-small);
-}
-.row:first-child {
-  border-start-start-radius: 20px;
-  border-start-end-radius: 20px;
-}
-.row:last-child {
-  border-end-start-radius: 20px;
-  border-end-end-radius: 20px;
+  min-height: 40px;
+  padding: 6px 16px;
 }
 .text {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 .bone {
   display: block;
-  border-radius: 999px;
+  border-radius: var(--console-radius-chip);
   background: linear-gradient(
     90deg,
-    var(--md-sys-color-surface-container-highest) 0%,
-    var(--md-sys-color-surface-container-high) 50%,
-    var(--md-sys-color-surface-container-highest) 100%
+    var(--md-sys-color-surface-container-high) 0%,
+    var(--md-sys-color-surface-container-highest) 50%,
+    var(--md-sys-color-surface-container-high) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
 }
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
 }
 .line1 {
   height: 12px;

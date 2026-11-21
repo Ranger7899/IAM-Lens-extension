@@ -1,20 +1,19 @@
+/* Interactive chip: 4px radius, outlined; selected = nav-active tone. */
 .root {
   composes: layer from './state-layer.module.css';
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 32px;
-  padding: 0 12px;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
   cursor: pointer;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-small);
+  border: 1px solid var(--console-border);
+  border-radius: var(--console-radius-chip);
   background: transparent;
-  color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-large);
-  transition: background-color var(--motion-spring-fast);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-label-medium);
 }
 .selected {
-  background: var(--md-sys-color-secondary-container);
+  background: var(--console-nav-active);
   color: var(--md-sys-color-on-secondary-container);
-  border-color: transparent;
 }

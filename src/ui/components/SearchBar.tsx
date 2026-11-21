@@ -21,7 +21,7 @@ export interface SearchBarProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   label?: string;
 }
 
-/** M3 search bar: full pill at rest, morphs to a 16px-radius sheet on focus. */
+/** Console filter bar: flat, underlined, accent underline on focus. */
 export function SearchBar({ label = 'Search roles and permissions', className, ...rest }: SearchBarProps) {
   const ref = useRef<HTMLInputElement>(null);
   useSlashFocus(ref);

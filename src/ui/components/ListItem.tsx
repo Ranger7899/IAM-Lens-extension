@@ -20,7 +20,7 @@ export interface ListProps {
   children: ReactNode;
 }
 
-/** M3 Expressive segmented list: items are separate tiles with a 2px gap, large outer / small inner corners. */
+/** Console list: flat dense rows, no dividers. */
 export function List({ label, children }: ListProps) {
   return (
     <ul className={styles.list} aria-label={label} onKeyDown={roveFocus}>
@@ -42,7 +42,7 @@ export interface ListItemProps {
   extra?: ReactNode;
   onClick?: () => void;
   selected?: boolean;
-  /** Stagger index for the entry animation (40 ms step, capped at 8) */
+  /** Legacy stagger index (rows no longer animate) */
   index?: number;
   /** Accessible name override for the row button */
   label?: string;

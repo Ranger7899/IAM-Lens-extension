@@ -12,7 +12,7 @@ export interface TabsProps {
   label: string;
 }
 
-/** M3 primary tabs with roving tabindex and arrow-key navigation. */
+/** Console tabs with roving tabindex and arrow-key navigation. */
 export function Tabs({ tabs, value, onChange, label }: TabsProps) {
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const onKey = (e: KeyboardEvent, i: number) => {

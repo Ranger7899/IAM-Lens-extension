@@ -19,7 +19,7 @@ body,
 body {
   font: var(--md-sys-typescale-body-medium);
   color: var(--md-sys-color-on-surface);
-  background: var(--md-sys-color-surface);
+  background: var(--console-panel);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -27,36 +27,17 @@ h1,
 h2,
 h3 {
   margin: 0;
-  letter-spacing: var(--tracking-display);
+}
+
+/* Console links are underlined; component links opt out with text-decoration: none */
+a {
+  color: var(--console-link);
+  text-decoration: underline;
 }
 
 :focus-visible {
-  outline: 3px solid var(--md-sys-color-primary);
+  outline: 2px solid var(--console-accent);
   outline-offset: 2px;
-}
-
-/*
- * Faint dot grid (1px dots, 16px pitch, outline-variant at 55%, tuned up from 35% so it reads) behind the app. It is densest at the top
- * and fades out toward the content area, so it never competes with the opaque list cards.
- */
-.dot-grid {
-  position: relative;
-  isolation: isolate;
-}
-.dot-grid::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 420px;
-  z-index: -1;
-  pointer-events: none;
-  background-image: radial-gradient(
-    color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent) 1px,
-    transparent 1.5px
-  );
-  background-size: 16px 16px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 80px, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0, #000 80px, transparent 100%);
 }
 
 .sr-only {

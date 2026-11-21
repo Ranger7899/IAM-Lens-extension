@@ -5,15 +5,13 @@
   min-width: 0;
   justify-self: start;
   align-self: start;
-  height: 22px;
-  padding: 0 8px;
+  height: 20px;
+  padding: 0 4px;
   box-sizing: border-box;
-  border: 1px solid color-mix(in srgb, var(--md-sys-color-on-secondary-container) 16%, transparent);
-  border-radius: var(--md-sys-shape-corner-small);
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-  font: var(--md-sys-typescale-label-small);
-  letter-spacing: 0.02em;
+  border-radius: var(--console-radius-chip);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
   white-space: nowrap;
 }
 .id {
