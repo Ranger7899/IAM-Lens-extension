@@ -1,5 +1,5 @@
-import { test as base, chromium, type BrowserContext } from '@playwright/test';
-import { mkdtempSync } from 'node:fs';
+import { test as base, chromium, type BrowserContext, type Page } from '@playwright/test';
+import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -29,3 +29,33 @@ export const test = base.extend<{ context: BrowserContext; extensionId: string }
 });
 
 export const expect = test.expect;
+
+export interface SnapshotRole {
+  name: string;
+  title: string;
+  perms: number[];
+}
+export interface Snapshot {
+  permissions: string[];
+  roles: SnapshotRole[];
+}
+
+/** The bundled snapshot, read from disk so tests can compare the UI against ground truth at runtime. */
+export function loadSnapshot(): Snapshot {
+  return JSON.parse(
+    readFileSync(path.resolve(import.meta.dirname, '..', 'data', 'roles.snapshot.json'), 'utf8'),
+  );
+}
+
+export function sidepanelUrl(extensionId: string, hash = ''): string {
+  return `chrome-extension://${extensionId}/sidepanel.html${hash}`;
+}
+
+/** Read the popup -> side panel hand-off route from `chrome.storage.session`. */
+export async function readPendingRoute(page: Page): Promise<unknown> {
+  return page.evaluate(
+    async () =>
+      ((await chrome.storage.session.get('pendingRoute')).pendingRoute as { route?: unknown } | undefined)
+        ?.route,
+  );
+}

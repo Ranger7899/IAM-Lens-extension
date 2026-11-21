@@ -11,7 +11,7 @@ export default defineConfig({
   testMatch: shots ? ['**/screenshots.spec.ts', '**/shots-*.spec.ts'] : undefined,
   timeout: shots ? 120_000 : 30_000,
   workers: 1, // one persistent-context browser at a time
-  reporter: 'list',
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   // Per-worker output dirs (IAM_TEST_OUT=test-results-IAM-9) so parallel runs don't wipe each other.
   outputDir: process.env.IAM_TEST_OUT ?? 'test-results',
   use: { trace: 'retain-on-failure' },
