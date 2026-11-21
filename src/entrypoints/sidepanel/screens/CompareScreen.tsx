@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Card, EmptyState, IconButton, PrivilegeBar, Snackbar } from '@/ui/components';
+import { Card, EmptyState, IconButton, PrivilegeBar, Snackbar, SourceBadge } from '@/ui/components';
 import { useIam } from '@/ui/data';
 import { diffRoles, type IamIndex, type RoleRecord } from '@/core';
 import { useNavigate } from '../navigation';
@@ -83,6 +83,7 @@ function CompareView({ index, a, b }: { index: IamIndex; a?: string; b?: string 
                 <span className={styles.headTitle}>{nameOf(role)}</span>
                 <span className={styles.headTotal}>{fmt(role.perms.length)}</span>
               </div>
+              {role.source.kind === 'custom' && <SourceBadge parent={role.source.parent} />}
               <PrivilegeBar {...index.profile(role)} size="thin" />
             </Card>
           ))}

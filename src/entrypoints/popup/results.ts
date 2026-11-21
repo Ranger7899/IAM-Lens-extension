@@ -5,7 +5,14 @@ import type { Route } from '@/entrypoints/sidepanel/routes';
 export const LIMIT = 8;
 
 export type PopupResult =
-  | { kind: 'role'; id: string; title: string; counts: PrivilegeProfile; stage: string }
+  | {
+      kind: 'role';
+      id: string;
+      title: string;
+      counts: PrivilegeProfile;
+      stage: string;
+      customParent?: string;
+    }
   | { kind: 'permission'; id: string; risk: 'read' | 'write' | 'admin'; grantedBy: number };
 
 export const routeOf = (r: PopupResult): Route =>
@@ -27,6 +34,7 @@ export function topResults(index: IamIndex, query: string, limit = LIMIT): Popup
     title: h.role.title || h.role.name,
     counts: index.profile(h.role),
     stage: h.role.deleted ? 'DEPRECATED' : h.role.stage,
+    customParent: h.role.source.kind === 'custom' ? h.role.source.parent : undefined,
   }));
   const ps: PopupResult[] = permissions.map((h) => ({
     kind: 'permission',

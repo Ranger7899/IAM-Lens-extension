@@ -46,7 +46,14 @@ function persistQuery(q: string) {
 
 function toSummary(r: RoleRecord, counts: RoleSummary['counts']): RoleSummary {
   const stage = (r.deleted ? 'DEPRECATED' : STAGES.has(r.stage) ? r.stage : 'GA') as Stage;
-  return { id: r.name, title: r.title || r.name, stage, counts, description: r.description };
+  return {
+    id: r.name,
+    title: r.title || r.name,
+    stage,
+    counts,
+    description: r.description,
+    customParent: r.source.kind === 'custom' ? r.source.parent : undefined,
+  };
 }
 
 /** A tonal card that jumps straight to an exact match or to the minimal-roles finder. */

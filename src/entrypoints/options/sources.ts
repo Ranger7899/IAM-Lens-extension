@@ -1,6 +1,7 @@
 /** Custom-role sources (projects / organizations): stored in `meta.customSources`, roles in the custom-roles store. */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { GcpResource } from '@/core/gcp';
+import { signalCustomRolesChanged } from '@/ui/data/IamProvider';
 import type { OptionsDeps } from './deps';
 import { describeError, type SourceError } from './format';
 
@@ -67,6 +68,7 @@ export function useCustomSources(deps: OptionsDeps) {
         const roles = await deps.fetchRoles(rec.parent);
         await deps.deleteRolesByParent(rec.parent);
         await deps.saveRoles(roles);
+        signalCustomRolesChanged();
         setCounts((c) => ({ ...c, [rec.parent]: roles.length }));
         next = { ...rec, fetchedAt: new Date().toISOString(), error: undefined };
       } catch (e) {
@@ -108,6 +110,7 @@ export function useCustomSources(deps: OptionsDeps) {
   const remove = useCallback(
     async (parent: string) => {
       await deps.deleteRolesByParent(parent);
+      signalCustomRolesChanged();
       setCounts((c) => Object.fromEntries(Object.entries(c).filter(([k]) => k !== parent)));
       await commit(ref.current.filter((s) => s.parent !== parent));
     },
@@ -116,6 +119,7 @@ export function useCustomSources(deps: OptionsDeps) {
 
   const signOutAndClear = useCallback(async () => {
     await deps.signOut();
+    signalCustomRolesChanged();
     await commit([]);
     setCounts({});
     setSignedIn(false);

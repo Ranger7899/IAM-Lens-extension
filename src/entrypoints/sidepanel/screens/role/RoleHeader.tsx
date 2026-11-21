@@ -1,4 +1,4 @@
-import { Button, Card, Chip, IdToken, Label, PrivilegeBar, StageChip } from '@/ui/components';
+import { Button, Card, Chip, IdToken, Label, PrivilegeBar, SourceBadge, StageChip } from '@/ui/components';
 import type { PrivilegeProfile, RoleRecord } from '@/core';
 import { LocalIcon } from './LocalIcon';
 import styles from './RoleHeader.module.css';
@@ -33,7 +33,11 @@ export function RoleHeader({
       <div className={styles.eyebrow}>
         <StageChip stage={asStage(role.stage)} />
         {role.deleted && <Label>Deleted</Label>}
-        <span>{role.source.kind === 'custom' ? 'Custom role' : 'Predefined role'}</span>
+        {role.source.kind === 'custom' ? (
+          <SourceBadge parent={role.source.parent} />
+        ) : (
+          <span>Predefined role</span>
+        )}
       </div>
       <h2 className={styles.title}>{role.title || role.name}</h2>
       <IdToken value={role.name} onCopied={onCopyId} />

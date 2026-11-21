@@ -134,44 +134,44 @@ export function SidePanelRouter() {
   const detail = isDetail(route);
   return (
     <NavigationContext.Provider value={api}>
-    <div className={`${styles.root} dot-grid`}>
-      <TopAppBar
-        title="IAM Lens"
-        leading={
-          detail ? (
-            <IconButton icon="arrow_back" label="Back" onClick={back} />
-          ) : (
-            <span className={styles.mark}>
-              <LensMark size={28} />
-            </span>
-          )
-        }
-        actions={
-          <IconButton
-            icon="settings"
-            label="Settings"
-            onClick={() => void chrome.runtime.openOptionsPage()}
+      <div className={`${styles.root} dot-grid`}>
+        <TopAppBar
+          title="IAM Lens"
+          leading={
+            detail ? (
+              <IconButton icon="arrow_back" label="Back" onClick={back} />
+            ) : (
+              <span className={styles.mark}>
+                <LensMark size={28} />
+              </span>
+            )
+          }
+          actions={
+            <IconButton
+              icon="settings"
+              label="Settings"
+              onClick={() => void chrome.runtime.openOptionsPage()}
+            />
+          }
+        >
+          <SegmentedButton
+            label="Mode"
+            segments={MODES}
+            value={modeOf(route)}
+            onChange={(id) => {
+              if (id === 'search') go({ name: 'search', query: '' });
+              else go({ name: id as 'minimal' | 'compare' | 'whatsnew' });
+            }}
           />
-        }
-      >
-        <SegmentedButton
-          label="Mode"
-          segments={MODES}
-          value={modeOf(route)}
-          onChange={(id) => {
-            if (id === 'search') go({ name: 'search', query: '' });
-            else go({ name: id as 'minimal' | 'compare' | 'whatsnew' });
-          }}
-        />
-      </TopAppBar>
-      <main className={styles.main}>
-        <div className={`${styles.view} route-view`}>
-          <IamGate>
-            <Screen route={route} go={go} />
-          </IamGate>
-        </div>
-      </main>
-    </div>
+        </TopAppBar>
+        <main className={styles.main}>
+          <div className={`${styles.view} route-view`}>
+            <IamGate>
+              <Screen route={route} go={go} />
+            </IamGate>
+          </div>
+        </main>
+      </div>
     </NavigationContext.Provider>
   );
 }

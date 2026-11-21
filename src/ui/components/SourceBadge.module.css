@@ -1,0 +1,27 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+  justify-self: start;
+  align-self: start;
+  height: 22px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-on-secondary-container) 16%, transparent);
+  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font: var(--md-sys-typescale-label-small);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.id {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dot {
+  margin: 0 4px;
+  opacity: 0.6;
+}

@@ -19,7 +19,8 @@ beforeEach(() => {
       session: {
         set: async (o: Record<string, unknown>) => {
           Object.assign(store, o);
-          for (const l of listeners) l(Object.fromEntries(Object.entries(o).map(([k, v]) => [k, { newValue: v }])), 'session');
+          for (const l of listeners)
+            l(Object.fromEntries(Object.entries(o).map(([k, v]) => [k, { newValue: v }])), 'session');
         },
         get: async (k: string) => (k in store ? { [k]: store[k] } : {}),
         remove: async (k: string) => void delete store[k],

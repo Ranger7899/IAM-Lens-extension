@@ -93,9 +93,7 @@ export function PermissionDetailView({
         ) : null}
       </div>
       <div className={styles.orderRow}>
-        <span className={styles.orderLabel}>
-          Order
-        </span>
+        <span className={styles.orderLabel}>Order</span>
         <SegmentedButton
           label="Order"
           segments={ORDERS}
@@ -120,6 +118,7 @@ export function PermissionDetailView({
               title: role.title || role.name,
               stage: role.deleted ? 'DEPRECATED' : STAGES.has(role.stage) ? (role.stage as Stage) : 'GA',
               counts: c,
+              customParent: role.source.kind === 'custom' ? role.source.parent : undefined,
             };
             return (
               <RoleRow

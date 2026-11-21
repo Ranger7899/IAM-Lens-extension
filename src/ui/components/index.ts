@@ -21,3 +21,4 @@ export * from './LensMark';
 export * from './PermissionAnatomy';
 export * from './Skeleton';
 export * from './ErrorCard';
+export * from './SourceBadge';

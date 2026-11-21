@@ -1,4 +1,13 @@
-import { Chip, IdToken, PermissionToken, PrivilegeBar, StageChip, Icon, type Risk } from '@/ui/components';
+import {
+  Chip,
+  IdToken,
+  PermissionToken,
+  PrivilegeBar,
+  SourceBadge,
+  StageChip,
+  Icon,
+  type Risk,
+} from '@/ui/components';
 import type { ChosenRole, PrivilegeProfile } from '@/core';
 import { LocalIcon } from '../role/LocalIcon';
 import styles from './minimal.module.css';
@@ -42,6 +51,7 @@ export function RoleResultCard({
         <div className={styles.roleTitle}>
           <h3>{role.title || role.name}</h3>
           <IdToken value={role.name} onCopied={onCopyId} />
+          {role.source.kind === 'custom' && <SourceBadge parent={role.source.parent} />}
         </div>
         <StageChip stage={asStage(role.stage)} />
       </header>

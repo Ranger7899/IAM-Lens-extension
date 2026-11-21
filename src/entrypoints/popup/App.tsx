@@ -10,6 +10,7 @@ import {
   PermissionToken,
   PrivilegeBar,
   SearchBar,
+  SourceBadge,
   StageChip,
   TopAppBar,
   type ExampleQuery,
@@ -179,6 +180,7 @@ function Row({
         headline={
           <span className={styles.title}>
             <span className={styles.titleText}>{r.title}</span>
+            {r.customParent && <SourceBadge parent={r.customParent} />}
             {r.stage !== 'GA' && <StageChip stage={r.stage as 'BETA' | 'ALPHA' | 'DEPRECATED'} />}
           </span>
         }

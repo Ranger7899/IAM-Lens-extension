@@ -1,4 +1,11 @@
-import { isDiscouraged, isLegacyRole, isServiceAgentRole, rolesGranting, type IamIndex, type RoleRecord } from '@/core';
+import {
+  isDiscouraged,
+  isLegacyRole,
+  isServiceAgentRole,
+  rolesGranting,
+  type IamIndex,
+  type RoleRecord,
+} from '@/core';
 
 export type Resolved =
   | { kind: 'exact'; index: number; permission: string }

@@ -15,6 +15,8 @@ export interface RoleSummary {
   stage: Stage;
   counts: RiskCounts;
   description?: string;
+  /** `projects/<id>` / `organizations/<id>` for a custom role; omitted for predefined roles. */
+  customParent?: string;
 }
 
 export interface PermissionEntry {

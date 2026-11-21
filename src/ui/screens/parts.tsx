@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ListItem, Monogram, PrivilegeBar, StageChip } from '../components';
+import { ListItem, Monogram, PrivilegeBar, SourceBadge, StageChip } from '../components';
 import type { RoleSummary } from '../types';
 import styles from './parts.module.css';
 
@@ -52,9 +52,10 @@ export function RoleRow({ role, index, onOpen, badge }: RoleRowProps) {
       }
       extra={
         <>
-          {(badge || role.stage !== 'GA') && (
+          {(badge || role.customParent || role.stage !== 'GA') && (
             <span className={styles.badgeRow}>
               {badge}
+              {role.customParent && <SourceBadge parent={role.customParent} />}
               {role.stage !== 'GA' && <StageChip stage={role.stage} />}
             </span>
           )}

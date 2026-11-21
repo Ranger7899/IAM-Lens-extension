@@ -3,7 +3,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { StrictMode, act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { makeSnapshot } from '@/core/__tests__/fixtures';
-import { IamGate, IamProvider, useIam, type IamValue, type SnapshotLoader } from './IamProvider';
+import type { CustomRoleInput } from '@/core';
+import {
+  IamGate,
+  IamProvider,
+  useIam,
+  type CustomRolesLoader,
+  type CustomRolesSubscribe,
+  type IamValue,
+  type SnapshotLoader,
+} from './IamProvider';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -19,13 +28,21 @@ function Probe({ onValue }: { onValue: (v: IamValue) => void }) {
   return null;
 }
 
-async function mountWith(loader: SnapshotLoader, strict = false) {
+async function mountWith(
+  loader: SnapshotLoader,
+  strict = false,
+  custom: { load?: CustomRolesLoader; subscribe?: CustomRolesSubscribe } = {},
+) {
   host = document.createElement('div');
   document.body.append(host);
   root = createRoot(host);
   let latest!: IamValue;
   const tree = (
-    <IamProvider loader={loader}>
+    <IamProvider
+      loader={loader}
+      customRolesLoader={custom.load ?? (async () => [])}
+      subscribeCustomRoles={custom.subscribe ?? (() => () => {})}
+    >
       <Probe onValue={(v) => (latest = v)} />
       <IamGate>
         <p id="ready">ready</p>
@@ -81,5 +98,39 @@ describe('IamProvider', () => {
     expect(get().status).toBe('ready');
     expect(get().snapshotMeta?.source).toBe('stored');
     expect(loader).toHaveBeenCalledTimes(2);
+  });
+
+  it('merges stored custom roles (with unknown permissions) and rebuilds when they change', async () => {
+    const snapshot = await makeSnapshot([{ name: 'roles/a.viewer', perms: ['a.things.get'] }]);
+    const loader = vi.fn(async () => ({ snapshot, source: 'bundled' as const }));
+    const mk = (perms: string[]): CustomRoleInput => ({
+      name: 'projects/p1/roles/auditor',
+      title: 'Auditor',
+      perms,
+      source: { kind: 'custom', parent: 'projects/p1' },
+    });
+    let stored: CustomRoleInput[] = [mk(['a.things.get', 'zzz.widgets.delete'])];
+    let fire: () => void = () => {};
+    const get = await mountWith(loader, false, {
+      load: async () => stored,
+      subscribe: (cb) => {
+        fire = cb;
+        return () => {};
+      },
+    });
+    const first = get().index!;
+    const role = first.role('projects/p1/roles/auditor')!;
+    expect(role.source).toEqual({ kind: 'custom', parent: 'projects/p1' });
+    const pi = first.permissionIndex('zzz.widgets.delete');
+    expect(pi).toBeDefined();
+    expect(first.classOf(pi!)).toBe('admin');
+
+    stored = [];
+    await act(async () => {
+      fire();
+    });
+    expect(get().index).not.toBe(first);
+    expect(get().index!.role('projects/p1/roles/auditor')).toBeUndefined();
+    expect(loader).toHaveBeenCalledTimes(1); // the snapshot is not reloaded
   });
 });
