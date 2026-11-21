@@ -56,6 +56,7 @@ function makeDeps(over: Partial<OptionsDeps> = {}, signedIn = false) {
     getMeta: async () => meta,
     patchMeta: async (p) => (meta = { ...meta, ...p }),
     refreshNow: vi.fn(async () => ({ status: 'up-to-date' as const, version: '1' })),
+    openInPanel: vi.fn(),
     ...over,
   };
   return deps;

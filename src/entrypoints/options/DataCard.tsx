@@ -2,12 +2,20 @@ import { useEffect, useState } from 'react';
 import type { UpdateResult } from '@/core';
 import { Button, Icon } from '@/ui/components';
 import { useIam } from '@/ui/data';
+import type { useWhatsNew } from '@/ui/whatsnew/useWhatsNew';
+import { formatDate, n } from '@/ui/whatsnew/format';
 import type { OptionsDeps } from './deps';
 import { describeUpdate, relativeTime, shortDate } from './format';
 import { Section } from './Section';
 import styles from './DataCard.module.css';
 
-export function DataCard({ deps }: { deps: OptionsDeps }) {
+export function DataCard({
+  deps,
+  whatsNew,
+}: {
+  deps: OptionsDeps;
+  whatsNew: ReturnType<typeof useWhatsNew>;
+}) {
   const iam = useIam();
   const [last, setLast] = useState<{ at?: string; result?: UpdateResult }>({});
   const [checking, setChecking] = useState(false);
@@ -80,6 +88,7 @@ export function DataCard({ deps }: { deps: OptionsDeps }) {
             <span className={styles.when}>
               {last.at ? `Last check ${relativeTime(last.at)}` : 'Checks run once a day in the background'}
             </span>
+            {whatsNew.status === 'ready' && <ChangesLink s={whatsNew} />}
           </span>
         </p>
         <Button variant="tonal" icon="refresh" onClick={check} disabled={checking}>
@@ -87,5 +96,22 @@ export function DataCard({ deps }: { deps: OptionsDeps }) {
         </Button>
       </div>
     </Section>
+  );
+}
+
+/** "N changes since Oct 28" -> the What's new section below. */
+function ChangesLink({ s }: { s: Extract<ReturnType<typeof useWhatsNew>, { status: 'ready' }> }) {
+  const d = s.diff;
+  const total =
+    d.rolesAdded.length +
+    d.rolesRemoved.length +
+    d.rolesChanged.length +
+    d.permissionsAdded.length +
+    d.permissionsRemoved.length;
+  const text = total === 0 ? 'No changes' : `${n(total)} ${total === 1 ? 'change' : 'changes'}`;
+  return (
+    <a className={styles.changes} href="#whatsnew">
+      {text} since {formatDate(s.previous.generatedAt)}
+    </a>
   );
 }

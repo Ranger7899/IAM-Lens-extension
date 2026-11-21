@@ -8,6 +8,8 @@ export interface WhatsNewHeaderProps {
   previous: SnapshotInfo;
   current: SnapshotInfo;
   diff: SnapshotDiff;
+  /** Hide the eyebrow when a surrounding section already titles it (options page). */
+  bare?: boolean;
 }
 
 const STATS = [
@@ -19,13 +21,15 @@ const STATS = [
 ] as const;
 
 /** Big header card: the two snapshot versions with dates, and one stat tile per section. */
-export function WhatsNewHeader({ previous, current, diff }: WhatsNewHeaderProps) {
+export function WhatsNewHeader({ previous, current, diff, bare }: WhatsNewHeaderProps) {
   const total = STATS.reduce((sum, s) => sum + diff[s.key].length, 0);
   return (
     <header className={styles.header}>
-      <p className={styles.eyebrow}>
-        <Icon name="new_releases" size={16} filled /> What&rsquo;s new
-      </p>
+      {!bare && (
+        <p className={styles.eyebrow}>
+          <Icon name="new_releases" size={16} filled /> What&rsquo;s new
+        </p>
+      )}
       <h2 className={styles.headline}>
         {total === 0
           ? 'No changes between snapshots'

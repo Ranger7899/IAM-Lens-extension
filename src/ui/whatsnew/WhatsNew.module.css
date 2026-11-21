@@ -368,3 +368,6 @@ a.permLink:hover > * {
 .emptyMeta code {
   font: var(--md-sys-typescale-mono-medium);
 }
+.emptyBare {
+  padding: 8px 0 4px;
+}

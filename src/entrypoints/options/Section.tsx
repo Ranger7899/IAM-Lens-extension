@@ -8,13 +8,15 @@ export interface SectionProps {
   subtitle?: string;
   /** Right-aligned header content (e.g. a status chip). */
   aside?: ReactNode;
+  /** Anchor id, e.g. `whatsnew` for `options.html#whatsnew`. */
+  id?: string;
   children: ReactNode;
 }
 
 /** One options section: icon, 18/24 title, optional subtitle, then free-form content; sections are divided by a hairline. */
-export function Section({ icon, title, subtitle, aside, children }: SectionProps) {
+export function Section({ icon, title, subtitle, aside, id, children }: SectionProps) {
   return (
-    <section className={styles.card} aria-label={title} role="region">
+    <section id={id} className={styles.card} aria-label={title} role="region">
       <header className={styles.head}>
         <span className={styles.tile}>
           <Icon name={icon} size={20} />

@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { StageChip, PermissionToken, Icon } from '@/ui/components';
 import { classifyPermission, type RoleChange, type RoleSummary } from '@/core';
-import { routeHref } from '../../router';
+import { RouteLink } from './openRoute';
 import { n } from './format';
 import styles from './WhatsNew.module.css';
 
@@ -96,9 +96,9 @@ export function RoleRows({
         return (
           <li key={r.name} className={styles.row} style={{ '--i': Math.min(i, 8) } as React.CSSProperties}>
             {linked ? (
-              <a className={styles.rowMain} href={routeHref({ name: 'role', id: r.name })}>
+              <RouteLink className={styles.rowMain} route={{ name: 'role', id: r.name }}>
                 {body}
-              </a>
+              </RouteLink>
             ) : (
               <div className={`${styles.rowMain} ${styles.gone}`}>{body}</div>
             )}
@@ -141,9 +141,9 @@ function PermList({ perms, sign, linked }: { perms: string[]; sign: '+' | '−';
 export function PermLink({ name, linked }: { name: string; linked: boolean }) {
   const token = <PermissionToken permission={name} risk={classifyPermission(name)} static />;
   return linked ? (
-    <a className={styles.permLink} href={routeHref({ name: 'permission', id: name })}>
+    <RouteLink className={styles.permLink} route={{ name: 'permission', id: name }}>
       {token}
-    </a>
+    </RouteLink>
   ) : (
     <span className={`${styles.permLink} ${styles.gone}`}>{token}</span>
   );
@@ -160,10 +160,10 @@ export function ChangedRoles({ changes }: { changes: readonly RoleChange[] }) {
           className={styles.changedItem}
           style={{ '--i': Math.min(i, 8) } as React.CSSProperties}
         >
-          <a className={styles.changedHead} href={routeHref({ name: 'role', id: c.name })}>
+          <RouteLink className={styles.changedHead} route={{ name: 'role', id: c.name }}>
             <RoleName role={c} />
             <Icon name="chevron_right" size={20} className={styles.chev} />
-          </a>
+          </RouteLink>
           <div className={styles.chips}>
             {c.stage && (
               <span className={styles.stageChange}>

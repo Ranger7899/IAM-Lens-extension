@@ -44,17 +44,22 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   await expect(stub('Compare two roles')).toBeVisible();
   await page.getByRole('tab', { name: 'Minimal' }).click();
   await expect(stub('Find minimal roles')).toBeVisible();
-  await page.getByRole('tab', { name: "What's new" }).click();
-  await expect(stub('Nothing to compare yet')).toBeVisible();
+  // The side panel has exactly three tabs; What's new lives in Settings (IAM-39).
+  await expect(page.getByRole('tab')).toHaveText(['Search', 'Minimal', 'Compare']);
 
   await page.evaluate(() => (location.hash = '#/role/roles%2Fviewer'));
   await expect(stub('Viewer')).toBeVisible();
   await expect(page.getByText('roles/viewer')).toBeVisible();
   await page.getByRole('button', { name: 'Back', exact: true }).click();
-  await expect(stub('Nothing to compare yet')).toBeVisible();
+  await expect(stub('Find minimal roles')).toBeVisible();
 
   await page.evaluate(() => (location.hash = '#/permission/storage.objects.get'));
   await expect(stub(/^Roles/)).toBeVisible();
   await page.keyboard.press('Alt+ArrowLeft');
-  await expect(stub('Nothing to compare yet')).toBeVisible();
+  await expect(stub('Find minimal roles')).toBeVisible();
+
+  // Old deep link: a short "moved" stub, no dead route.
+  await page.evaluate(() => (location.hash = '#/whatsnew'));
+  await expect(stub('What’s new moved to Settings')).toBeVisible();
+  await expect(page.getByRole('tab')).toHaveCount(3);
 });

@@ -69,3 +69,13 @@
     grid-template-columns: 1fr;
   }
 }
+.changes {
+  width: fit-content;
+  color: var(--console-link);
+  font: var(--md-sys-typescale-body-small);
+  text-decoration: underline;
+}
+.changes:focus-visible {
+  outline: 2px solid var(--console-accent);
+  outline-offset: 2px;
+}

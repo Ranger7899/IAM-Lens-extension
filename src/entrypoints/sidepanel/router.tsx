@@ -19,16 +19,15 @@ import styles from './App.module.css';
 export { NavigationContext, useNavigate, parseRoute, routeHref };
 export type { Route, TopLevelRoute, NavigationApi, NavigateOptions };
 
-const MODES: { id: TopLevelRoute; label: string }[] = [
+const MODES: { id: Exclude<TopLevelRoute, 'whatsnew'>; label: string }[] = [
   { id: 'search', label: 'Search' },
   { id: 'minimal', label: 'Minimal' },
   { id: 'compare', label: 'Compare' },
-  { id: 'whatsnew', label: "What's new" },
 ];
 
-/** The segment a route belongs to; detail routes are reached from Search. */
-export function modeOf(r: Route): TopLevelRoute {
-  return r.name === 'role' || r.name === 'permission' ? 'search' : r.name;
+/** The segment a route belongs to; detail routes are reached from Search, the retired `whatsnew` stub shows under Search. */
+export function modeOf(r: Route): Exclude<TopLevelRoute, 'whatsnew'> {
+  return r.name === 'role' || r.name === 'permission' || r.name === 'whatsnew' ? 'search' : r.name;
 }
 
 export function isDetail(r: Route): boolean {
@@ -162,7 +161,7 @@ export function SidePanelRouter() {
               value={modeOf(route)}
               onChange={(id) => {
                 if (id === 'search') go({ name: 'search', query: '' });
-                else go({ name: id as 'minimal' | 'compare' | 'whatsnew' });
+                else go({ name: id as 'minimal' | 'compare' });
               }}
             />
           </div>

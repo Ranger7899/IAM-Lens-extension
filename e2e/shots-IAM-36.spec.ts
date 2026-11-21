@@ -177,11 +177,11 @@ const SHOTS: Shot[] = [
   },
   {
     name: 'whatsnew',
-    page: 'sidepanel',
-    hash: '#/whatsnew',
-    w: 400,
+    page: 'options', // moved from the side panel (IAM-39)
+    hash: '#whatsnew',
+    w: 960,
     h: 900,
-    ready: 'main article',
+    ready: '#whatsnew article',
     seeded: true,
   },
   {

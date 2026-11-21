@@ -1,6 +1,8 @@
 import { IamGate } from '@/ui/data';
 import { LensMark } from '@/ui/components';
 import { useThemePreference } from '@/ui/theme/useThemePreference';
+import { useWhatsNew } from '@/ui/whatsnew/useWhatsNew';
+import { WhatsNewCard } from './WhatsNewCard';
 import { AboutCard } from './AboutCard';
 import { AppearanceCard } from './AppearanceCard';
 import { CustomRolesCard } from './CustomRolesCard';
@@ -10,6 +12,7 @@ import styles from './App.module.css';
 
 export function App({ deps }: { deps: OptionsDeps }) {
   useThemePreference();
+  const whatsNew = useWhatsNew(deps.whatsNew);
   return (
     <div className={styles.root}>
       <header className={styles.top}>
@@ -22,7 +25,8 @@ export function App({ deps }: { deps: OptionsDeps }) {
       <div className={styles.panel}>
         <main className={styles.main}>
           <IamGate>
-            <DataCard deps={deps} />
+            <DataCard deps={deps} whatsNew={whatsNew} />
+            <WhatsNewCard deps={deps} state={whatsNew} />
           </IamGate>
           <CustomRolesCard deps={deps} />
           <AppearanceCard />

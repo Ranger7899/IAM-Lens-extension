@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { makeSnapshot } from '@/core/__tests__/fixtures';
-import { WhatsNewScreen } from '../WhatsNewScreen';
+import { WhatsNewScreen } from './WhatsNewScreen';
 import type { WhatsNewLoader } from './useWhatsNew';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -106,5 +106,33 @@ describe('WhatsNewScreen', () => {
   it('shows an error card when loading fails', async () => {
     await mount(() => Promise.reject(new Error('boom')));
     expect(host.querySelector('[role="alert"]')?.textContent).toContain('boom');
+  });
+});
+
+describe('OpenRouteProvider', () => {
+  it('hands the clicked route to the opener instead of navigating', async () => {
+    const { OpenRouteProvider } = await import('./openRoute');
+    const open = vi.fn();
+    const previous = await makeSnapshot([{ name: 'roles/a.viewer', perms: ['a.b.get'] }]);
+    const current = await makeSnapshot([
+      { name: 'roles/a.viewer', perms: ['a.b.get'] },
+      { name: 'roles/a.new', title: 'New', perms: ['a.b.get'] },
+    ]);
+    host = document.createElement('div');
+    document.body.append(host);
+    root = createRoot(host);
+    await act(async () =>
+      root.render(
+        <OpenRouteProvider value={open}>
+          <WhatsNewScreen load={() => Promise.resolve({ previous, current })} />
+        </OpenRouteProvider>,
+      ),
+    );
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 100));
+    });
+    const link = host.querySelector<HTMLAnchorElement>('a[href="#/role/roles%2Fa.new"]')!;
+    act(() => link.click());
+    expect(open).toHaveBeenCalledWith({ name: 'role', id: 'roles/a.new' });
   });
 });

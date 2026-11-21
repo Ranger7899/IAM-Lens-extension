@@ -1,12 +1,13 @@
-/** IAM-14 What's new screenshots: `IAM_OUT_DIR=.output-IAM-14 SCREENSHOTS=1 SKIP_BUILD=1 npx playwright test shots-IAM-14`. */
+/** IAM-39: What's new in options + the 3-tab side panel. `IAM_OUT_DIR=.output-IAM-39 IAM_TEST_OUT=test-results-IAM-39 SKIP_BUILD=1 npx playwright test shots-IAM-39`. */
 import { execSync } from 'node:child_process';
 import { mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Page } from '@playwright/test';
-import { test } from './fixtures';
+import { test, expect, readPendingRoute } from './fixtures';
 
-const OUT = path.resolve(import.meta.dirname, '..', 'docs', 'screens', 'IAM-14');
+const OUT = path.resolve(import.meta.dirname, '..', 'docs', 'screens', 'IAM-39');
 const PANEL = { width: 400, height: 800 };
+const OPTIONS = { width: 960, height: 900 };
 const SNAP = JSON.parse(
   readFileSync(path.resolve(import.meta.dirname, '..', 'data', 'roles.snapshot.json'), 'utf8'),
 );
@@ -105,43 +106,58 @@ test.beforeAll(() => {
   mkdirSync(OUT, { recursive: true });
 });
 
-interface Shot {
-  name: string;
-  previous: boolean;
-  act?: (p: Page) => Promise<void>;
-}
-const SHOTS: Shot[] = [
-  { name: 'diff', previous: true },
-  {
-    name: 'diff-scrolled',
-    previous: true,
-    act: async (p) => {
-      await p.locator('main').evaluate((m) => (m.scrollTop = 700));
-    },
-  },
-  {
-    name: 'diff-scrolled-2',
-    previous: true,
-    act: async (p) => {
-      await p.locator('main').evaluate((m) => (m.scrollTop = 1500));
-    },
-  },
-  { name: 'empty', previous: false },
-];
-
 for (const scheme of ['light', 'dark'] as const) {
-  for (const s of SHOTS) {
-    test(`${s.name} (${scheme})`, async ({ context, extensionId }) => {
-      const page = await context.newPage();
-      await page.setViewportSize(PANEL);
-      await page.emulateMedia({ colorScheme: scheme });
-      await seed(page, extensionId, s.previous);
-      await page.goto(`chrome-extension://${extensionId}/sidepanel.html#/whatsnew`);
-      await page.waitForSelector('main article, main section[aria-labelledby="wn-empty"]');
-      await page.evaluate(() => document.fonts.ready);
-      await s.act?.(page);
-      await page.waitForTimeout(1000);
-      await page.screenshot({ path: path.join(OUT, `${s.name}-${scheme}.png`) });
-    });
-  }
+  test(`options what's new (${scheme})`, async ({ context, extensionId }) => {
+    const page = await context.newPage();
+    await page.setViewportSize(OPTIONS);
+    await page.emulateMedia({ colorScheme: scheme });
+    await seed(page, extensionId, true);
+    await page.goto(`chrome-extension://${extensionId}/options.html#whatsnew`);
+    await page.waitForSelector('#whatsnew article');
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(800);
+    await page.screenshot({ path: path.join(OUT, `options-whatsnew-${scheme}.png`) });
+    // Role data card with its "N changes since ..." link.
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: path.join(OUT, `options-top-${scheme}.png`) });
+  });
+
+  test(`options what's new, empty (${scheme})`, async ({ context, extensionId }) => {
+    const page = await context.newPage();
+    await page.setViewportSize(OPTIONS);
+    await page.emulateMedia({ colorScheme: scheme });
+    await seed(page, extensionId, false);
+    await page.goto(`chrome-extension://${extensionId}/options.html#whatsnew`);
+    await page.waitForSelector('#whatsnew section[aria-labelledby="wn-empty"]');
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(800);
+    await page.screenshot({ path: path.join(OUT, `options-empty-${scheme}.png`) });
+  });
+
+  test(`side panel, three tabs (${scheme})`, async ({ context, extensionId }) => {
+    const page = await context.newPage();
+    await page.setViewportSize(PANEL);
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.goto(`chrome-extension://${extensionId}/sidepanel.html`);
+    await page.getByRole('searchbox').waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(600);
+    await page.screenshot({ path: path.join(OUT, `sidepanel-tabs-${scheme}.png`) });
+  });
 }
+
+test('clicking a role in options hands the route to the side panel', async ({ context, extensionId }) => {
+  const page = await context.newPage();
+  await page.setViewportSize(OPTIONS);
+  await seed(page, extensionId, true);
+  await page.goto(`chrome-extension://${extensionId}/options.html#whatsnew`);
+  await page.waitForSelector('#whatsnew article');
+  // Let the window id resolve (sidePanel.open needs it synchronously at click time).
+  await page.waitForTimeout(500);
+  const link = page.locator('#whatsnew a[href^="#/role/"]').first();
+  const href = await link.getAttribute('href');
+  await link.click();
+  await expect.poll(() => readPendingRoute(page)).toMatchObject({ name: 'role' });
+  expect(href).toContain('#/role/');
+  expect(page.url()).toContain('options.html#whatsnew'); // stays on the options page
+});

@@ -26,6 +26,7 @@ const PAGES: Target[] = [
   { name: 'sidepanel', hash: '#role=roles/storage.admin', demo: true },
   { name: 'sidepanel', hash: '#perm=storage.objects.get', demo: true },
   { name: 'options', hash: '' },
+  { name: 'options', hash: '#whatsnew', label: 'options whatsnew', ready: '#whatsnew h2' },
   // real router: every screen
   { name: 'sidepanel', hash: '#/search', label: 'search empty', ready: 'main' },
   { name: 'sidepanel', hash: '#/search?q=storage', label: 'search results', ready: '[role=tabpanel]' },
@@ -46,7 +47,7 @@ const PAGES: Target[] = [
   { name: 'sidepanel', hash: `#/minimal?perms=${FIVE}`, label: 'minimal results', ready: 'article' },
   { name: 'sidepanel', hash: '#/compare', label: 'compare empty', ready: 'main' },
   { name: 'sidepanel', hash: VE, label: 'compare diff', ready: 'main article' },
-  { name: 'sidepanel', hash: '#/whatsnew', label: 'whatsnew', ready: 'main h2' },
+  { name: 'sidepanel', hash: '#/whatsnew', label: 'whatsnew moved stub', ready: 'main h2' },
 ];
 
 for (const scheme of ['light', 'dark'] as const) {

@@ -16,7 +16,15 @@ import {
   signIn,
   signOut,
 } from '@/core/gcp';
+import { writePendingRoute } from '@/ui/data/pendingRouteStore';
 import type { OptionsDeps } from './deps';
+
+// Resolved ahead of time: sidePanel.open must run synchronously inside the click (user gesture).
+let windowId: number | undefined;
+void browser.windows
+  .getCurrent()
+  .then((w) => (windowId = w.id))
+  .catch(() => {});
 
 export const realDeps: OptionsDeps = {
   version: browser.runtime.getManifest().version,
@@ -32,4 +40,9 @@ export const realDeps: OptionsDeps = {
   getMeta,
   patchMeta,
   refreshNow: () => browser.runtime.sendMessage({ type: 'refresh-now' }) as Promise<UpdateResult>,
+  openInPanel(route) {
+    const stored = writePendingRoute(route).catch(() => {});
+    if (windowId !== undefined) void Promise.resolve(chrome.sidePanel.open({ windowId })).catch(() => {});
+    void stored;
+  },
 };
