@@ -1,0 +1,30 @@
+.root {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 4px 16px;
+  align-items: start;
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+.tile {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+}
+.title {
+  margin: 0;
+  font: var(--md-sys-typescale-title-medium);
+}
+.detail {
+  margin: 4px 0 0;
+  font: var(--md-sys-typescale-body-medium);
+  overflow-wrap: anywhere;
+}
+.actions {
+  grid-column: 2;
+  margin-top: 12px;
+}

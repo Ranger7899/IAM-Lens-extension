@@ -9,14 +9,20 @@ const PAGES = [
   { name: 'sidepanel', hash: '#role=roles/storage.admin' },
   { name: 'sidepanel', hash: '#perm=storage.objects.get' },
   { name: 'options', hash: '' },
+  // real router (stub screens)
+  { name: 'sidepanel', hash: '#/search', real: true },
+  { name: 'sidepanel', hash: '#/role/roles%2Fviewer', real: true },
+  { name: 'sidepanel', hash: '#/compare', real: true },
 ];
 
 for (const scheme of ['light', 'dark'] as const) {
-  for (const { name, hash } of PAGES) {
-    test(`axe: ${name}${hash} (${scheme})`, async ({ context, extensionId }) => {
+  for (const { name, hash, real } of PAGES) {
+    test(`axe: ${name}${hash}${real ? '' : ' demo'} (${scheme})`, async ({ context, extensionId }) => {
       const page = await context.newPage();
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
-      await page.goto(`chrome-extension://${extensionId}/${name}.html${hash}`);
+      await page.goto(
+        `chrome-extension://${extensionId}/${name}.html${name === 'sidepanel' && !real ? '?demo=1' : ''}${hash}`,
+      );
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(300);
       const { violations } = await new AxeBuilder({ page })

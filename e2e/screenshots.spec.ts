@@ -60,12 +60,36 @@ for (const scheme of ['light', 'dark'] as const) {
       const page = await context.newPage();
       await page.setViewportSize(shot.size);
       await page.emulateMedia({ colorScheme: scheme });
-      await page.goto(`chrome-extension://${extensionId}/${shot.page}.html${shot.hash ?? ''}`);
+      await page.goto(
+        `chrome-extension://${extensionId}/${shot.page}.html${shot.page === 'sidepanel' ? '?demo=1' : ''}${shot.hash ?? ''}`,
+      );
       await page.waitForLoadState('networkidle');
       await page.evaluate(() => document.fonts.ready);
       await shot.act?.(page);
       await page.waitForTimeout(1100); // let spring / stagger animations settle
       await page.screenshot({ path: path.join(OUT, `${shot.name}-${scheme}.png`) });
+    });
+  }
+}
+
+// Real (non-demo) side panel: data states. The snapshot request is intercepted instead of adding test hooks.
+const DATA_STATES = [
+  { name: 'iam-loading', route: (r: import('@playwright/test').Route) => void r.request(), wait: false },
+  { name: 'iam-error', route: (r: import('@playwright/test').Route) => void r.abort(), wait: true },
+  { name: 'iam-ready-stub', route: undefined, wait: true },
+] as const;
+
+for (const scheme of ['light', 'dark'] as const) {
+  for (const st of DATA_STATES) {
+    test(`${st.name} (${scheme})`, async ({ context, extensionId }) => {
+      const page = await context.newPage();
+      await page.setViewportSize(PANEL);
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+      if (st.route) await page.route('**/roles.snapshot-*.json', st.route);
+      await page.goto(`chrome-extension://${extensionId}/sidepanel.html#/role/roles%2Fviewer`);
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(st.wait ? 800 : 300);
+      await page.screenshot({ path: path.join(OUT, `${st.name}-${scheme}.png`) });
     });
   }
 }
