@@ -20,6 +20,9 @@ export default defineConfig({
       : undefined,
   timeout: shots || store ? 120_000 : 30_000,
   workers: 1, // one persistent-context browser at a time
+  // Shared CI runners are 2-3x slower: give UI waits more time and allow one retry there only.
+  expect: { timeout: process.env.CI ? 15_000 : 5_000 },
+  retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   // Per-worker output dirs (IAM_TEST_OUT=test-results-IAM-9) so parallel runs don't wipe each other.
   outputDir: process.env.IAM_TEST_OUT ?? 'test-results',
