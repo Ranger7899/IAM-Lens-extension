@@ -5,8 +5,10 @@ const shots = !!process.env.SCREENSHOTS;
 
 export default defineConfig({
   testDir: 'e2e',
-  testIgnore: shots ? undefined : '**/screenshots.spec.ts',
-  testMatch: shots ? '**/screenshots.spec.ts' : undefined,
+  testIgnore: shots ? undefined : ['**/screenshots.spec.ts', '**/shots-*.spec.ts'],
+  // Per-ticket screenshot specs live in e2e/shots-<KEY>.spec.ts; run one with
+  // `SCREENSHOTS=1 npx playwright test shots-IAM-9`.
+  testMatch: shots ? ['**/screenshots.spec.ts', '**/shots-*.spec.ts'] : undefined,
   timeout: shots ? 120_000 : 30_000,
   workers: 1, // one persistent-context browser at a time
   reporter: 'list',
