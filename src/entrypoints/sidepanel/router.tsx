@@ -18,7 +18,7 @@ export type Route =
   | { name: 'search'; query: string }
   | { name: 'role'; id: string }
   | { name: 'permission'; id: string }
-  | { name: 'minimal' }
+  | { name: 'minimal'; perms?: string[] }
   | { name: 'compare' }
   | { name: 'whatsnew' };
 
@@ -35,7 +35,10 @@ export function parseRoute(hash: string): Route {
     case 'permission':
       if (arg) return { name: 'permission', id: arg };
       break;
-    case 'minimal':
+    case 'minimal': {
+      const perms = (new URLSearchParams(qs).get('perms') ?? '').split(',').filter(Boolean);
+      return perms.length ? { name: 'minimal', perms } : { name: 'minimal' };
+    }
     case 'compare':
     case 'whatsnew':
       return { name: head };
@@ -51,6 +54,8 @@ export function routeHref(r: Route): string {
       return `#/role/${encodeURIComponent(r.id)}`;
     case 'permission':
       return `#/permission/${encodeURIComponent(r.id)}`;
+    case 'minimal':
+      return r.perms?.length ? `#/minimal?perms=${encodeURIComponent(r.perms.join(','))}` : '#/minimal';
     default:
       return `#/${r.name}`;
   }
@@ -121,10 +126,10 @@ export function useHashRoute(): Navigator {
   return { route, go, back };
 }
 
-function Screen({ route }: { route: Route }) {
+function Screen({ route, go }: { route: Route; go: (r: Route) => void }) {
   switch (route.name) {
     case 'search':
-      return <SearchScreen query={route.query} />;
+      return <SearchScreen query={route.query} go={go} />;
     case 'role':
       return <RoleScreen name={route.id} />;
     case 'permission':
@@ -140,6 +145,7 @@ function Screen({ route }: { route: Route }) {
 
 export function SidePanelRouter() {
   const { route, go, back } = useHashRoute();
+  // Back arrow only where there is somewhere to go back to; the root Search route shows the mark.
   const detail = isDetail(route);
   return (
     <div className={`${styles.root} dot-grid`}>
@@ -175,7 +181,7 @@ export function SidePanelRouter() {
       <main className={styles.main}>
         <div className={`${styles.view} route-view`}>
           <IamGate>
-            <Screen route={route} />
+            <Screen route={route} go={go} />
           </IamGate>
         </div>
       </main>
