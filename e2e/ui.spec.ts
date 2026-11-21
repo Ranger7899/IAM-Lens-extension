@@ -45,16 +45,16 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   await page.getByRole('radio', { name: 'Minimal' }).click();
   await expect(stub('Find minimal roles')).toBeVisible();
   await page.getByRole('radio', { name: "What's new" }).click();
-  await expect(stub("What's new")).toBeVisible();
+  await expect(stub('Nothing to compare yet')).toBeVisible();
 
   await page.evaluate(() => (location.hash = '#/role/roles%2Fviewer'));
   await expect(stub('Viewer')).toBeVisible();
   await expect(page.getByText('roles/viewer')).toBeVisible();
   await page.getByRole('button', { name: 'Back', exact: true }).click();
-  await expect(stub("What's new")).toBeVisible();
+  await expect(stub('Nothing to compare yet')).toBeVisible();
 
   await page.evaluate(() => (location.hash = '#/permission/storage.objects.get'));
   await expect(stub(/^Smallest first/)).toBeVisible();
   await page.keyboard.press('Alt+ArrowLeft');
-  await expect(stub("What's new")).toBeVisible();
+  await expect(stub('Nothing to compare yet')).toBeVisible();
 });
