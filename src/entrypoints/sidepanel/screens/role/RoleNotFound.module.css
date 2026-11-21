@@ -1,0 +1,38 @@
+.root {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 24px 20px;
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background: var(--md-sys-color-surface-container-high);
+}
+.glyph {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.title {
+  margin: 4px 0 0;
+  font: var(--md-sys-typescale-headline-small);
+}
+.body {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+  text-wrap: pretty;
+}
+.code {
+  font: var(--md-sys-typescale-mono-medium);
+  color: var(--md-sys-color-on-surface);
+  overflow-wrap: anywhere;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
