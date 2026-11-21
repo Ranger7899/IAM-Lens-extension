@@ -41,7 +41,9 @@ export default defineConfig({
     name: 'IAM Lens — role & permission lookup for Google Cloud',
     description:
       'Instantly find which Google Cloud IAM roles grant a permission, and which permissions a role has.',
-    // TODO(Phase 0): add `key: '<public key>'` here to pin the extension ID. Do not generate keys in this repo.
+    // Public key pins the extension ID to nkkmmkcohkjacpgiaiiadjmhcbmhgaen (IAM-6). The private key is kept
+    // outside the repo (~/.iam-lens-keys/key.pem); never commit it.
+    key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3I3du8O5yuUB5ogLIEEkD/2I6+J+VfR2GrkzG2P1hffdRXzvFlqmrJMAFRpVnq4+DoVEBA4yzFW8sIunItiUgPNNAVXnZtXI9S6MFsi9Gxuza/5UvSosaB7gQ98rj4+zt42PDBBC5YyY4z33HSzlW9311lek5V5SYda4YbqAE+8Ne/xbojW2x816SjsEUD69x4hDwOHx3Tdl5oQW0ewoPwPQaoj1MreMe1IR3RvMiU5EdkyezXnMeY1L2Ku5lpRSYyctsR9TG36Kokk11HZBusO6IUm4H1x8Rfv0GOWX2JcVnFT3H4ynkCxrbnJ3f+imx3C1Vz9rkbqtJfwKQSdB3wIDAQAB',
     permissions: ['sidePanel', 'storage', 'unlimitedStorage', 'alarms', 'contextMenus'],
     optional_permissions: ['identity'],
     optional_host_permissions: ['https://*.googleapis.com/'],
