@@ -1,0 +1,194 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  align-content: start;
+}
+.header {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  padding: 22px 20px 20px;
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background: var(--md-sys-color-surface-container-high);
+  overflow: hidden;
+  animation: headerIn var(--motion-emphasized) backwards;
+}
+/* A soft risk-coloured wash in the top corner so the class reads before the label does. */
+.header::before {
+  content: '';
+  position: absolute;
+  inset: -40% -20% auto auto;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--wash), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.read {
+  --wash: var(--md-custom-color-read-container);
+}
+.write {
+  --wash: var(--md-custom-color-write-container);
+}
+.admin {
+  --wash: var(--md-custom-color-admin-container);
+}
+@keyframes headerIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+.kindRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.kind {
+  font: var(--md-sys-typescale-label-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.granted {
+  margin: 0;
+  font: var(--md-sys-typescale-title-medium);
+  letter-spacing: -0.005em;
+}
+.granted b {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.risk {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 10px 0 7px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font: var(--md-sys-typescale-label-medium);
+}
+.risk.read {
+  background: var(--md-custom-color-read-container);
+  color: var(--md-custom-color-on-read-container);
+}
+.risk.write {
+  background: var(--md-custom-color-write-container);
+  color: var(--md-custom-color-on-write-container);
+}
+.risk.admin {
+  background: var(--md-custom-color-admin-container);
+  color: var(--md-custom-color-on-admin-container);
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 20px 8px 8px;
+}
+.toolbarTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--md-sys-typescale-label-large);
+  letter-spacing: 0.02em;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-highest);
+  font: var(--md-sys-typescale-label-small);
+  font-variant-numeric: tabular-nums;
+}
+.note {
+  margin: 4px 8px 0;
+  font: var(--md-sys-typescale-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.pickerHead {
+  display: grid;
+  gap: 6px;
+  padding: 12px 8px 4px;
+}
+.pickerTitle {
+  font: var(--md-sys-typescale-headline-small);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.pickerHint {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+}
+.pickerHint code {
+  font-family: var(--font-mono);
+  color: var(--md-sys-color-on-surface);
+}
+.num {
+  font: 600 12px/16px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.verbIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+.verbIcon.read {
+  background: var(--md-custom-color-read-container);
+  color: var(--md-custom-color-on-read-container);
+}
+.verbIcon.write {
+  background: var(--md-custom-color-write-container);
+  color: var(--md-custom-color-on-write-container);
+}
+.verbIcon.admin {
+  background: var(--md-custom-color-admin-container);
+  color: var(--md-custom-color-on-admin-container);
+}
+.empty {
+  padding: 16px 8px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+/* The shared List is an auto-column grid: without this a long role ID widens every row past the panel. */
+.root > ul {
+  grid-template-columns: minmax(0, 1fr);
+}
+.toolbarTitle {
+  white-space: nowrap;
+}
+.toolbar > button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+/* Long verbs (overrideUnlockedRetention...) scroll inside the row instead of widening it. */
+.tokenWrap {
+  display: block;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.root > ul > li {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+.root > ul > li > div > button > span:nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

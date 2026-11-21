@@ -1,13 +1,47 @@
-import { Card } from '@/ui/components';
+import { useMemo } from 'react';
+import { EmptyState } from '@/ui/components';
+import { useIam } from '@/ui/data';
+import { PermissionDetailView } from './permission/PermissionDetailView';
+import { PermissionPicker } from './permission/PermissionPicker';
+import { resolvePermission } from './permission/resolve';
 
-/** Stub. The real screen lands in IAM-11. */
+// Hash navigation, same format as the router's routeHref (not imported: router imports this file).
+const go = (path: 'role' | 'permission', id: string) => {
+  location.hash = `#/${path}/${encodeURIComponent(id)}`;
+};
+
+/** `permission/:name`: roles granting the permission, smallest first; partial input shows a picker. */
 export function PermissionScreen({ name }: { name: string }) {
-  return (
-    <Card variant="filled">
-      <h2 style={{ margin: 0, font: 'var(--md-sys-typescale-title-medium)' }}>Permission</h2>
-      <p style={{ margin: '4px 0 0', color: 'var(--md-sys-color-on-surface-variant)' }}>
-        Coming in IAM-11. Route param: {name}
-      </p>
-    </Card>
-  );
+  const { index } = useIam();
+  const resolved = useMemo(() => (index ? resolvePermission(index, name) : undefined), [index, name]);
+  if (!index || !resolved) return null;
+  switch (resolved.kind) {
+    case 'exact':
+      return (
+        <PermissionDetailView
+          key={resolved.permission}
+          index={index}
+          permIdx={resolved.index}
+          onOpenRole={(id) => go('role', id)}
+        />
+      );
+    case 'picker':
+      return (
+        <PermissionPicker
+          index={index}
+          input={name}
+          matches={resolved.matches}
+          truncated={resolved.truncated}
+          onPick={(p) => go('permission', p)}
+        />
+      );
+    default:
+      return (
+        <EmptyState
+          title="No such permission"
+          hint={`Nothing matches "${name}". Permissions look like service.resource.verb.`}
+          examples={[]}
+        />
+      );
+  }
 }
