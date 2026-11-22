@@ -142,6 +142,7 @@ export class IamIndex {
   /** One byte per permission: 0 read, 1 write, 2 admin. */
   readonly classTable: Uint8Array;
 
+  private roleMaxClasses?: Uint8Array;
   private readonly permIndex: Map<string, number>;
   private readonly roleIndex: Map<string, number>;
   private readonly offsets: Int32Array;
@@ -274,6 +275,23 @@ export class IamIndex {
 
   classOf(permIdx: number): PrivilegeClass {
     return (['read', 'write', 'admin'] as const)[this.classTable[permIdx]];
+  }
+
+  /** Highest privilege class (0 read, 1 write, 2 admin) among a role's permissions; computed once for all roles, lazily. */
+  roleMaxClass(role: RoleRecord): number {
+    if (!this.roleMaxClasses) {
+      const out = new Uint8Array(this.roles.length);
+      for (const r of this.roles) {
+        let m = 0;
+        for (let i = 0; i < r.perms.length && m < 2; i++) {
+          const c = this.classTable[r.perms[i]];
+          if (c > m) m = c;
+        }
+        out[r.idx] = m;
+      }
+      this.roleMaxClasses = out;
+    }
+    return this.roleMaxClasses[role.idx];
   }
 
   /** Read/write/admin counts for a role. */

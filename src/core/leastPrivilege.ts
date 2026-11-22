@@ -77,7 +77,9 @@ export interface RolesGrantingOptions {
 
 /**
  * Every role granting `perm`. Ordering, most significant first: ordinary roles, then service-agent-like roles,
- * then deleted/DEPRECATED; with `preferService` (default) roles of the permission's own service before the rest;
+ * then deleted/DEPRECATED; then excess privilege (roles whose highest privilege class, read < write < admin,
+ * is at most the permission's own class before roles that carry more, so a read permission never ranks an admin
+ * role ahead of a read-only one); with `preferService` (default) roles of the permission's own service before the rest;
  * then GA before BETA/ALPHA; then fewest permissions; then name. With `preferService: false` the order is
  * strictly smallest first (then stage, name) within each class.
  */
@@ -90,18 +92,23 @@ export function rolesGranting(
   const idxs = index.roleIdxsGranting(perm);
   const name = typeof perm === 'number' ? index.permissions[perm] : perm;
   const service = preferService && name ? permissionService(name).toLowerCase() : undefined;
-  const out: { r: RoleRecord; cls: number; tier: number }[] = [];
+  const targetClass =
+    typeof perm === 'number' ? index.classTable[perm] : index.classTable[index.permissionIndex(perm) ?? -1];
+  const out: { r: RoleRecord; cls: number; excess: number; tier: number }[] = [];
   for (const i of idxs) {
     const r = index.roles[i];
     if (opts.excludeDiscouraged && isDiscouraged(r)) continue;
     out.push({
       r,
       cls: discouragedClass(r),
+      excess: targetClass === undefined || index.roleMaxClass(r) <= targetClass ? 0 : 1,
       tier: service !== undefined && roleService(r) === service ? 0 : 1,
     });
   }
   const within = preferService ? byStageThenSize : bySizeThenStage;
-  return out.sort((a, b) => a.cls - b.cls || a.tier - b.tier || within(a.r, b.r)).map((x) => x.r);
+  return out
+    .sort((a, b) => a.cls - b.cls || a.excess - b.excess || a.tier - b.tier || within(a.r, b.r))
+    .map((x) => x.r);
 }
 
 /**
@@ -133,7 +140,7 @@ export interface MinimalRolesResult {
 
 /**
  * Greedy weighted set cover. At every step picks the role maximising
- * `newly covered / (permission count + ROLE_OVERHEAD)` (ties: GA first, fewer permissions, then name).
+ * `newly covered / (permission count + ROLE_OVERHEAD)` (ties: lower highest privilege class, then GA first, fewer permissions, then name).
  * Roles of the same service as a requested permission are preferred; then any ordinary role, then
  * service-agent/worker roles, then deleted/DEPRECATED ones, each tier only for what the earlier tiers could not cover.
  * Redundant picks are pruned afterwards.
@@ -184,7 +191,9 @@ export function minimalRoles(index: IamIndex, perms: readonly string[]): Minimal
         if (
           !best ||
           ratio > bestRatio + 1e-12 ||
-          (Math.abs(ratio - bestRatio) <= 1e-12 && byStageThenSize(role, best) < 0)
+          (Math.abs(ratio - bestRatio) <= 1e-12 &&
+            (index.roleMaxClass(role) < index.roleMaxClass(best) ||
+              (index.roleMaxClass(role) === index.roleMaxClass(best) && byStageThenSize(role, best) < 0)))
         ) {
           best = role;
           bestNew = fresh;

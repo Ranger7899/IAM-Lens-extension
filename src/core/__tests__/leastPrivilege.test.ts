@@ -15,7 +15,8 @@ describe('real snapshot', () => {
   const index = new IamIndex(realSnapshot());
 
   it("rolesGranting puts the permission's own service first", () => {
-    const roles = rolesGranting(index, 'storage.objects.get');
+    // Excess privilege ranks first, so look only at roles that do not exceed the permission's class (read).
+    const roles = rolesGranting(index, 'storage.objects.get').filter((r) => index.roleMaxClass(r) === 0);
     const names = roles.map((r) => r.name);
     expect(names[0]).toMatch(/^roles\/storage\./);
     expect(names).toContain('roles/storage.objectViewer');
@@ -38,8 +39,9 @@ describe('real snapshot', () => {
   });
 
   it('preferService: false is strictly smallest-first among ordinary roles', () => {
+    // Within the roles that carry no more than read privilege (the excess-privilege key sorts first).
     const roles = rolesGranting(index, 'storage.objects.get', { preferService: false }).filter(
-      (r) => !isServiceAgentRole(r) && !isDiscouraged(r),
+      (r) => !isServiceAgentRole(r) && !isDiscouraged(r) && index.roleMaxClass(r) === 0,
     );
     for (let i = 1; i < roles.length; i++)
       expect(roles[i].perms.length).toBeGreaterThanOrEqual(roles[i - 1].perms.length);
@@ -152,9 +154,9 @@ describe('fixtures', () => {
   it('service tier first, toggled off by preferService: false; agent-like roles after ordinary ones', async () => {
     const snap = await makeSnapshot([
       { name: 'roles/other.tiny', perms: ['svc.r.get'] },
-      { name: 'roles/svc.big', perms: ['svc.r.get', 'svc.r.a', 'svc.r.b'] },
+      { name: 'roles/svc.big', perms: ['svc.r.get', 'svc.r.list', 'svc.r.watch'] },
       { name: 'roles/svc.serviceAgent', perms: ['svc.r.get'] },
-      { name: 'roles/svc.betaSmall', stage: 'BETA', perms: ['svc.r.get', 'svc.r.c'] },
+      { name: 'roles/svc.betaSmall', stage: 'BETA', perms: ['svc.r.get', 'svc.r.count'] },
     ]);
     const index = new IamIndex(snap);
     expect(rolesGranting(index, 'svc.r.get').map((r) => r.name)).toEqual([
@@ -169,5 +171,65 @@ describe('fixtures', () => {
       'roles/svc.big',
       'roles/svc.serviceAgent',
     ]);
+  });
+
+  it('excess privilege: a read permission ranks read-only roles before roles with more privilege', async () => {
+    const snap = await makeSnapshot([
+      { name: 'roles/svc.admin', perms: ['svc.r.get', 'svc.r.create', 'svc.r.setIamPolicy'] },
+      { name: 'roles/svc.writer', perms: ['svc.r.get', 'svc.r.create', 'svc.r.update', 'svc.r.patch'] },
+      { name: 'roles/other.reader', perms: ['svc.r.get', 'svc.r.list', 'svc.r.watch'] },
+    ]);
+    const index = new IamIndex(snap);
+    const names = (p: string, o = {}) => rolesGranting(index, p, o).map((r) => r.name);
+    expect(names('svc.r.get')).toEqual(['roles/other.reader', 'roles/svc.admin', 'roles/svc.writer']);
+    expect(names('svc.r.get', { preferService: false })[0]).toBe('roles/other.reader');
+    // write target: admin role drops below the others
+    expect(names('svc.r.create')).toEqual(['roles/svc.writer', 'roles/svc.admin']);
+    // admin target: unchanged (same service, then size)
+    expect(names('svc.r.setIamPolicy')).toEqual(['roles/svc.admin']);
+    expect(index.roleMaxClass(index.role('roles/svc.admin')!)).toBe(2);
+  });
+
+  it('minimalRoles prefers the lower-privilege role among equal scores', async () => {
+    const snap = await makeSnapshot([
+      { name: 'roles/svc.a', perms: ['svc.r.get', 'svc.r.setIamPolicy'] },
+      { name: 'roles/svc.b', perms: ['svc.r.get', 'svc.r.list'] },
+    ]);
+    const res = minimalRoles(new IamIndex(snap), ['svc.r.get']);
+    expect(res.roles.map((r) => r.role.name)).toEqual(['roles/svc.b']);
+  });
+});
+
+describe('excess privilege on the real snapshot', () => {
+  const index = new IamIndex(realSnapshot());
+  const top = (p: string) => grantingRolesTop(p);
+  function grantingRolesTop(p: string) {
+    const all = rolesGranting(index, p);
+    const eligible = all.filter((r) => !isDiscouraged(r) && !isServiceAgentRole(r));
+    const badge = eligible.find((r) => !isLegacyRole(r)) ?? eligible[0];
+    return { first3: all.slice(0, 3).map((r) => r.name), badge };
+  }
+
+  it('getIamPolicy: badge is a read-only role, Project IAM Admin ranks below', () => {
+    const { badge } = top('resourcemanager.projects.getIamPolicy');
+    expect(['roles/browser', 'roles/iam.roleViewer']).toContain(badge.name);
+    expect(index.roleMaxClass(badge)).toBe(0);
+    const names = rolesGranting(index, 'resourcemanager.projects.getIamPolicy').map((r) => r.name);
+    expect(names.indexOf('roles/resourcemanager.projectIamAdmin')).toBeGreaterThan(names.indexOf(badge.name));
+  });
+
+  it('storage.objects.get still badges roles/storage.objectViewer', () => {
+    expect(top('storage.objects.get').badge.name).toBe('roles/storage.objectViewer');
+  });
+
+  it('storage.objects.create badges a role without admin permissions', () => {
+    const { badge } = top('storage.objects.create');
+    expect(index.roleMaxClass(badge)).toBeLessThanOrEqual(1);
+  });
+
+  it('admin permission is unaffected by the excess key', () => {
+    const p = 'resourcemanager.projects.setIamPolicy';
+    const names = rolesGranting(index, p).map((r) => r.name);
+    expect(names[0]).toMatch(/^roles\/resourcemanager\./);
   });
 });
