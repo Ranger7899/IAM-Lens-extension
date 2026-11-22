@@ -1,5 +1,5 @@
 /**
- * OAuth configuration for custom-role sign-in (IAM-58). "Chrome Extension" client (Item ID nkkmmkcohkjacpgiaiiadjmhcbmhgaen):
+ * OAuth configuration for custom-role sign-in (IAM-58). "Chrome Extension" client (Item ID odnpdglkmklhecdmggaebgakadfciooc):
  * no redirect URI and no client secret. `wxt.config.ts` puts the same ID in the manifest `oauth2` block, which is
  * what `chrome.identity.getAuthToken` reads.
  */

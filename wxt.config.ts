@@ -42,14 +42,14 @@ export default defineConfig({
     name: 'IAM Lens — role & permission lookup for Google Cloud',
     description:
       'Instantly find which Google Cloud IAM roles grant a permission, and which permissions a role has.',
-    // Public key pins the extension ID to nkkmmkcohkjacpgiaiiadjmhcbmhgaen (IAM-6). The private key is kept
-    // outside the repo (~/.iam-lens-keys/key.pem); never commit it.
-    // `npm run zip:store` sets IAM_STORE_BUILD=1 to omit the key: the Web Store has been reported to reject a
+    // Chrome Web Store public key: pins the extension ID to odnpdglkmklhecdmggaebgakadfciooc, the store item (IAM-53),
+    // so unpacked builds share the store ID and its OAuth client. The store holds the private key.
+    // `npm run zip:store` sets IAM_STORE_BUILD=1 to omit the key: the Web Store rejects a
     // manifest `key` on a brand-new item (see docs/release-checklist.md). Everything else is identical.
     ...(process.env.IAM_STORE_BUILD
       ? {}
       : {
-          key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3I3du8O5yuUB5ogLIEEkD/2I6+J+VfR2GrkzG2P1hffdRXzvFlqmrJMAFRpVnq4+DoVEBA4yzFW8sIunItiUgPNNAVXnZtXI9S6MFsi9Gxuza/5UvSosaB7gQ98rj4+zt42PDBBC5YyY4z33HSzlW9311lek5V5SYda4YbqAE+8Ne/xbojW2x816SjsEUD69x4hDwOHx3Tdl5oQW0ewoPwPQaoj1MreMe1IR3RvMiU5EdkyezXnMeY1L2Ku5lpRSYyctsR9TG36Kokk11HZBusO6IUm4H1x8Rfv0GOWX2JcVnFT3H4ynkCxrbnJ3f+imx3C1Vz9rkbqtJfwKQSdB3wIDAQAB',
+          key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArLEVUa91FRXs+7GrbaDMfNLVNnNrjPl6YQeUf3OEzQ/7W7n6L0J1Utt4v+LomHTWXmMkmYCurlPEU0WcsvbhhDMsLdiC/q8RQKsOXBi1BonqYGIe4m62X2xVsJ03lp8vLaIzAO1ziNDtDlYlbpMMiTVYycgma5UTMyJlUm92GPAT2PFmk3UtVmjrnsaCN4T9zaHF/UcKQ/N4Jb01MHF58cZAdJUsaerNOVAlPPEVFL96YcEp4idOCdy7QCZR3zkHKWdoMtsmFz9Wg7cSToyl7//f4wFWG7q/5cMKrOgmQP0PvtTZ47xR8MXQoTB5gLYoMbifrxJUXCZAdwK1XMyx0wIDAQAB',
         }),
     permissions: ['sidePanel', 'storage', 'unlimitedStorage', 'alarms', 'contextMenus'],
     // Read by chrome.identity.getAuthToken. `identity` itself stays optional and is requested at sign-in.

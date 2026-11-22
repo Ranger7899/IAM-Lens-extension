@@ -5,7 +5,7 @@ Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaul
 ## App information
 
 - App name: IAM Lens
-- Type: "Chrome Extension" OAuth client (client ID `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb.apps.googleusercontent.com`), Item ID `<EXTENSION_ID>` (pinned via manifest key). It has no redirect URIs and no client secret. `chromiumapp.org` is not an authorized domain and is not needed: sign-in uses `chrome.identity.getAuthToken`, and the client ID is in the manifest `oauth2` block.
+- Type: "Chrome Extension" OAuth client (client ID `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb.apps.googleusercontent.com`), Item ID `odnpdglkmklhecdmggaebgakadfciooc` (pinned via manifest key). It has no redirect URIs and no client secret. `chromiumapp.org` is not an authorized domain and is not needed: sign-in uses `chrome.identity.getAuthToken`, and the client ID is in the manifest `oauth2` block.
 - Sign-in works in Google Chrome only, with the Google account signed in to the Chrome profile (no account picker).
 - Homepage: `https://iamlens.vaultline.cloud/`
 - Privacy policy: `https://iamlens.vaultline.cloud/privacy.html`
@@ -62,8 +62,8 @@ Sync behaviour: runs when the side panel opens if the last sync is over 1 hour o
 
 ## Demo video script (unlisted YouTube, about 3 minutes, English narration or captions)
 
-1. (0:00-0:30) No-sign-in lookup. Show the extension in `chrome://extensions` (ID `<EXTENSION_ID>`) and state the single purpose. Open the side panel, search `storage.objects.get`, open `roles/viewer`. Say that predefined roles work with no sign-in.
-2. (0:30-1:05) Settings, Sign in. Open Settings (options page), show the Custom roles card and the privacy note, click "Sign in". `getAuthToken` opens Google's consent window without an editable address bar. Google requires the OAuth client ID to be visible, so show it two ways: open `chrome://extensions`, enable Developer mode, open the extension's manifest (or `chrome-extension://<EXTENSION_ID>/manifest.json`) and pause on `oauth2.client_id`; and, if the consent window shows its URL, pause on `client_id=` there as well.
+1. (0:00-0:30) No-sign-in lookup. Show the extension in `chrome://extensions` (ID `odnpdglkmklhecdmggaebgakadfciooc`) and state the single purpose. Open the side panel, search `storage.objects.get`, open `roles/viewer`. Say that predefined roles work with no sign-in.
+2. (0:30-1:05) Settings, Sign in. Open Settings (options page), show the Custom roles card and the privacy note, click "Sign in". `getAuthToken` opens Google's consent window without an editable address bar. Google requires the OAuth client ID to be visible, so show it two ways: open `chrome://extensions`, enable Developer mode, open the extension's manifest (or `chrome-extension://odnpdglkmklhecdmggaebgakadfciooc/manifest.json`) and pause on `oauth2.client_id`; and, if the consent window shows its URL, pause on `client_id=` there as well.
 3. (1:05-1:40) Consent screen. Show the app name "IAM Lens", the developer contact, and both scope lines ("Manage your IAM policies" and the read-only Cloud Platform line) readable. Zoom on them, say aloud that the extension only issues read (GET) requests for role definitions and project names. Approve.
 4. (1:40-2:05) Auto-sync status row. Open the side panel Search page and show the status row: "Custom roles · N from X projects and Y organizations · synced just now". Say that all accessible projects and organizations are found automatically, with nothing to choose or configure, and that it re-syncs hourly while the panel is open.
 5. (2:05-2:25) Custom role. Search for a custom role and show its badge "Custom · <project> (project)" and its permissions.

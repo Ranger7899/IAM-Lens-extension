@@ -20,7 +20,7 @@ Full command: `npm run typecheck && npm run lint && npm test && npm run build &&
 - [x] `permissions`: `sidePanel`, `storage`, `unlimitedStorage`, `alarms`, `contextMenus` (no host permissions, no `tabs`, no `activeTab`)
 - [x] `optional_permissions`: `identity` (requested only when the user clicks Sign in)
 - [x] `optional_host_permissions`: `https://*.googleapis.com/` (same moment)
-- [x] `key` present (pins ID `nkkmmkcohkjacpgiaiiadjmhcbmhgaen`).
+- [x] `key` present (pins ID `odnpdglkmklhecdmggaebgakadfciooc`).
 - [x] Top-level `oauth2` block present (IAM-58): sign-in uses `identity.getAuthToken` with the Chrome Extension OAuth client `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb`, and `wxt.config.ts` writes `oauth2.client_id` and both scopes into the manifest. `identity` stays an optional permission. Verify after `npm run zip` / `npm run zip:store` that the manifest in each zip contains `oauth2` (and `key` only in the non-store zip).
 - [x] No remote code: no `<script src="http...">`, no `eval`/`new Function`, no custom `content_security_policy`. The only network fetches are JSON data (roles snapshot) and Google API GETs, never executed.
 
@@ -28,7 +28,7 @@ Full command: `npm run typecheck && npm run lint && npm test && npm run build &&
 
 - [ ] **Pending (IAM-51)** Privacy policy live on the custom domain. Page is `site/privacy.html` (updated for auto-sync, IAM-49); needs DNS/HTTPS on the domain (IAM-47, IAM-51).
 - [x] Listing assets ready: copy in `docs/store-listing.md`; screenshots, promo tile and marquee in `docs/store-assets/` (IAM-26, IAM-37). Re-check once the final homepage and privacy URLs are known.
-- [ ] **Pending (IAM-53)** Extension ID matches the store item. Compare the ID in the Developer Dashboard with `nkkmmkcohkjacpgiaiiadjmhcbmhgaen`.
+- [ ] **Pending (IAM-53)** Extension ID matches the store item. Compare the ID in the Developer Dashboard with `odnpdglkmklhecdmggaebgakadfciooc`.
 - [ ] **Pending (IAM-57)** OAuth verification submitted (also needs IAM-46, IAM-54, IAM-55). Text is in `docs/oauth-verification.md`.
 - [ ] **Pending (IAM-56)** Chrome Web Store listing submitted for review.
 
@@ -52,7 +52,7 @@ Agents don't upload, log in or submit. Steps for you (with the SM):
 
 1. Register as a Chrome Web Store developer if not done (one-time fee) and verify the contact email (IAM-53).
 2. Open the [Developer Dashboard](https://chrome.google.com/webstore/devconsole), choose **Add new item**, upload `.output/iam-lens-1.0.0-chrome.zip` (or the `zip:store` variant if the upload is rejected for `key`; see above). Do not publish yet.
-3. Check the Item ID against `nkkmmkcohkjacpgiaiiadjmhcbmhgaen` (Package tab, View public key). If it differs, follow step 2 of the plan above and tell the SM.
+3. Check the Item ID against `odnpdglkmklhecdmggaebgakadfciooc` (Package tab, View public key). If it differs, follow step 2 of the plan above and tell the SM.
 4. Fill Store listing from `docs/store-listing.md`, upload the images from `docs/store-assets/`, set the privacy policy URL (the live custom-domain page), then the Privacy practices tab (single purpose, permission justifications, data-use disclosures, Limited Use certification) from the same doc.
 5. Complete OAuth verification first or in parallel (IAM-54, IAM-55, IAM-57); the store reviewer may check that sign-in works.
 6. Click **Submit for review** (IAM-56). Choose staged/deferred publishing if you want to release manually after approval.
