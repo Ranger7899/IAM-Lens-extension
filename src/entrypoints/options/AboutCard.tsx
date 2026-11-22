@@ -1,5 +1,5 @@
 import { LensMark } from '@/ui/components';
-import { FONT_LICENSE_URL, PRIVACY_URL, SOURCE_URL } from './constants';
+import { FONT_LICENSE_URL, LICENSE_URL, PRIVACY_URL, SOURCE_URL } from './constants';
 import { Section } from './Section';
 
 export function AboutCard({ version }: { version: string }) {
@@ -13,6 +13,10 @@ export function AboutCard({ version }: { version: string }) {
         {' · '}
         <a href={SOURCE_URL} target="_blank" rel="noreferrer noopener">
           Source
+        </a>
+        {' · '}
+        <a href={LICENSE_URL} target="_blank" rel="noreferrer noopener">
+          MIT licence
         </a>
       </p>
       <p>
