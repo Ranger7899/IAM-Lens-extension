@@ -2,6 +2,7 @@
   "name": "iam-lens",
   "description": "IAM Lens: two-way Google Cloud IAM role and permission lookup",
   "private": true,
+  "author": "Yousef Masad <ysfmasad@gmail.com>",
   "version": "1.0.0",
   "type": "module",
   "scripts": {

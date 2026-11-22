@@ -1,6 +1,6 @@
 # Chrome Web Store listing: IAM Lens
 
-Ready to paste. Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaultline.cloud/privacy.html`, terms `https://iamlens.vaultline.cloud/terms.html`; authorized domain `vaultline.cloud`; developer Ranger7899; contact ysfmasad@gmail.com.
+Ready to paste. Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaultline.cloud/privacy.html`, terms `https://iamlens.vaultline.cloud/terms.html`; authorized domain `vaultline.cloud`; developer Yousef Masad; contact ysfmasad@gmail.com.
 
 ## Name options (none starts with a Google trademark)
 
