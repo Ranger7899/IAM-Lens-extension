@@ -76,7 +76,7 @@ workflow. Pages is deployed only when `data/` changed, so it holds the last chan
 | Provider condition | `assertion.repository_id=='1466970464' && assertion.repository_owner_id=='42381187' && assertion.ref=='refs/heads/main'` |
 | Impersonation binding | `roles/iam.workloadIdentityUser` for `principalSet://…/github-actions/attribute.repository_id/1466970464` only |
 | Repo variables | `WIF_PROVIDER=projects/609543680898/locations/global/workloadIdentityPools/github-actions/providers/iam-lens-repo`, `WIF_SERVICE_ACCOUNT=iam-lens-snapshot@iam-chrome.iam.gserviceaccount.com` |
-| Pages URL | `https://ranger7899.github.io/IAM-Lens-extension/` (`manifest.json`, `roles.snapshot.json`, `privacy.html`) |
+| Pages URL | `https://iamlens.vaultline.cloud/` (custom domain on GitHub Pages; old `https://ranger7899.github.io/IAM-Lens-extension/` redirects) (`manifest.json`, `roles.snapshot.json`, `privacy.html`) |
 
 The IDs are numeric on purpose: a renamed or re-created repository with the same name cannot assume the identity.
 `GCP_PROJECT_ID` / quota-project header is no longer used. All of the above is free (no billable resources).

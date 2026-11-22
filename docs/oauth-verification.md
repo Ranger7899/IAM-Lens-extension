@@ -1,15 +1,15 @@
 # OAuth verification: IAM Lens
 
-Placeholders: `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>`, `<AUTHORIZED_DOMAIN>`, `<EXTENSION_ID>`. The URLs and domain depend on where the site is hosted (github.io or a custom domain) and are filled in by the owner. The publishing status shown in Google Auth Platform is "Testing" until the app is published to "In production".
+Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaultline.cloud/privacy.html`, terms `https://iamlens.vaultline.cloud/terms.html`; authorized domain `vaultline.cloud`; developer Ranger7899; contact ysfmasad@gmail.com.
 
 ## App information
 
 - App name: IAM Lens
 - Type: "Chrome Extension" OAuth client (client ID `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb.apps.googleusercontent.com`), Item ID `<EXTENSION_ID>` (pinned via manifest key). It has no redirect URIs and no client secret. `chromiumapp.org` is not an authorized domain and is not needed: sign-in uses `chrome.identity.getAuthToken`, and the client ID is in the manifest `oauth2` block.
 - Sign-in works in Google Chrome only, with the Google account signed in to the Chrome profile (no account picker).
-- Homepage: `<HOMEPAGE_URL>`
-- Privacy policy: `<PRIVACY_POLICY_URL>`
-- Terms of service: `<TERMS_URL>`
+- Homepage: `https://iamlens.vaultline.cloud/`
+- Privacy policy: `https://iamlens.vaultline.cloud/privacy.html`
+- Terms of service: `https://iamlens.vaultline.cloud/terms.html`
 - Support contact: ysfmasad@gmail.com
 - Sign-in is optional. The core app works without any Google account.
 
@@ -20,10 +20,10 @@ Placeholders: `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TE
 | App name | IAM Lens |
 | User support email | ysfmasad@gmail.com |
 | App logo | `scripts/brand/consent-logo-120.png` (120x120 PNG, under 1 MB; regenerate with `npm run gen:consent-logo`) |
-| Application home page | `<HOMEPAGE_URL>` |
-| Application privacy policy link | `<PRIVACY_POLICY_URL>` |
-| Application terms of service link | `<TERMS_URL>` |
-| Authorized domains | `<AUTHORIZED_DOMAIN>` (the domain that hosts the homepage, privacy policy and terms links) |
+| Application home page | `https://iamlens.vaultline.cloud/` |
+| Application privacy policy link | `https://iamlens.vaultline.cloud/privacy.html` |
+| Application terms of service link | `https://iamlens.vaultline.cloud/terms.html` |
+| Authorized domains | `vaultline.cloud` (the domain that hosts the homepage, privacy policy and terms links) |
 | Developer contact information | ysfmasad@gmail.com |
 | Scopes (Data Access) | `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform.read-only` (add both) |
 | Publishing status | Testing until verification passes, then In production |

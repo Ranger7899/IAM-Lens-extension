@@ -1,6 +1,6 @@
 # Chrome Web Store listing: IAM Lens
 
-Ready to paste. Placeholders: `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>` (the hosted site URLs; github.io or a custom domain, `<AUTHORIZED_DOMAIN>`).
+Ready to paste. Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaultline.cloud/privacy.html`, terms `https://iamlens.vaultline.cloud/terms.html`; authorized domain `vaultline.cloud`; developer Ranger7899; contact ysfmasad@gmail.com.
 
 ## Name options (none starts with a Google trademark)
 
@@ -32,7 +32,7 @@ IAM Lens is a fast two-way lookup for Google Cloud IAM.
 - Works offline on a bundled snapshot of predefined roles that refreshes automatically.
 - Optional: sign in with Google once and IAM Lens automatically finds every project and organization your account can access, read-only, and includes their custom roles in search. There is nothing to pick or configure. It re-syncs every hour while the side panel is open, with a refresh button on the Search page. Custom roles are stored only in your browser, and signing out revokes access and deletes them.
 
-Privacy: no analytics, no tracking, no remote code. Full policy: <PRIVACY_POLICY_URL>
+Privacy: no analytics, no tracking, no remote code. Full policy: https://iamlens.vaultline.cloud/privacy.html
 
 IAM Lens is an independent project. Not affiliated with Google. Google Cloud and related icons are trademarks of Google LLC.
 
@@ -73,7 +73,7 @@ IAM Lens has one purpose: to let users look up which Google Cloud IAM roles gran
   - I do not sell or transfer user data to third parties, outside of the approved use cases.
   - I do not use or transfer user data for purposes that are unrelated to my item's single purpose.
   - I do not use or transfer user data to determine creditworthiness or for lending purposes.
-- Privacy policy URL: `<PRIVACY_POLICY_URL>`
+- Privacy policy URL: `https://iamlens.vaultline.cloud/privacy.html`
 - Limited Use: the extension complies with the Google API Services User Data Policy, including Limited Use.
 
 ## Test instructions for reviewers
