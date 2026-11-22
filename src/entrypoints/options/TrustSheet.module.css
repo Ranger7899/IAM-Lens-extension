@@ -36,3 +36,12 @@
   padding-top: 12px;
   border-top: 1px solid var(--md-sys-color-outline-variant);
 }
+
+/* The OAuth client ID, shown so users (and Google's reviewers) can match it to the consent screen. */
+.clientId {
+  display: block;
+  margin-top: 2px;
+  font: 400 12px/18px var(--font-mono);
+  overflow-wrap: break-word; /* breaks at the hyphen first; never mid-word unless it truly cannot fit */
+  user-select: all;
+}

@@ -1,4 +1,5 @@
 import { Button, Dialog, Icon, type IconName } from '@/ui/components';
+import { OAUTH_CLIENT_ID } from '@/core/gcp/authConfig';
 import { IAM_SOURCE_URL, REVOKE_URL, SOURCE_URL } from './constants';
 import styles from './TrustSheet.module.css';
 
@@ -43,6 +44,16 @@ const POINTS: Point[] = [
       <>
         Remove access on {link(REVOKE_URL, 'your Google Account permissions page')}, or use Sign out &amp;
         clear here.
+      </>
+    ),
+  },
+  {
+    icon: 'target',
+    title: 'Who is asking',
+    body: (
+      <>
+        Google shows the app name IAM Lens. The OAuth client it uses is:
+        <code className={styles.clientId}>{OAUTH_CLIENT_ID}</code>
       </>
     ),
   },
