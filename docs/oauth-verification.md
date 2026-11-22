@@ -1,14 +1,31 @@
 # OAuth verification: IAM Lens
 
-Placeholders: `<CONTACT_EMAIL>`, `<DEVELOPER_NAME>`, `<PRIVACY_POLICY_URL>`, `<EXTENSION_ID>`.
+Placeholders: `<CONTACT_EMAIL>`, `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>`, `<AUTHORIZED_DOMAIN>`, `<EXTENSION_ID>`. The URLs and domain depend on where the site is hosted (github.io or a custom domain) and are filled in by the owner. The publishing status shown in Google Auth Platform is "Testing" until the app is published to "In production".
 
 ## App information
 
 - App name: IAM Lens
 - Type: Chrome extension OAuth client, ID `<EXTENSION_ID>` (pinned via manifest key)
-- Privacy policy: `<PRIVACY_POLICY_URL>` (source: `site/privacy.html`)
+- Homepage: `<HOMEPAGE_URL>`
+- Privacy policy: `<PRIVACY_POLICY_URL>`
+- Terms of service: `<TERMS_URL>`
 - Support contact: `<CONTACT_EMAIL>`
 - Sign-in is optional. The core app works without any Google account.
+
+## Consent-screen fields (Google Auth Platform, Branding and Data Access)
+
+| Field | Value |
+| --- | --- |
+| App name | IAM Lens |
+| User support email | `<CONTACT_EMAIL>` |
+| App logo | `scripts/brand/consent-logo-120.png` (120x120 PNG, under 1 MB; regenerate with `npm run gen:consent-logo`) |
+| Application home page | `<HOMEPAGE_URL>` |
+| Application privacy policy link | `<PRIVACY_POLICY_URL>` |
+| Application terms of service link | `<TERMS_URL>` |
+| Authorized domains | `<AUTHORIZED_DOMAIN>` (the domain that hosts the homepage, privacy policy and terms links) |
+| Developer contact information | `<CONTACT_EMAIL>` |
+| Scopes (Data Access) | `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform.read-only` (add both) |
+| Publishing status | Testing until verification passes, then In production |
 
 ## Scopes requested
 
@@ -21,30 +38,35 @@ Requested together, space-separated. Nothing else.
 
 Google's API reference for [`projects.roles.list`](https://cloud.google.com/iam/docs/reference/rest/v1/projects.roles/list) and [`organizations.roles.list`](https://cloud.google.com/iam/docs/reference/rest/v1/organizations.roles/list) lists the accepted OAuth scopes as only `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform`. `cloud-platform.read-only` is not accepted: calls made with it fail with 403 `ACCESS_TOKEN_SCOPE_INSUFFICIENT`. There is no read-only IAM scope, so `iam` is the narrowest scope that lets the extension list custom roles. `cloud-platform` is broader than `iam`, so it was not chosen.
 
-`cloud-platform.read-only` is requested for the Cloud Resource Manager calls (`projects.search`, `organizations.search`), which accept it, so the user can pick which project or organisation to read.
+`cloud-platform.read-only` is requested for the Cloud Resource Manager calls (`projects.search`, `organizations.search`), which accept it, so the extension can discover every project and organisation the signed-in account can access.
 
-The extension only ever calls `roles.list` (GET) and the two search methods (GET). It never calls any method that changes IAM policies, roles or resources. The code is public: `src/core/gcp/iam.ts`.
+The extension only ever calls `roles.list` (GET) and the two search methods (GET), through `src/core/gcp/http.ts`, which only issues GET requests. It never calls any method that changes IAM policies, roles or resources. The code is public: `src/core/gcp/iam.ts`, `src/core/gcp/crm.ts`, `src/ui/data/customSync.ts`.
 
 ## Scope justification (paste)
 
-IAM Lens lets a Google Cloud user look up which IAM roles grant a permission and which permissions a role contains. Predefined roles come from a bundled public snapshot. To also show the user's own custom roles, the extension lists them with the IAM API (`roles.list` for an organisation or project), which Google restricts to the `https://www.googleapis.com/auth/iam` or `https://www.googleapis.com/auth/cloud-platform` scope; no read-only scope is accepted by that method, so we request the narrower of the two, `iam`. The extension also requests `https://www.googleapis.com/auth/cloud-platform.read-only` for the Cloud Resource Manager API (`projects.search`, `organizations.search`), to let the user choose which project or organisation to read. Although `iam` is described as "Manage your IAM policies", the extension only issues read (GET) requests for role definitions (list and get). It never creates, modifies or deletes any resource or policy and never reads resource data, only role definitions and project names/IDs. The OAuth token is used only in the user's browser, is never sent to the developer or any third party, and custom-role data is stored locally only and deleted on sign-out. Use of Google user data adheres to the Google API Services User Data Policy, including Limited Use requirements.
+IAM Lens lets a Google Cloud user look up which IAM roles grant a permission and which permissions a role contains. Predefined roles come from a bundled public snapshot. To also show the user's own custom roles, the extension uses the Cloud Resource Manager API (`projects.search` and `organizations.search`) to automatically discover all projects and organizations the signed-in account can access, then reads each one's custom roles with the IAM API (`roles.list`). The search calls are covered by `https://www.googleapis.com/auth/cloud-platform.read-only`. `roles.list` is restricted by Google to `https://www.googleapis.com/auth/iam` or `https://www.googleapis.com/auth/cloud-platform`; no read-only scope is accepted by that method, so we request the narrower of the two, `iam`. Although `iam` is described as "Manage your IAM policies", the extension only issues read-only GET requests. It never creates, modifies or deletes any resource, role or policy and never reads resource data: only role definitions and the display names and IDs of the projects and organizations. The data is refreshed automatically: when the side panel opens and the last sync is more than one hour old, then once an hour while the panel stays open, and on demand with the refresh button (Search page) or "Sync now" (Settings). The OAuth token lives only in the browser session, is never sent to the developer or any third party, and the fetched role definitions and source names are stored locally only. Signing out revokes the token and deletes them. Use of Google user data adheres to the Google API Services User Data Policy, including Limited Use requirements.
 
 ## API calls made with the token
 
-| API | Method | Why |
-| --- | --- | --- |
-| IAM `roles.list` | GET `/v1/roles` (custom roles, per parent) | Load custom roles |
-| Cloud Resource Manager `projects.search` / organizations search | GET | Let the user pick a project or organisation |
+All calls are HTTP GET, made from the extension in the user's browser, with pagination (`pageSize` 500 for search, 1000 for roles).
+
+| API | Request | Scope | Why |
+| --- | --- | --- | --- |
+| Cloud Resource Manager v3 `projects.search` | GET `cloudresourcemanager.googleapis.com/v3/projects:search` | `cloud-platform.read-only` | Discover every accessible project (ID and display name) |
+| Cloud Resource Manager v3 `organizations.search` | GET `cloudresourcemanager.googleapis.com/v3/organizations:search` | `cloud-platform.read-only` | Discover every accessible organization (a 403/404 just means none) |
+| IAM v1 `roles.list` (projects) | GET `iam.googleapis.com/v1/projects/<id>/roles?view=FULL&showDeleted=false` | `iam` | Read the custom roles of each project |
+| IAM v1 `roles.list` (organizations) | GET `iam.googleapis.com/v1/organizations/<id>/roles?view=FULL&showDeleted=false` | `iam` | Read the custom roles of each organization |
+
+Sync behaviour: runs when the side panel opens if the last sync is over 1 hour old, then every hour while the panel is open, and on demand (refresh button, "Sync now"). Up to 4 sources are fetched at once. A source the account cannot read (403/404) is skipped and counted as "no access". Roles of sources that are no longer accessible are removed. Token revocation uses `oauth2.googleapis.com/revoke` on sign-out.
 
 ## Demo video script (unlisted YouTube, about 3 minutes, English narration or captions)
 
-1. (0:00) Show the extension in the Chrome Web Store listing or `chrome://extensions` with the ID `<EXTENSION_ID>`. State the single purpose.
-2. (0:15) Without signing in: open the side panel, search `storage.objects.get`, open `roles/viewer`. Show that predefined roles work offline and with no sign-in.
-3. (0:45) Open Settings and show the privacy note and the "Sign in" button. Show the privacy policy URL.
-4. (1:00) Click "Sign in". Show the full browser address bar or the Google account chooser, then the OAuth consent screen with the app name, the developer, and the requested scope clearly readable. Zoom on the scope lines ("Manage your IAM policies" and the read-only Cloud Platform line) and say aloud that the extension only reads role definitions. Approve.
-5. (1:30) Show the project picker populated from Cloud Resource Manager. Select a project.
-6. (1:50) Show a custom role appearing with a "Custom" badge and its permissions. Mention that only read requests are made (optionally show the Network panel of the extension's service worker with GET requests to `iam.googleapis.com` and `cloudresourcemanager.googleapis.com`).
-7. (2:20) Click "Sign out". Show the custom roles disappearing, and state that the token was revoked and local data deleted. Optionally show DevTools, Application, IndexedDB with the custom-role store empty.
-8. (2:45) Close by stating: no analytics, no remote code, data stays local, Limited Use compliance.
+1. (0:00-0:30) No-sign-in lookup. Show the extension in `chrome://extensions` (ID `<EXTENSION_ID>`) and state the single purpose. Open the side panel, search `storage.objects.get`, open `roles/viewer`. Say that predefined roles work with no sign-in.
+2. (0:30-1:05) Settings, Sign in. Open Settings (options page), show the Custom roles card and the privacy note, click "Sign in". The Google sign-in window must show the address bar with `client_id=` clearly readable (Google requires the OAuth client ID to be visible). Pause on it for a few seconds. If the sign-in window hides the URL, also show it with the Network panel of the extension's service worker or by repeating the flow once with the URL visible.
+3. (1:05-1:40) Consent screen. Show the app name "IAM Lens", the developer contact, and both scope lines ("Manage your IAM policies" and the read-only Cloud Platform line) readable. Zoom on them, say aloud that the extension only issues read (GET) requests for role definitions and project names. Approve.
+4. (1:40-2:05) Auto-sync status row. Open the side panel Search page and show the status row: "Custom roles · N from X projects and Y organizations · synced just now". Say that all accessible projects and organizations are found automatically, with nothing to choose or configure, and that it re-syncs hourly while the panel is open.
+5. (2:05-2:25) Custom role. Search for a custom role and show its badge "Custom · <project> (project)" and its permissions.
+6. (2:25-2:40) Refresh button. Click the refresh icon on the status row, show "Syncing…" then the updated "synced just now". Mention only GET requests (optionally show the service-worker Network panel with GETs to `iam.googleapis.com` and `cloudresourcemanager.googleapis.com`).
+7. (2:40-3:00) Sign out and clear. In Settings click "Sign out & clear", confirm, show the custom roles and the status row disappearing, and state that the token was revoked and local data deleted. Close: no analytics, no remote code, data stays local, Limited Use compliance.
 
-Recording tips: use a throwaway Google Cloud project and a test account, hide personal info and real project names, 1080p, show the URL bar during consent.
+Recording tips: use a throwaway Google Cloud account with a few projects and at least one custom role, hide personal info and real project names, 1080p, keep the URL bar with `client_id=` visible during consent.
