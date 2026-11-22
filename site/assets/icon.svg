@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <mask id="iam-lens-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="128">
+      <rect width="128" height="128" fill="#fff"/>
+      <circle cx="60" cy="55" r="15" fill="none" stroke="#000" stroke-width="8"/>
+      <path d="M71 66 86 81" fill="none" stroke="#000" stroke-width="9" stroke-linecap="round"/>
+    </mask>
+  </defs>
+  <path d="M64 18 102 29.5V58C102 81 87 98 64 110 41 98 26 81 26 58V29.5Z" fill="#3f6ddb" stroke="#3f6ddb" stroke-width="4" stroke-linejoin="round" mask="url(#iam-lens-cut)"/>
+</svg>

@@ -62,12 +62,12 @@ jobs:
           fi
 
       # Pages is redeployed on every run so the first run (and any manual run) publishes even when the
-      # snapshot itself did not change. It serves the snapshot, its manifest and the privacy policy.
+      # snapshot itself did not change. It serves the snapshot, its manifest and the whole site/ folder (homepage, privacy, terms, assets).
       - name: Prepare Pages artifact
         run: |
           mkdir -p _site
           cp data/roles.snapshot.json data/manifest.json _site/
-          cp site/privacy.html _site/privacy.html
+          cp -R site/. _site/
 
       - uses: actions/upload-pages-artifact@v3
         with:

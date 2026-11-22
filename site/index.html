@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2016%2016%27%3E%3Cdefs%3E%3Cmask%20id=%27iam-lens-cut%27%20maskUnits=%27userSpaceOnUse%27%20x=%270%27%20y=%270%27%3E%3Crect%20fill=%27#fff%27/%3E%3Ccircle%20cx=%277%27%20cy=%277%27%20r=%272%27%20fill=%27none%27%20stroke=%27#000%27%20stroke-width=%272%27/%3E%3Cpath%20d=%27M9.5%209.5%2011.5%2011.5%27%20fill=%27none%27%20stroke=%27#000%27%20stroke-width=%272%27%20stroke-linecap=%27round%27/%3E%3C/mask%3E%3C/defs%3E%3Cpath%20d=%27M8%201%2015%203V8C15%2011.3%2012%2013.7%208%2015%204%2013.7%201%2011.3%201%208V3Z%27%20fill=%27#3f6ddb%27%20mask=%27url(#iam-lens-cut)%27/%3E%3C/svg%3E">
+    <title>IAM Lens: find Google Cloud IAM roles and permissions</title>
+    <meta name="description" content="IAM Lens is a browser extension to look up which Google Cloud IAM roles grant a permission and which permissions a role contains.">
+    <style>
+      :root {
+        color-scheme: light dark;
+        --shell: #f0f5fe;
+        --panel: #ffffff;
+        --head: #e9eef6;
+        --border: #b7c3e0;
+        --divider: #d3dbec;
+        --active: #dbedfc;
+        --ink: #1b2e5d;
+        --ink2: #475569;
+        --link: #3d60b8;
+        --accent: #314f9b;
+        --on-accent: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --shell: #282c32;
+          --panel: #353b43;
+          --head: #414d5e;
+          --border: #50638b;
+          --divider: #4a5568;
+          --active: #2a3f5e;
+          --ink: #f1f4f9;
+          --ink2: #b9c0cc;
+          --link: #e5ebff;
+          --accent: #a8baff;
+          --on-accent: #1b2e5d;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--shell);
+        color: var(--ink);
+        font-family: 'Google Sans Flex', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .skip {
+        position: absolute;
+        left: 0.5rem;
+        top: -4rem;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+      .skip:focus {
+        top: 0.5rem;
+      }
+      .bar {
+        padding: 14px 1.25rem;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+      }
+      .page {
+        max-width: 48rem;
+        margin: 0 auto 2rem;
+        background: var(--panel);
+        border-radius: 20px 20px 0 0;
+        border: 1px solid var(--divider);
+        border-bottom: 0;
+      }
+      header,
+      main,
+      footer {
+        padding: 0 1.75rem;
+      }
+      header {
+        padding-top: 2rem;
+      }
+      h1 {
+        font-size: 22px;
+        font-weight: 400;
+        line-height: 28px;
+        margin: 0 0 0.25rem;
+      }
+      h2 {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+        margin: 2rem 0 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--divider);
+      }
+      main h2:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      p,
+      li {
+        color: var(--ink);
+      }
+      .meta {
+        color: var(--ink2);
+        margin: 0;
+      }
+      .summary {
+        margin-top: 1.25rem;
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        background: var(--active);
+        color: var(--ink);
+      }
+      .summary p {
+        margin: 0;
+        color: inherit;
+      }
+      a {
+        color: var(--link);
+        text-decoration: underline;
+      }
+      a:focus-visible,
+      .skip:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      code {
+        font-family: 'Google Sans Code', 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 0.9em;
+        padding: 0.1em 0.4em;
+        border-radius: 4px;
+        background: var(--head);
+      }
+      footer {
+        margin-top: 2.5rem;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+        border-top: 1px solid var(--divider);
+        color: var(--ink2);
+      }
+      footer p {
+        margin: 0;
+        color: inherit;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .bar img {
+        width: 24px;
+        height: 24px;
+      }
+      .bar a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .lead {
+        font-size: 16px;
+        margin: 1rem 0 0;
+      }
+      .cta {
+        display: inline-block;
+        margin-top: 1.25rem;
+        padding: 6px 20px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--on-accent);
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .cta:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 2px;
+      }
+      .shot {
+        margin: 1rem 0 0;
+      }
+      .shot img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .shot figcaption {
+        margin-top: 0.4rem;
+        color: var(--ink2);
+      }
+      nav.links ul,
+      footer ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        margin: 0 0 0.75rem;
+        padding: 0;
+        list-style: none;
+      }
+      @media (max-width: 480px) {
+        header,
+        main,
+        footer {
+          padding: 0 1rem;
+        }
+        header {
+          padding-top: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="bar"><img src="assets/icon.svg" alt="" width="24" height="24"><a href="index.html">IAM Lens</a></div>
+    <div class="page">
+    <header>
+      <div class="brand">
+        <img src="assets/icon.svg" alt="IAM Lens logo" width="48" height="48">
+        <h1>IAM Lens</h1>
+      </div>
+      <p class="lead">
+        Look up which Google Cloud IAM roles grant a permission and which permissions a role
+        contains.
+      </p>
+      <!-- TODO: replace "#" with the Chrome Web Store listing URL once the extension is published. -->
+      <a class="cta" href="#">Add to Chrome</a>
+    </header>
+    <main id="main">
+      <h2>What it does</h2>
+      <ul>
+        <li>Search every predefined Google Cloud role and permission from one box.</li>
+        <li>See what a role contains, with each permission split into service, resource and verb and a read, write and admin privilege bar.</li>
+        <li>Start from a permission and find the roles that grant it, including the smallest roles that cover it.</li>
+        <li>Compare roles side by side.</li>
+        <li>Optionally sign in to include your own custom roles.</li>
+      </ul>
+      <figure class="shot">
+        <picture>
+          <source srcset="assets/screenshot-1-search-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="assets/screenshot-1-search-light.png" alt="IAM Lens search results listing roles and permissions that match a query" width="1280" height="800" loading="lazy">
+        </picture>
+        <figcaption>Search roles and permissions.</figcaption>
+      </figure>
+      <figure class="shot">
+        <picture>
+          <source srcset="assets/screenshot-2-role-detail-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="assets/screenshot-2-role-detail-light.png" alt="IAM Lens role detail page with the role's permissions and a privilege bar" width="1280" height="800" loading="lazy">
+        </picture>
+        <figcaption>See what a role contains.</figcaption>
+      </figure>
+      <figure class="shot">
+        <picture>
+          <source srcset="assets/screenshot-3-permission-detail-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="assets/screenshot-3-permission-detail-light.png" alt="IAM Lens permission detail page listing the roles that grant the permission" width="1280" height="800" loading="lazy">
+        </picture>
+        <figcaption>Find the roles that grant a permission.</figcaption>
+      </figure>
+
+      <h2 id="signin">How sign-in works and what data is used</h2>
+      <p>Signing in with Google is optional. Without it, IAM Lens works entirely from a bundled snapshot of the predefined roles.</p>
+      <ul>
+        <li>After you sign in, IAM Lens makes read-only <code>GET</code> calls to the Google IAM API (<code>roles.list</code>) and to Cloud Resource Manager (project and organisation search) to find your custom roles.</li>
+        <li>The access token stays in your browser. It is never sent to the developer or to any third party.</li>
+        <li>Custom roles are stored locally in the extension and are deleted when you sign out.</li>
+        <li>There is no analytics, tracking or remote code.</li>
+      </ul>
+      <p>Details are in the <a href="privacy.html">privacy policy</a>.</p>
+
+    </main>
+    <footer>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="privacy.html">Privacy policy</a></li>
+        <li><a href="terms.html">Terms of service</a></li>
+        <li><a href="https://github.com/Ranger7899/IAM-Lens-extension">Source code on GitHub</a></li>
+        <li>Contact: <code>CONTACT_EMAIL</code></li>
+      </ul>
+      <p>IAM Lens. Not affiliated with Google. Google Cloud is a trademark of Google LLC.</p>
+    </footer>
+    </div>
+  </body>
+</html>

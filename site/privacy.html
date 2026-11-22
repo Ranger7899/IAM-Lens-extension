@@ -153,11 +153,12 @@
     <div class="page">
     <header>
       <h1>IAM Lens privacy policy</h1>
-      <p class="meta">Last updated: <time datetime="2026-11-21">21 November 2026</time></p>
+      <p class="meta">Last updated: <time datetime="2026-11-22">22 November 2026</time></p>
       <div class="summary">
         <p>
-          IAM Lens has no analytics, no tracking and no remote code. Everything it stores stays in
-          your browser, and signing out deletes your custom-role data.
+          IAM Lens has no analytics, no tracking and no remote code. If you sign in, your Google
+          data is read directly by your browser, stored only on your device, and never sent to the
+          developer. Signing out deletes it.
         </p>
       </div>
     </header>
@@ -187,51 +188,131 @@
 
       <h2>Optional sign-in and custom roles</h2>
       <p>
-        Signing in with Google is optional and is only needed if you want to see your own
-        organisation or project custom roles. If you sign in:
+        Signing in with Google is optional and is only needed if you want to see your own custom
+        roles. Without signing in, IAM Lens does not contact any Google API and accesses no Google
+        user data.
+      </p>
+
+      <h2>Google user data IAM Lens accesses</h2>
+      <p>
+        After you sign in, IAM Lens automatically looks up <strong>every project and organization
+        your Google account can access</strong>, and then fetches the custom roles defined on each
+        of them. You do not choose projects one by one. The data accessed is:
       </p>
       <ul>
         <li>
-          The OAuth access token is used only to call the Google IAM API and the Cloud Resource
-          Manager API directly from your browser, to list the projects you can access and their
-          custom roles.
+          <strong>Project and organization IDs and display names</strong>, from the Cloud Resource
+          Manager API (project and organization search).
         </li>
         <li>
-          IAM Lens requests two Google OAuth scopes:
-          <code>https://www.googleapis.com/auth/iam</code> and
-          <code>https://www.googleapis.com/auth/cloud-platform.read-only</code>. Google words the
-          first as &ldquo;Manage your IAM policies&rdquo; because it offers no read-only scope for
-          listing custom roles. IAM Lens only reads role definitions (list and get) and the names of
-          your projects and organisations, and never changes anything.
+          <strong>Custom role definitions</strong> of those projects and organizations, from the
+          Cloud IAM API (<code>roles.list</code>): role name, title, description, launch stage,
+          whether it is deleted, and its list of permissions.
         </li>
         <li>
-          The token and the data returned are never sent to the developer or to any third party.
+          <strong>The OAuth access token</strong> that Google issues when you sign in, used only to
+          authorize those requests.
         </li>
         <li>
-          Custom-role data is stored only locally in your browser (extension storage). It is not
-          synced or uploaded.
+          <strong>Email address and profile:</strong> not collected. IAM Lens does not request any
+          email, profile or OpenID scope, does not read your name or email address, and does not
+          call any user-info endpoint.
+        </li>
+      </ul>
+
+      <h2>When IAM Lens contacts Google</h2>
+      <p>These requests are made only while you are signed in, and only:</p>
+      <ul>
+        <li>right after you sign in on the options page;</li>
+        <li>
+          when you open the side panel and more than 1 hour has passed since the last sync (or
+          there has been no sync yet);
+        </li>
+        <li>every hour while the side panel stays open;</li>
+        <li>when you press the refresh button.</li>
+      </ul>
+      <p>
+        If the access token has expired, IAM Lens renews it silently without showing a window. If
+        that is not possible it asks you to sign in again; it never opens a sign-in window on its
+        own. IAM Lens does not run any sync while the side panel is closed.
+      </p>
+
+      <h2>Scopes requested and why</h2>
+      <p>IAM Lens requests two Google OAuth scopes:</p>
+      <ul>
+        <li>
+          <code>https://www.googleapis.com/auth/iam</code>: needed by the Cloud IAM API to list
+          custom roles, which rejects read-only access. Google words it as &ldquo;Manage your IAM
+          policies&rdquo;, but IAM Lens only uses it to read role definitions.
         </li>
         <li>
-          Signing out revokes the token and deletes the locally stored custom-role data. You can
-          also remove the extension to delete all of its data.
+          <code>https://www.googleapis.com/auth/cloud-platform.read-only</code>: needed to search
+          the projects and organizations you can access, so their custom roles can be found.
+        </li>
+      </ul>
+      <p>
+        IAM Lens makes only read (HTTP GET) requests to Google APIs. It never creates, changes or
+        deletes any role, policy, project or other resource.
+      </p>
+
+      <h2>How your data is used, stored and shared</h2>
+      <ul>
+        <li>
+          Google user data is used only to show you your custom roles inside IAM Lens
+          (searching, listing and comparing roles and permissions).
+        </li>
+        <li>
+          The OAuth access token is kept in <code>chrome.storage.session</code>. It is held in
+          memory only and is cleared when you close the browser.
+        </li>
+        <li>
+          The custom roles, and the IDs and display names of your projects and organizations, are
+          stored locally in your browser in IndexedDB. They are not synced to your Google account
+          and not uploaded anywhere.
+        </li>
+        <li>
+          Your requests go directly from your browser to Google (Google sign-in, the Cloud
+          Resource Manager API and the Cloud IAM API). Nothing is sent to the developer or to any
+          other server or third party, and no human reads your data.
+        </li>
+        <li>
+          There is no analytics, no advertising, no tracking and no remote code. Google user data
+          is not used for advertising or sold.
+        </li>
+      </ul>
+
+      <h2>Deleting your data</h2>
+      <ul>
+        <li>
+          <strong>Sign out &amp; clear</strong> (options page) revokes the access token with Google,
+          removes it from the browser, and deletes all stored custom roles and the stored list of
+          projects and organizations.
+        </li>
+        <li>
+          Removing the extension deletes everything it stored in your browser.
+        </li>
+        <li>
+          You can also revoke IAM Lens's access at any time in your
+          <a href="https://myaccount.google.com/permissions">Google Account permissions</a>.
         </li>
       </ul>
 
       <h2>Google API Services User Data Policy</h2>
       <p>
-        IAM Lens's use and transfer to any other app of information received from Google APIs will
-        adhere to the
-        <a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"
-          >Google API Services User Data Policy</a
-        >, including the Limited Use requirements. Specifically, data received from Google APIs is
-        used only to provide and improve the user-facing lookup features, is not transferred to
-        others, is not used for advertising, and is not read by humans.
+        IAM Lens's use and transfer of information received from Google APIs will adhere to the
+        <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
+        including the Limited Use requirements.
+      </p>
+      <p>
+        Specifically, data received from Google APIs is used only to provide the user-facing
+        custom-role lookup features, is not transferred to others, is not used for advertising,
+        and is not read by humans.
       </p>
 
       <h2>Permissions</h2>
       <p>
         The extension requests only the browser permissions it needs: side panel, local storage,
-        scheduled alarms (for snapshot refresh), and context menu. The identity permission and
+        scheduled alarms (for snapshot refresh), unlimited local storage (for the roles database), and context menu. The identity permission and
         access to <code>googleapis.com</code> are optional and are requested only when you choose to
         sign in.
       </p>

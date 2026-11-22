@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2016%2016%27%3E%3Cdefs%3E%3Cmask%20id=%27iam-lens-cut%27%20maskUnits=%27userSpaceOnUse%27%20x=%270%27%20y=%270%27%3E%3Crect%20fill=%27#fff%27/%3E%3Ccircle%20cx=%277%27%20cy=%277%27%20r=%272%27%20fill=%27none%27%20stroke=%27#000%27%20stroke-width=%272%27/%3E%3Cpath%20d=%27M9.5%209.5%2011.5%2011.5%27%20fill=%27none%27%20stroke=%27#000%27%20stroke-width=%272%27%20stroke-linecap=%27round%27/%3E%3C/mask%3E%3C/defs%3E%3Cpath%20d=%27M8%201%2015%203V8C15%2011.3%2012%2013.7%208%2015%204%2013.7%201%2011.3%201%208V3Z%27%20fill=%27#3f6ddb%27%20mask=%27url(#iam-lens-cut)%27/%3E%3C/svg%3E">
+    <title>IAM Lens terms of service</title>
+    <meta name="description" content="Terms of service for the IAM Lens browser extension.">
+    <style>
+      :root {
+        color-scheme: light dark;
+        --shell: #f0f5fe;
+        --panel: #ffffff;
+        --head: #e9eef6;
+        --border: #b7c3e0;
+        --divider: #d3dbec;
+        --active: #dbedfc;
+        --ink: #1b2e5d;
+        --ink2: #475569;
+        --link: #3d60b8;
+        --accent: #314f9b;
+        --on-accent: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --shell: #282c32;
+          --panel: #353b43;
+          --head: #414d5e;
+          --border: #50638b;
+          --divider: #4a5568;
+          --active: #2a3f5e;
+          --ink: #f1f4f9;
+          --ink2: #b9c0cc;
+          --link: #e5ebff;
+          --accent: #a8baff;
+          --on-accent: #1b2e5d;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--shell);
+        color: var(--ink);
+        font-family: 'Google Sans Flex', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .skip {
+        position: absolute;
+        left: 0.5rem;
+        top: -4rem;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+      .skip:focus {
+        top: 0.5rem;
+      }
+      .bar {
+        padding: 14px 1.25rem;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+      }
+      .page {
+        max-width: 48rem;
+        margin: 0 auto 2rem;
+        background: var(--panel);
+        border-radius: 20px 20px 0 0;
+        border: 1px solid var(--divider);
+        border-bottom: 0;
+      }
+      header,
+      main,
+      footer {
+        padding: 0 1.75rem;
+      }
+      header {
+        padding-top: 2rem;
+      }
+      h1 {
+        font-size: 22px;
+        font-weight: 400;
+        line-height: 28px;
+        margin: 0 0 0.25rem;
+      }
+      h2 {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+        margin: 2rem 0 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--divider);
+      }
+      main h2:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      p,
+      li {
+        color: var(--ink);
+      }
+      .meta {
+        color: var(--ink2);
+        margin: 0;
+      }
+      .summary {
+        margin-top: 1.25rem;
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        background: var(--active);
+        color: var(--ink);
+      }
+      .summary p {
+        margin: 0;
+        color: inherit;
+      }
+      a {
+        color: var(--link);
+        text-decoration: underline;
+      }
+      a:focus-visible,
+      .skip:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      code {
+        font-family: 'Google Sans Code', 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 0.9em;
+        padding: 0.1em 0.4em;
+        border-radius: 4px;
+        background: var(--head);
+      }
+      footer {
+        margin-top: 2.5rem;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+        border-top: 1px solid var(--divider);
+        color: var(--ink2);
+      }
+      footer p {
+        margin: 0;
+        color: inherit;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .bar img {
+        width: 24px;
+        height: 24px;
+      }
+      .bar a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .lead {
+        font-size: 16px;
+        margin: 1rem 0 0;
+      }
+      .cta {
+        display: inline-block;
+        margin-top: 1.25rem;
+        padding: 6px 20px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--on-accent);
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .cta:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 2px;
+      }
+      .shot {
+        margin: 1rem 0 0;
+      }
+      .shot img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .shot figcaption {
+        margin-top: 0.4rem;
+        color: var(--ink2);
+      }
+      nav.links ul,
+      footer ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        margin: 0 0 0.75rem;
+        padding: 0;
+        list-style: none;
+      }
+      @media (max-width: 480px) {
+        header,
+        main,
+        footer {
+          padding: 0 1rem;
+        }
+        header {
+          padding-top: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="bar"><img src="assets/icon.svg" alt="" width="24" height="24"><a href="index.html">IAM Lens</a></div>
+    <div class="page">
+    <header>
+      <h1>IAM Lens terms of service</h1>
+      <p class="meta">Last updated: <time datetime="2026-11-22">22 November 2026</time></p>
+      <div class="summary">
+        <p>IAM Lens is free, open-source software provided as is, without warranty. You are responsible for your own cloud access and decisions.</p>
+      </div>
+    </header>
+    <main id="main">
+      <h2>Using IAM Lens</h2>
+      <p>By installing or using the IAM Lens browser extension you agree to these terms. If you do not agree, do not use it.</p>
+
+      <h2>Licence</h2>
+      <p>IAM Lens is released under the MIT licence. The source code and licence text are available on <a href="https://github.com/Ranger7899/IAM-Lens-extension">GitHub</a>.</p>
+
+      <h2>No warranty</h2>
+      <p>IAM Lens is provided &ldquo;as is&rdquo;, without warranty of any kind, express or implied, including merchantability, fitness for a particular purpose and non-infringement. Role and permission data comes from a periodically refreshed snapshot and may be incomplete or out of date. Check the official Google Cloud documentation before relying on it.</p>
+
+      <h2>Limitation of liability</h2>
+      <p>To the maximum extent permitted by law, the developer is not liable for any claim, damages or other liability arising from the use of IAM Lens, including decisions about IAM policies and access.</p>
+
+      <h2>Your responsibilities</h2>
+      <p>You are responsible for your Google account, your Google Cloud access and any changes you make to your cloud resources. IAM Lens only reads role definitions and the names of your projects and organisations, and never changes anything. Follow the terms of Google and Google Cloud when you sign in.</p>
+
+      <h2>Privacy</h2>
+      <p>How data is handled is described in the <a href="privacy.html">privacy policy</a>.</p>
+
+      <h2>Changes</h2>
+      <p>These terms may be updated. The new version will be posted on this page with a new date.</p>
+
+      <h2>Contact</h2>
+      <p>Questions about these terms: <code>CONTACT_EMAIL</code></p>
+    </main>
+    <footer>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="privacy.html">Privacy policy</a></li>
+        <li><a href="terms.html">Terms of service</a></li>
+        <li><a href="https://github.com/Ranger7899/IAM-Lens-extension">Source code on GitHub</a></li>
+        <li>Contact: <code>CONTACT_EMAIL</code></li>
+      </ul>
+      <p>IAM Lens. Not affiliated with Google. Google Cloud is a trademark of Google LLC.</p>
+    </footer>
+    </div>
+  </body>
+</html>
