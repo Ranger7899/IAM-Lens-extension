@@ -3,6 +3,7 @@ import { execSync } from 'node:child_process';
 import { mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from './fixtures';
+import { enableSidePanelTabs } from './sidePanelTabs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'docs', 'screens', 'IAM-40');
@@ -15,6 +16,7 @@ test.beforeAll(() => {
 
 for (const scheme of ['light', 'dark'] as const) {
   test(`sidepanel header (${scheme})`, async ({ context, extensionId }) => {
+    await enableSidePanelTabs(context);
     const page = await context.newPage();
     await page.setViewportSize({ width: 400, height: 300 });
     await page.emulateMedia({ colorScheme: scheme });

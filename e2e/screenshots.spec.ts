@@ -7,6 +7,7 @@ import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import type { Page } from '@playwright/test';
 import { test } from './fixtures';
+import { enableSidePanelTabs } from './sidePanelTabs';
 
 const OUT = path.resolve(import.meta.dirname, '..', `${process.env.IAM_TEST_OUT ?? 'test-results'}-screens`);
 
@@ -57,6 +58,7 @@ test.beforeAll(() => {
 for (const scheme of ['light', 'dark'] as const) {
   for (const shot of SHOTS) {
     test(`${shot.name} (${scheme})`, async ({ context, extensionId }) => {
+      await enableSidePanelTabs(context); // screenshots show all three tabs
       const page = await context.newPage();
       await page.setViewportSize(shot.size);
       await page.emulateMedia({ colorScheme: scheme });
@@ -82,6 +84,7 @@ const DATA_STATES = [
 for (const scheme of ['light', 'dark'] as const) {
   for (const st of DATA_STATES) {
     test(`${st.name} (${scheme})`, async ({ context, extensionId }) => {
+      await enableSidePanelTabs(context);
       const page = await context.newPage();
       await page.setViewportSize(PANEL);
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });

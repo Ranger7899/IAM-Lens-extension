@@ -8,6 +8,7 @@ import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type { BrowserContext, Page } from '@playwright/test';
 import { test } from './fixtures';
+import { enableSidePanelTabs } from './sidePanelTabs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'docs', 'store-assets');
@@ -129,6 +130,7 @@ async function capture(
   wait: string,
   act?: (p: Page) => Promise<void>,
 ): Promise<Buffer> {
+  await enableSidePanelTabs(context); // store screenshots show all three tabs
   const page = await context.newPage();
   await page.setViewportSize(size);
   await page.emulateMedia({ colorScheme: scheme });

@@ -6,6 +6,7 @@ import type { GcpResource } from '@/core/gcp';
 
 export interface OptionsDeps {
   version: string;
+  /** True while a sign-in record exists (an expired token is renewed silently). */
   isSignedIn(): Promise<boolean>;
   /** True when the stored token was granted before the `iam` scope was requested. */
   needsScopeUpgrade?(): Promise<boolean>;

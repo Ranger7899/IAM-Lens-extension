@@ -13,6 +13,7 @@ import {
   type IamValue,
   type SnapshotLoader,
 } from './IamProvider';
+import { useSourceInfo } from './sourceInfo';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -132,5 +133,36 @@ describe('IamProvider', () => {
     expect(get().index).not.toBe(first);
     expect(get().index!.role('projects/p1/roles/auditor')).toBeUndefined();
     expect(loader).toHaveBeenCalledTimes(1); // the snapshot is not reloaded
+  });
+
+  it('exposes the display names of the synced sources and reloads them on change', async () => {
+    const snapshot = await makeSnapshot([{ name: 'roles/a.viewer', perms: ['a.things.get'] }]);
+    let list = [{ parent: 'projects/p1', kind: 'project' as const, displayName: 'First' }];
+    let fire: () => void = () => {};
+    function Name() {
+      return <p id="name">{useSourceInfo('projects/p1')?.displayName ?? 'none'}</p>;
+    }
+    host = document.createElement('div');
+    document.body.append(host);
+    root = createRoot(host);
+    await act(async () =>
+      root!.render(
+        <IamProvider
+          loader={async () => ({ snapshot, source: 'bundled' as const })}
+          customRolesLoader={async () => []}
+          customSourcesLoader={async () => list}
+          subscribeCustomRoles={(cb) => {
+            fire = cb;
+            return () => {};
+          }}
+        >
+          <Name />
+        </IamProvider>,
+      ),
+    );
+    expect(host.querySelector('#name')!.textContent).toBe('First');
+    list = [{ parent: 'projects/p1', kind: 'project', displayName: 'Renamed' }];
+    await act(async () => fire());
+    expect(host.querySelector('#name')!.textContent).toBe('Renamed');
   });
 });

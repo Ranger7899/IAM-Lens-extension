@@ -115,6 +115,11 @@ export async function isSignedIn(): Promise<boolean> {
   return !!cur && cur.expiresAt > Date.now();
 }
 
+/** True while a sign-in record exists, even if its token has expired (it can be renewed silently). */
+export async function hasSession(): Promise<boolean> {
+  return !!(await readAuth());
+}
+
 /** True when a token exists but was granted before the `iam` scope was requested. */
 export async function needsScopeUpgrade(): Promise<boolean> {
   const cur = await readAuth();

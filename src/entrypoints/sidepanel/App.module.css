@@ -6,6 +6,9 @@
   flex-direction: column;
   background: var(--console-shell);
 }
+.noTabs {
+  --stick: 0px; /* no tab bar to stick below */
+}
 .root > header {
   background: transparent;
   padding: 4px 8px 6px;
@@ -22,6 +25,9 @@
   margin-inline: 8px 0;
 }
 .main {
+  /* Containing block for absolute descendants (sr-only labels): without it they are placed against
+     the viewport at their in-flow offset, overflow the document and add a second scrollbar. */
+  position: relative;
   flex: 1;
   min-height: 0;
   overflow-y: auto;

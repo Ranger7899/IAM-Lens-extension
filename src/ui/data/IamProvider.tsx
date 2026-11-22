@@ -15,6 +15,7 @@ import {
   type ReactNode,
 } from 'react';
 import {
+  getMeta,
   IamIndex,
   listCustomRoles,
   loadSnapshot,
@@ -23,6 +24,7 @@ import {
   type SnapshotSource,
 } from '@/core';
 import { ErrorCard, SkeletonList } from '@/ui/components';
+import { SourcesCtx, type SourceInfo } from './sourceInfo';
 
 export interface SnapshotMeta {
   version: string;
@@ -68,6 +70,13 @@ const subscribeViaStorage: CustomRolesSubscribe = (cb) => {
   }
 };
 
+export type CustomSourcesLoader = () => Promise<SourceInfo[]>;
+
+const loadSourcesFromMeta: CustomSourcesLoader = async () => {
+  const list = (await getMeta()).customSources;
+  return Array.isArray(list) ? (list as SourceInfo[]) : [];
+};
+
 const Ctx = createContext<IamValue | null>(null);
 
 const idle = (cb: () => void): (() => void) => {
@@ -87,6 +96,8 @@ export interface IamProviderProps {
   customRolesLoader?: CustomRolesLoader;
   /** Injected in tests; defaults to `chrome.storage.onChanged` on the custom-roles signal key. */
   subscribeCustomRoles?: CustomRolesSubscribe;
+  /** Injected in tests; defaults to `meta.customSources`. */
+  customSourcesLoader?: CustomSourcesLoader;
 }
 
 export function IamProvider({
@@ -94,7 +105,11 @@ export function IamProvider({
   loader = () => loadSnapshot(),
   customRolesLoader = listCustomRoles,
   subscribeCustomRoles = subscribeViaStorage,
+  customSourcesLoader = loadSourcesFromMeta,
 }: IamProviderProps) {
+  const [sources, setSources] = useState<ReadonlyMap<string, SourceInfo>>(() => new Map());
+  const sourcesRef = useRef(customSourcesLoader);
+  const sourcesAlive = useRef(true);
   const [state, setState] = useState<IamState>({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
   // The loader is read once per attempt; changing the prop later does not reload.
@@ -140,12 +155,30 @@ export function IamProvider({
     };
   }, [attempt]);
 
+  // Display names of the custom-role sources; reloaded with every custom-roles change (see below).
+  const reloadSources = useCallback(() => {
+    void sourcesRef
+      .current()
+      .catch((): SourceInfo[] => [])
+      .then((list) => {
+        if (sourcesAlive.current) setSources(new Map(list.map((x) => [x.parent, x])));
+      });
+  }, []);
+  useEffect(() => {
+    sourcesAlive.current = true;
+    reloadSources();
+    return () => {
+      sourcesAlive.current = false;
+    };
+  }, [reloadSources]);
+
   // Rebuild the index (same snapshot) when the options page changes the stored custom roles.
   useEffect(() => {
     let alive = true;
     let cancelIdle: (() => void) | undefined;
     let seq = 0;
     const unsubscribe = subscribeCustomRoles(() => {
+      reloadSources();
       const base = snapshotRef.current;
       if (!base) return;
       const mine = ++seq;
@@ -173,7 +206,7 @@ export function IamProvider({
       cancelIdle?.();
       unsubscribe();
     };
-  }, [subscribeCustomRoles]);
+  }, [subscribeCustomRoles, reloadSources]);
 
   // Perf/e2e hook: true once the index is built and the routed UI can render.
   useEffect(() => {
@@ -191,7 +224,11 @@ export function IamProvider({
   }, []);
 
   const value = useMemo<IamValue>(() => ({ ...state, retry }), [state, retry]);
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+  return (
+    <Ctx.Provider value={value}>
+      <SourcesCtx.Provider value={sources}>{children}</SourcesCtx.Provider>
+    </Ctx.Provider>
+  );
 }
 
 export function useIam(): IamValue {

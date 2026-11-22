@@ -23,6 +23,8 @@ import { useIam } from '@/ui/data';
 import { ConsoleTable, RoleRow } from '@/ui/screens';
 import type { RoleSummary, Stage } from '@/ui/types';
 import type { Route } from '../router';
+import type { SyncDeps } from '@/ui/data/customSync';
+import { CustomSyncRow } from './search/CustomSyncRow';
 import { highlightTerms, useHighlights } from './search/useHighlights';
 import './search/highlight.css';
 import styles from './search/SearchScreen.module.css';
@@ -36,6 +38,8 @@ export interface SearchScreenProps {
   /** Query from the route hash (`#/search?q=`), used as the initial text. */
   query: string;
   go: (r: Route) => void;
+  /** Injected in tests; defaults to the real Google-backed sync. */
+  syncDeps?: SyncDeps;
 }
 
 /** Keeps the query in the hash without adding history entries, so back-navigation restores it. */
@@ -85,20 +89,22 @@ function JumpCard({
   );
 }
 
-export function SearchScreen({ query, go }: SearchScreenProps) {
+export function SearchScreen({ query, go, syncDeps }: SearchScreenProps) {
   const iam = useIam();
   if (iam.status !== 'ready') return null;
-  return <SearchBody index={iam.index} initial={query} go={go} />;
+  return <SearchBody index={iam.index} initial={query} go={go} syncDeps={syncDeps} />;
 }
 
 function SearchBody({
   index,
   initial,
   go,
+  syncDeps,
 }: {
   index: NonNullable<ReturnType<typeof useIam>['index']>;
   initial: string;
   go: (r: Route) => void;
+  syncDeps?: SyncDeps;
 }) {
   const [text, setQuery] = useState(initial);
   const [tab, setTab] = useState<'roles' | 'permissions' | null>(null);
@@ -310,6 +316,7 @@ function SearchBody({
           spellCheck={false}
         />
       </div>
+      <CustomSyncRow deps={syncDeps} />
       {exactRole && (
         <JumpCard eyebrow="Open role" value={exactRole.name} onClick={() => openRole(exactRole.name)} enter />
       )}

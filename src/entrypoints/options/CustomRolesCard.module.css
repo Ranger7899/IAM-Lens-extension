@@ -69,3 +69,29 @@ p.error {
   margin: 0;
   text-wrap: pretty;
 }
+.summary {
+  margin: 0;
+}
+.sources {
+  font: var(--md-sys-typescale-body-medium);
+}
+.sources summary {
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.sources ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+}
+.sources li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  gap: 12px;
+  padding: 6px 16px;
+  border-top: 1px solid var(--console-divider);
+}
+.sources li > span {
+  overflow-wrap: anywhere;
+}

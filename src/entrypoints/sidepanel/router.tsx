@@ -5,6 +5,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IconButton, LensMark, Tabs, TopAppBar } from '@/ui/components';
 import { IamGate, usePendingRoute } from '@/ui/data';
+import { useSidePanelTabs } from '@/ui/settings/useSidePanelTabs';
+import { realSyncDeps } from '@/ui/data/customSyncDeps';
+import { useCustomSync } from '@/ui/data/useCustomSync';
 import { navigateWithTransition, type NavDirection } from '@/ui/motion/navigate';
 import { CompareScreen } from './screens/CompareScreen';
 import { MinimalScreen } from './screens/MinimalScreen';
@@ -19,7 +22,8 @@ import styles from './App.module.css';
 export { NavigationContext, useNavigate, parseRoute, routeHref };
 export type { Route, TopLevelRoute, NavigationApi, NavigateOptions };
 
-const MODES: { id: Exclude<TopLevelRoute, 'whatsnew'>; label: string }[] = [
+type ModeId = Exclude<TopLevelRoute, 'whatsnew'>;
+const MODES: { id: ModeId; label: string }[] = [
   { id: 'search', label: 'Search' },
   { id: 'minimal', label: 'Minimal' },
   { id: 'compare', label: 'Compare' },
@@ -125,15 +129,30 @@ function Screen({ route, go }: { route: Route; go: NavigationApi['go'] }) {
   }
 }
 
+/** Panel-wide custom-roles auto-sync (on open when older than 1h, then hourly), whatever screen is showing. */
+function AutoSync() {
+  useCustomSync(realSyncDeps, { auto: true });
+  return null;
+}
+
 export function SidePanelRouter() {
   const { route, go, back, href } = useHashRoute();
   const api = useMemo<NavigationApi>(() => ({ go, back, href }), [go, back, href]);
   usePendingRoute(go); // popup hand-off (IAM-15)
+  // Minimal and Compare are opt-in (Settings). Their routes always render (omnibox, old links); only the tab is optional.
+  const [enabled] = useSidePanelTabs();
+  const current = modeOf(route);
+  // A hidden mode reached by deep link shows its tab while active, so the bar never lacks a selection.
+  const modes = MODES.filter(
+    (m) => m.id === 'search' || m.id === current || enabled[m.id as 'minimal' | 'compare'],
+  );
+  const showTabs = modes.length > 1;
   // Back arrow only where there is somewhere to go back to; the root Search route shows the mark.
   const detail = isDetail(route);
   return (
     <NavigationContext.Provider value={api}>
-      <div className={styles.root}>
+      <AutoSync />
+      <div className={`${styles.root} ${showTabs ? '' : styles.noTabs}`}>
         <TopAppBar
           title="IAM Lens"
           leading={
@@ -154,17 +173,19 @@ export function SidePanelRouter() {
           }
         ></TopAppBar>
         <main className={styles.main}>
-          <div className={styles.tabs}>
-            <Tabs
-              label="Mode"
-              tabs={MODES}
-              value={modeOf(route)}
-              onChange={(id) => {
-                if (id === 'search') go({ name: 'search', query: '' });
-                else go({ name: id as 'minimal' | 'compare' });
-              }}
-            />
-          </div>
+          {showTabs && (
+            <div className={styles.tabs}>
+              <Tabs
+                label="Mode"
+                tabs={modes}
+                value={current}
+                onChange={(id) => {
+                  if (id === 'search') go({ name: 'search', query: '' });
+                  else go({ name: id as 'minimal' | 'compare' });
+                }}
+              />
+            </div>
+          )}
           <div className={`${styles.view} route-view`}>
             <IamGate>
               <Screen route={route} go={go} />

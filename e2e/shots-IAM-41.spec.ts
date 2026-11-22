@@ -101,12 +101,8 @@ test('error rows (light)', async ({ context, extensionId }) => {
   await mockGoogle(context);
   const page = await open(context, extensionId, 'light');
   await seed(page, BOTH);
-  await page.getByRole('button', { name: 'Add projects or organizations' }).click();
-  await page.getByRole('button', { name: 'Add Payments (prod)' }).click();
-  await page.getByRole('button', { name: 'Add Analytics staging' }).click();
-  await page.getByRole('button', { name: 'Add Legacy sandbox' }).click();
-  await page.getByText("can't list custom roles on projects/legacy-sandbox").waitFor();
-  await page.getByRole('button', { name: 'Done adding' }).click();
+  await page.getByRole('button', { name: 'Sync now' }).click();
+  await page.getByText(/Last synced/).waitFor();
   await shot(page, 'error-rows', 'light');
 });
 

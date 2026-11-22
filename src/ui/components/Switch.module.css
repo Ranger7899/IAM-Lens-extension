@@ -1,0 +1,69 @@
+/* Console switch: a labelled row with a 36x20 track; on = accent track, off = outlined. */
+.root {
+  composes: layer from './state-layer.module.css';
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: start;
+  color: var(--md-sys-color-on-surface);
+}
+.text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.label {
+  font: var(--md-sys-typescale-title-small);
+}
+.desc {
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-body-medium);
+}
+.track {
+  flex: none;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--console-border);
+  background: transparent;
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+}
+.thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--console-icon);
+  transition:
+    transform 120ms,
+    background-color 120ms;
+}
+.root[aria-checked='true'] .track {
+  background: var(--console-accent);
+  border-color: var(--console-accent);
+}
+.root[aria-checked='true'] .thumb {
+  transform: translateX(16px);
+  background: var(--console-panel);
+}
+.root:focus-visible {
+  outline: 2px solid var(--console-accent);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .thumb {
+    transition: none;
+  }
+}

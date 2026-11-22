@@ -7,6 +7,7 @@ import { AboutCard } from './AboutCard';
 import { AppearanceCard } from './AppearanceCard';
 import { CustomRolesCard } from './CustomRolesCard';
 import { DataCard } from './DataCard';
+import { SidePanelCard } from './SidePanelCard';
 import type { OptionsDeps } from './deps';
 import styles from './App.module.css';
 
@@ -30,6 +31,7 @@ export function App({ deps }: { deps: OptionsDeps }) {
           </IamGate>
           <CustomRolesCard deps={deps} />
           <AppearanceCard />
+          <SidePanelCard />
           <AboutCard version={deps.version} />
         </main>
       </div>

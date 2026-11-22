@@ -116,50 +116,66 @@ describe('options page', () => {
     expect(host!.textContent).toContain('Signed in');
   });
 
-  it('adds a project from the picker and lists its role count', async () => {
-    const deps = makeDeps({}, true);
+  it('syncs every accessible project and organization after sign-in and shows the summary', async () => {
+    const deps = makeDeps({
+      listOrganizations: async () => [{ id: '9', displayName: 'Acme', name: 'organizations/9' }],
+    });
     await mountApp(deps);
-    await click(button('Add projects or organizations'));
-    await click(button(/Add Alpha/));
-    expect(host!.textContent).toContain('projects/alpha');
-    expect(host!.textContent).toContain('1 role');
-    expect(host!.textContent).toContain('fetched just now');
+    await click(button(/Sign in with Google/));
+    await click(dialogOf('Before you sign in').querySelector('button:last-of-type') as HTMLElement);
+    expect(deps.signIn).toHaveBeenCalledTimes(1);
+    expect(host!.textContent).toContain('2 custom roles');
+    expect(host!.textContent).toContain('from 1 project and 1 organization');
+    expect(host!.textContent).toContain('Last synced just now');
+    expect((await deps.getMeta()).customSources).toHaveLength(2);
+    expect(document.querySelector('[aria-label^="Add "]')).toBeNull();
+    expect(button('Add projects or organizations')).toBeUndefined();
   });
 
-  it('shows a friendly 403, an offline message and "Sign in again" inline per source', async () => {
-    const outcomes = [
-      new GcpApiError(403, 'IAM_PERMISSION_DENIED', 'denied'),
-      new TypeError('Failed to fetch'),
-      new AuthRequiredError(),
-    ];
-    const deps = makeDeps({ fetchRoles: vi.fn(async () => Promise.reject(outcomes.shift())) }, true);
+  it('counts a 403 source as "no access" without showing an error', async () => {
+    const deps = makeDeps(
+      {
+        listProjects: async () => [
+          { id: 'alpha', displayName: 'Alpha', name: 'projects/1' },
+          { id: 'beta', displayName: 'Beta', name: 'projects/2' },
+        ],
+        fetchRoles: vi.fn(async (parent: string) => {
+          if (parent === 'projects/beta') throw new GcpApiError(403, 'IAM_PERMISSION_DENIED', 'denied');
+          return [
+            { name: `${parent}/roles/x`, perms: ['a.b.get'], source: { kind: 'custom' as const, parent } },
+          ];
+        }),
+      },
+      true,
+    );
     await mountApp(deps);
-    await click(button('Add projects or organizations'));
-    await click(button(/Add Alpha/));
-    expect(host!.textContent).toContain("can't list custom roles on projects/alpha");
-    await click(button(/Refresh Alpha/));
-    expect(host!.textContent).toContain("You're offline");
-    await click(button(/Refresh Alpha/));
+    await click(button('Sync now'));
+    expect(host!.textContent).toContain('1 custom role');
+    expect(host!.textContent).toContain('1 source had no access');
+    expect(host!.textContent).not.toContain("can't list custom roles");
+    expect(host!.textContent).toContain('Sources with custom roles (1)');
+  });
+
+  it('offers "Sign in again" when the session ended during a sync', async () => {
+    const deps = makeDeps({ listProjects: vi.fn(async () => Promise.reject(new AuthRequiredError())) }, true);
+    await mountApp(deps);
+    await click(button('Sync now'));
     expect(host!.textContent).toContain('Your Google session ended');
     expect(button('Sign in again')).toBeDefined();
   });
 
-  it('shows reason-specific rows: scope insufficient offers Sign in again; others show Google text', async () => {
-    const outcomes = [
-      new GcpApiError(403, 'ACCESS_TOKEN_SCOPE_INSUFFICIENT', 'insufficient'),
-      new GcpApiError(403, 'SERVICE_DISABLED', 'IAM API has not been used'),
-      new GcpApiError(400, 'INVALID_ARGUMENT', 'Role name is malformed.'),
-    ];
-    const deps = makeDeps({ fetchRoles: vi.fn(async () => Promise.reject(outcomes.shift())) }, true);
+  it('shows Google text for other failures of the whole sync', async () => {
+    const deps = makeDeps(
+      {
+        listProjects: vi.fn(async () =>
+          Promise.reject(new GcpApiError(400, 'INVALID_ARGUMENT', 'Bad request.')),
+        ),
+      },
+      true,
+    );
     await mountApp(deps);
-    await click(button('Add projects or organizations'));
-    await click(button(/Add Alpha/));
-    expect(host!.textContent).toContain('IAM Lens needs an updated permission. Sign in again.');
-    expect(button('Sign in again')).toBeDefined();
-    await click(button(/Refresh Alpha/));
-    expect(host!.textContent).toContain('The IAM API is disabled for this request');
-    await click(button(/Refresh Alpha/));
-    expect(host!.textContent).toContain('Role name is malformed.');
+    await click(button('Sync now'));
+    expect(host!.textContent).toContain('Bad request.');
   });
 
   it('asks to sign in again when the stored token lacks the new scope', async () => {

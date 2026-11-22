@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures';
+import { enableSidePanelTabs } from './sidePanelTabs';
 
 test('search -> role detail -> permission detail -> back, with keyboard support', async ({
   context,
@@ -35,6 +36,7 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   context,
   extensionId,
 }) => {
+  await enableSidePanelTabs(context); // Minimal and Compare are opt-in (IAM-43)
   const page = await context.newPage();
   await page.goto(`chrome-extension://${extensionId}/sidepanel.html`);
   const stub = (t: string | RegExp) => page.getByRole('heading', { level: 2, name: t });
@@ -62,4 +64,28 @@ test('side panel router: segments, detail routes, back button and Alt+Left', asy
   await page.evaluate(() => (location.hash = '#/whatsnew'));
   await expect(stub('What’s new moved to Settings')).toBeVisible();
   await expect(page.getByRole('tab')).toHaveCount(3);
+});
+
+test('side panel tabs are opt-in: Search only by default, three once enabled in Settings storage', async ({
+  context,
+  extensionId,
+}) => {
+  const page = await context.newPage();
+  await page.goto(`chrome-extension://${extensionId}/sidepanel.html`);
+  await expect(page.getByRole('searchbox')).toBeVisible();
+  await expect(page.getByRole('tablist')).toHaveCount(0);
+
+  // Deep links still render although the tab is hidden; the active mode's tab shows (a way back to Search).
+  await page.evaluate(() => (location.hash = '#/compare'));
+  await expect(page.getByRole('heading', { level: 2, name: 'Compare two roles' })).toBeVisible();
+  await expect(page.getByRole('tab')).toHaveText(['Search', 'Compare']);
+
+  // Toggling the setting updates the open panel live.
+  await enableSidePanelTabs(context);
+  await expect(page.getByRole('tab')).toHaveText(['Search', 'Minimal', 'Compare']);
+  await enableSidePanelTabs(context, { minimal: false, compare: true });
+  await expect(page.getByRole('tab')).toHaveText(['Search', 'Compare']);
+  await enableSidePanelTabs(context, { minimal: false, compare: false });
+  await page.evaluate(() => (location.hash = '#/search'));
+  await expect(page.getByRole('tablist')).toHaveCount(0);
 });
