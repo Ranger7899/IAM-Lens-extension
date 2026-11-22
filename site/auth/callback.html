@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex">
+    <title>IAM Lens sign-in</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --shell: #f0f5fe;
+        --panel: #ffffff;
+        --divider: #d3dbec;
+        --active: #dbedfc;
+        --ink: #1b2e5d;
+        --ink2: #475569;
+        --err: #ffdad6;
+        --on-err: #410002;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --shell: #282c32;
+          --panel: #353b43;
+          --divider: #4a5568;
+          --active: #2a3f5e;
+          --ink: #f1f4f9;
+          --ink2: #b9c0cc;
+          --err: #93000a;
+          --on-err: #ffdad6;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--shell);
+        color: var(--ink);
+        font-family: 'Google Sans Flex', Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .bar {
+        padding: 14px 1.25rem;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
+      }
+      .page {
+        max-width: 32rem;
+        margin: 1rem auto 2rem;
+        padding: 1.5rem 1.75rem;
+        background: var(--panel);
+        border-radius: 20px;
+        border: 1px solid var(--divider);
+      }
+      h1 {
+        font-size: 22px;
+        font-weight: 400;
+        line-height: 28px;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        margin: 0;
+      }
+      .note {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 16px;
+        background: var(--active);
+      }
+      .note.error {
+        background: var(--err);
+        color: var(--on-err);
+      }
+      .meta {
+        margin-top: 1rem;
+        color: var(--ink2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">IAM Lens</div>
+    <main class="page">
+      <h1 id="title">Finishing sign-in…</h1>
+      <p class="note" id="msg" role="status">Passing your sign-in to the IAM Lens extension.</p>
+      <p class="meta">
+        This page only forwards Google&rsquo;s response to the extension in your browser. The token is in the
+        address fragment, which is never sent to any server, and it is removed from the address bar right away.
+      </p>
+    </main>
+    <script src="callback.js"></script>
+  </body>
+</html>

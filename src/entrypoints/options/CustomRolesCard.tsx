@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChromeOnlyError, type AuthMethod } from '@/core/gcp';
 import { Button, Dialog, Icon, Snackbar } from '@/ui/components';
 import { signalCustomRolesChanged } from '@/ui/data';
 import { useCustomSync } from '@/ui/data/useCustomSync';
@@ -11,7 +12,11 @@ import styles from './CustomRolesCard.module.css';
 export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
   const s = useCustomSync(deps);
   const [needsUpgrade, setNeedsUpgrade] = useState(false);
-  const [trustOpen, setTrustOpen] = useState(false);
+  const [trustMethod, setTrustMethod] = useState<AuthMethod | null>(null);
+  const trustOpen = trustMethod !== null;
+  const setTrustOpen = (open: boolean) => !open && setTrustMethod(null);
+  const [method, setMethod] = useState<AuthMethod | undefined>(undefined);
+  const webAvailable = deps.webSignInAvailable === true;
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -19,23 +24,30 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
   useEffect(() => {
     let live = true;
     void Promise.resolve(deps.needsScopeUpgrade?.() ?? false).then((up) => live && setNeedsUpgrade(up));
+    void Promise.resolve(deps.authMethod?.()).then((m) => live && setMethod(m));
     return () => {
       live = false;
     };
   }, [deps]);
 
   /** Always called directly from a click handler so the permission prompt keeps its user gesture. */
-  const startSignIn = async () => {
+  const startSignIn = async (chosen: AuthMethod = method ?? 'chrome') => {
     setAuthError(null);
-    const pending = deps.signIn();
-    setTrustOpen(false);
+    const pending = deps.signIn({ method: chosen });
+    setTrustMethod(null);
     try {
       await pending;
+      setMethod((await deps.authMethod?.()) ?? chosen);
       s.markSignedIn();
       setNeedsUpgrade((await deps.needsScopeUpgrade?.()) ?? false);
       void s.syncNow();
     } catch (e) {
-      setAuthError(describeError(e).message);
+      const msg = describeError(e).message;
+      setAuthError(
+        e instanceof ChromeOnlyError && webAvailable
+          ? `${msg} Try "Use a different Google account" instead.`
+          : msg,
+      );
     }
   };
 
@@ -46,6 +58,7 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
     signalCustomRolesChanged();
     s.markSignedOut();
     setNeedsUpgrade(false);
+    setMethod(undefined);
   };
 
   const { summary } = s;
@@ -75,12 +88,18 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
             Sign in once with the Google account that can see your Cloud projects. IAM Lens then includes
             every project and organization that account can access, read-only, and fetches custom role
             definitions straight from Google to this browser. They stay on this device. Custom-role sign-in
-            works in Google Chrome only, using the account signed in to your Chrome profile.
+            works in Google Chrome with the account signed in to your Chrome profile
+            {webAvailable ? ', or with any other Google account (also in Edge and Brave)' : ''}.
           </p>
-          <div>
-            <Button variant="filled" icon="login" onClick={() => setTrustOpen(true)}>
-              Sign in with Google
+          <div className={styles.actions}>
+            <Button variant="filled" icon="login" onClick={() => setTrustMethod('chrome')}>
+              Sign in with Google (Chrome account)
             </Button>
+            {webAvailable && (
+              <Button variant="text" onClick={() => setTrustMethod('web')}>
+                Use a different Google account
+              </Button>
+            )}
           </div>
         </>
       )}
@@ -91,7 +110,7 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
           <span>
             Your Google session ended. Cached custom roles still work. Sign in again to refresh them.
           </span>
-          <Button variant="tonal" icon="login" onClick={() => void startSignIn()}>
+          <Button variant="tonal" icon="login" onClick={() => void startSignIn(method)}>
             Sign in again
           </Button>
         </p>
@@ -105,7 +124,7 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
               ? 'IAM Lens needs an updated permission to list custom roles. Sign in again to grant it.'
               : (s.authError?.message ?? 'Your Google session ended. Sign in again to refresh.')}
           </span>
-          <Button variant="tonal" icon="login" onClick={() => void startSignIn()}>
+          <Button variant="tonal" icon="login" onClick={() => void startSignIn(method)}>
             Sign in again
           </Button>
         </p>
@@ -122,6 +141,14 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
         <p className={styles.error} role="alert">
           <Icon name="error" size={18} />
           <span>{s.error.message}</span>
+        </p>
+      )}
+
+      {signedIn && (
+        <p className={styles.summary} data-auth-method={method ?? 'chrome'}>
+          {method === 'web'
+            ? 'Signed in with another Google account (session lasts about an hour).'
+            : 'Signed in with your Chrome account.'}
         </p>
       )}
 
@@ -171,8 +198,9 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
 
       <TrustSheet
         open={trustOpen}
+        method={trustMethod ?? 'chrome'}
         onClose={() => setTrustOpen(false)}
-        onContinue={() => void startSignIn()}
+        onContinue={() => void startSignIn(trustMethod ?? 'chrome')}
       />
 
       <Dialog

@@ -6,7 +6,15 @@ Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaul
 
 - App name: IAM Lens
 - Type: "Chrome Extension" OAuth client (client ID `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb.apps.googleusercontent.com`), Item ID `odnpdglkmklhecdmggaebgakadfciooc` (pinned via manifest key). It has no redirect URIs and no client secret. `chromiumapp.org` is not an authorized domain and is not needed: sign-in uses `chrome.identity.getAuthToken`, and the client ID is in the manifest `oauth2` block.
-- Sign-in works in Google Chrome only, with the Google account signed in to the Chrome profile (no account picker).
+- Two sign-in methods, both optional and with identical scopes and behaviour afterwards:
+  1. "Sign in with Google (Chrome account)": `chrome.identity.getAuthToken` with the Chrome Extension client above. Google Chrome only, with the account signed in to the Chrome profile (no account picker). This is the default.
+  2. "Use a different Google account": Google's account picker (`prompt=select_account`, implicit flow, `response_type=token`) using the Web application client below. Works in any Chromium browser and with any Google account.
+- Web application OAuth client (IAM-79): client ID `609543680898-n8hac6to84t8kf4qimatt2inbesumusr.apps.googleusercontent.com`.
+  - Authorized JavaScript origin: `https://iamlens.vaultline.cloud`
+  - Authorized redirect URI: `https://iamlens.vaultline.cloud/auth/callback.html`
+  - The redirect page is static (`site/auth/callback.html` + `callback.js`, CSP `default-src 'none'; script-src 'self'`). The token arrives in the URL fragment, which is never sent to a server. The page forwards it to the extension via `externally_connectable` messaging (`https://iamlens.vaultline.cloud/auth/*` only) and clears it. The extension accepts only messages from that origin and path, carrying the single-use `state` (valid 10 minutes) it generated at sign-in.
+  - No `chromiumapp.org` redirect, so the only authorized domain stays `vaultline.cloud`.
+  - Access tokens from this method last about an hour; there is no silent renewal, the user signs in again.
 - Homepage: `https://iamlens.vaultline.cloud/`
 - Privacy policy: `https://iamlens.vaultline.cloud/privacy.html`
 - Terms of service: `https://iamlens.vaultline.cloud/terms.html`
@@ -23,7 +31,8 @@ Site: homepage `https://iamlens.vaultline.cloud/`, privacy `https://iamlens.vaul
 | Application home page | `https://iamlens.vaultline.cloud/` |
 | Application privacy policy link | `https://iamlens.vaultline.cloud/privacy.html` |
 | Application terms of service link | `https://iamlens.vaultline.cloud/terms.html` |
-| Authorized domains | `vaultline.cloud` (the domain that hosts the homepage, privacy policy and terms links) |
+| Authorized domains | `vaultline.cloud` only (hosts the homepage, privacy policy, terms and the OAuth callback page; no `chromiumapp.org`) |
+| OAuth clients | Chrome Extension (`609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb`) and Web application (`609543680898-n8hac6to84t8kf4qimatt2inbesumusr`, origin `https://iamlens.vaultline.cloud`, redirect `https://iamlens.vaultline.cloud/auth/callback.html`) |
 | Developer contact information | ysfmasad@gmail.com |
 | Scopes (Data Access) | `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform.read-only` (add both) |
 | Publishing status | Testing until verification passes, then In production |
@@ -58,7 +67,7 @@ All calls are HTTP GET, made from the extension in the user's browser, with pagi
 | IAM v1 `roles.list` (projects) | GET `iam.googleapis.com/v1/projects/<id>/roles?view=FULL&showDeleted=false` | `iam` | Read the custom roles of each project |
 | IAM v1 `roles.list` (organizations) | GET `iam.googleapis.com/v1/organizations/<id>/roles?view=FULL&showDeleted=false` | `iam` | Read the custom roles of each organization |
 
-Sync behaviour: runs when the side panel opens if the last sync is over 1 hour old, then every hour while the panel is open, and on demand (refresh button, "Sync now"). Up to 4 sources are fetched at once. A source the account cannot read (403/404) is skipped and counted as "no access". Roles of sources that are no longer accessible are removed. Chrome caches the `getAuthToken` token itself; the extension keeps only a session marker. Sign-out calls `removeCachedAuthToken`, revokes the token at `oauth2.googleapis.com/revoke` and clears Chrome's cached tokens.
+Sync behaviour: runs when the side panel opens if the last sync is over 1 hour old, then every hour while the panel is open, and on demand (refresh button, "Sync now"). Up to 4 sources are fetched at once. A source the account cannot read (403/404) is skipped and counted as "no access". Roles of sources that are no longer accessible are removed. Chrome caches the `getAuthToken` token itself; the extension keeps only a session marker. Sign-out calls `removeCachedAuthToken` (Chrome method only), revokes the token at `oauth2.googleapis.com/revoke` and clears Chrome's cached tokens. For the web method the token itself is held in `chrome.storage.session` (memory only) and sign-out revokes it the same way.
 
 ## Demo video script (unlisted YouTube, about 3 minutes, English narration or captions)
 

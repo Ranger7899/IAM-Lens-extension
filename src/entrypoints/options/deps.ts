@@ -2,7 +2,7 @@
 import type { Route } from '@/entrypoints/sidepanel/routes';
 import type { WhatsNewLoader } from '@/ui/whatsnew/useWhatsNew';
 import type { CustomRoleInput, MetaRecord, UpdateResult } from '@/core';
-import type { GcpResource } from '@/core/gcp';
+import type { AuthMethod, GcpResource } from '@/core/gcp';
 
 export interface OptionsDeps {
   version: string;
@@ -11,7 +11,11 @@ export interface OptionsDeps {
   /** True when the stored token was granted before the `iam` scope was requested. */
   needsScopeUpgrade?(): Promise<boolean>;
   /** Must be called straight from a click handler (user gesture). */
-  signIn(): Promise<void>;
+  signIn(opts?: { method?: AuthMethod }): Promise<void>;
+  /** True when the "Use a different Google account" method is configured (web client ID present). */
+  webSignInAvailable?: boolean;
+  /** Method of the stored session (also when expired), so "Sign in again" can reuse it. */
+  authMethod?(): Promise<AuthMethod | undefined>;
   /** Revokes the token and clears local custom roles. */
   signOut(): Promise<void>;
   listProjects(): Promise<GcpResource[]>;

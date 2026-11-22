@@ -268,6 +268,18 @@
           and is cleared when you close the browser.
         </li>
         <li>
+          <strong>Second sign-in method (any Google account).</strong> You can instead choose
+          &ldquo;Use a different Google account&rdquo;, which opens Google's account picker. Google then
+          redirects to a small static page on our own domain,
+          <code>https://iamlens.vaultline.cloud/auth/callback.html</code>. The access token is in the URL
+          <em>fragment</em> (after <code>#</code>), which browsers never send to any server, so it never
+          reaches our hosting or anyone else. The page runs a short script that only forwards the token to
+          the IAM Lens extension in your browser, then removes it from the address bar. The page loads
+          nothing from other sites, stores nothing and has no analytics. The extension accepts the message
+          only from that exact page and only for a sign-in you started. Tokens from this method last about
+          an hour and are not renewed silently.
+        </li>
+        <li>
           The custom roles, and the IDs and display names of your projects and organizations, are
           stored locally in your browser in IndexedDB. They are not synced to your Google account
           and not uploaded anywhere.

@@ -5,7 +5,7 @@ import { browser } from 'wxt/browser';
 import { createRoot, type Root } from 'react-dom/client';
 import { makeSnapshot } from '@/core/__tests__/fixtures';
 import type { CustomRoleInput, MetaRecord } from '@/core';
-import { AuthRequiredError, GcpApiError } from '@/core/gcp';
+import { AuthRequiredError, ChromeOnlyError, GcpApiError } from '@/core/gcp';
 import { IamProvider } from '@/ui/data';
 import { App } from './App';
 import type { OptionsDeps } from './deps';
@@ -114,6 +114,40 @@ describe('options page', () => {
     await click(sheet.querySelector('button:last-of-type') as HTMLElement);
     expect(deps.signIn).toHaveBeenCalledTimes(1);
     expect(host!.textContent).toContain('Signed in');
+  });
+
+  it('hides the second sign-in option until the web client is configured', async () => {
+    await mountApp(makeDeps());
+    expect(host!.textContent).toContain('Sign in with Google (Chrome account)');
+    expect(host!.textContent).not.toContain('Use a different Google account');
+  });
+
+  it('offers a second method that goes through the trust sheet and signs in with method web', async () => {
+    const deps = makeDeps({ webSignInAvailable: true, authMethod: async () => 'web' });
+    await mountApp(deps);
+    await click(button(/Use a different Google account/));
+    const sheet = dialogOf('Before you sign in');
+    expect(sheet.hasAttribute('open')).toBe(true);
+    expect(deps.signIn).not.toHaveBeenCalled();
+    await click(sheet.querySelector('button:last-of-type') as HTMLElement);
+    expect(deps.signIn).toHaveBeenCalledWith({ method: 'web' });
+    expect(host!.textContent).toContain(
+      'Signed in with another Google account (session lasts about an hour)',
+    );
+  });
+
+  it('suggests the second option on ChromeOnlyError', async () => {
+    const deps = makeDeps({
+      webSignInAvailable: true,
+      signIn: vi.fn(async () => {
+        throw new ChromeOnlyError();
+      }),
+    });
+    await mountApp(deps);
+    await click(button(/Sign in with Google/));
+    await click(dialogOf('Before you sign in').querySelector('button:last-of-type') as HTMLElement);
+    expect(host!.textContent).toContain('needs Google Chrome');
+    expect(host!.textContent).toContain('Use a different Google account');
   });
 
   it('syncs every accessible project and organization after sign-in and shows the summary', async () => {

@@ -9,6 +9,7 @@ import {
 } from '@/core';
 import {
   fetchCustomRoles,
+  getAuthMethod,
   getToken,
   hasSession,
   needsScopeUpgrade,
@@ -16,6 +17,7 @@ import {
   searchProjects,
   signIn,
   signOut,
+  WEB_OAUTH_CLIENT_ID,
 } from '@/core/gcp';
 import { writePendingRoute } from '@/ui/data/pendingRouteStore';
 import type { OptionsDeps } from './deps';
@@ -32,6 +34,8 @@ export const realDeps: OptionsDeps = {
   isSignedIn: hasSession,
   needsScopeUpgrade,
   signIn,
+  webSignInAvailable: WEB_OAUTH_CLIENT_ID !== '',
+  authMethod: getAuthMethod,
   signOut,
   listProjects: () => searchProjects('', { getToken }),
   listOrganizations: () => searchOrganizations({ getToken }),

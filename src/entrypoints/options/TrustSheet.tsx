@@ -1,5 +1,5 @@
 import { Button, Dialog, Icon, type IconName } from '@/ui/components';
-import { OAUTH_CLIENT_ID } from '@/core/gcp/authConfig';
+import { OAUTH_CLIENT_ID, WEB_OAUTH_CLIENT_ID, WEB_OAUTH_REDIRECT_URI } from '@/core/gcp/authConfig';
 import { IAM_SOURCE_URL, REVOKE_URL, SOURCE_URL } from './constants';
 import styles from './TrustSheet.module.css';
 
@@ -64,15 +64,48 @@ const POINTS: Point[] = [
   },
 ];
 
+/** The web method differs from the default in who is asking and how the token reaches the extension. */
+const WEB_POINTS: Point[] = POINTS.map((p) => {
+  if (p.title === 'Stays in this browser') {
+    return {
+      ...p,
+      body: (
+        <>
+          Google sends the token to a small page on our own domain,{' '}
+          <code className={styles.clientId}>{WEB_OAUTH_REDIRECT_URI}</code>, in the address fragment, which is
+          never sent to a server. That page only forwards it to this extension and clears it. The token and
+          the roles stay on this device. Sessions last about an hour.
+        </>
+      ),
+    };
+  }
+  if (p.title === 'Who is asking') {
+    return {
+      ...p,
+      body: (
+        <>
+          Google shows the app name IAM Lens and lets you pick any Google account. The OAuth client it uses
+          is:
+          <code className={styles.clientId}>{WEB_OAUTH_CLIENT_ID}</code>
+        </>
+      ),
+    };
+  }
+  return p;
+});
+
 export interface TrustSheetProps {
   open: boolean;
+  /** Which sign-in the Continue button runs; changes the "who is asking" and token-path points. Default `chrome`. */
+  method?: 'chrome' | 'web';
   onClose: () => void;
   /** Called straight from the click so the browser keeps the user gesture for the permission prompt. */
   onContinue: () => void;
 }
 
 /** "Before you sign in": the trust summary shown first, so consent is informed. */
-export function TrustSheet({ open, onClose, onContinue }: TrustSheetProps) {
+export function TrustSheet({ open, method = 'chrome', onClose, onContinue }: TrustSheetProps) {
+  const points = method === 'web' ? WEB_POINTS : POINTS;
   return (
     <Dialog
       open={open}
@@ -90,7 +123,7 @@ export function TrustSheet({ open, onClose, onContinue }: TrustSheetProps) {
       }
     >
       <ul className={styles.list}>
-        {POINTS.map((p) => (
+        {points.map((p) => (
           <li key={p.title} className={styles.item}>
             <span className={styles.tile}>
               <Icon name={p.icon} size={20} />

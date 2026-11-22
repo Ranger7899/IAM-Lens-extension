@@ -56,6 +56,8 @@ export default defineConfig({
     oauth2: { client_id: OAUTH_CLIENT_ID, scopes: OAUTH_SCOPES },
     optional_permissions: ['identity'],
     optional_host_permissions: ['https://*.googleapis.com/'],
+    // The own-domain OAuth callback page (IAM-79) hands the token to the extension. Nothing broader than /auth/*.
+    externally_connectable: { matches: ['https://iamlens.vaultline.cloud/auth/*'] },
     omnibox: { keyword: 'iam' },
     action: { default_title: 'IAM Lens' },
   },

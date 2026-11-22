@@ -30,7 +30,7 @@ IAM Lens is a fast two-way lookup for Google Cloud IAM.
 - Optional side-panel tabs (turn them on in Settings, Side panel): a minimal roles finder that returns the smallest set of roles covering a list of permissions, and a compare view that puts two roles side by side.
 - Search from the toolbar popup, the side panel, the address bar (type "iam" then a space) or by right-clicking selected text.
 - Works offline on a bundled snapshot of predefined roles that refreshes automatically.
-- Optional: sign in with Google once and IAM Lens automatically finds every project and organization your account can access, read-only, and includes their custom roles in search. There is nothing to pick or configure. It re-syncs every hour while the side panel is open, with a refresh button on the Search page. Custom roles are stored only in your browser, and signing out revokes access and deletes them.
+- Optional: sign in with Google once and IAM Lens automatically finds every project and organization your account can access, read-only, and includes their custom roles in search. There is nothing to pick or configure. It re-syncs every hour while the side panel is open, with a refresh button on the Search page. Custom roles are stored only in your browser, and signing out revokes access and deletes them. You can sign in with your Chrome account (Chrome only) or choose "Use a different Google account" to pick any Google account, also in Edge and Brave.
 
 Privacy: no analytics, no tracking, no remote code. Full policy: https://iamlens.vaultline.cloud/privacy.html
 
@@ -57,6 +57,7 @@ IAM Lens has one purpose: to let users look up which Google Cloud IAM roles gran
 | `alarms` | Schedules the periodic check for a newer predefined-roles snapshot. |
 | `contextMenus` | Adds a "Look up in IAM Lens" item for selected text such as a permission or role ID. |
 | `identity` (optional) | Requested only when the user chooses to sign in, to obtain an OAuth token (`identity.getAuthToken`, Chrome only) for discovering projects and organizations and listing their custom roles. |
+| `externally_connectable` (`https://iamlens.vaultline.cloud/auth/*`) | Not a permission prompt: it only lets our own sign-in callback page on that path pass the token of the "Use a different Google account" method to the extension. The extension verifies the sender origin and path and a single-use state, and ignores everything else. |
 | Host `https://*.googleapis.com/` (optional) | Requested only at sign-in, to call the IAM API (`iam.googleapis.com`) and Cloud Resource Manager API (`cloudresourcemanager.googleapis.com`) from the browser. |
 | OAuth scopes (at sign-in) | `https://www.googleapis.com/auth/iam` (the only scope besides `cloud-platform` that Google accepts for listing custom roles; shown as "Manage your IAM policies", but IAM Lens only reads role definitions) and `https://www.googleapis.com/auth/cloud-platform.read-only` (project and organization search, to discover all accessible projects and organizations automatically). See `docs/oauth-verification.md`. |
 | Omnibox keyword `iam` | Lets users type `iam <query>` in the address bar to search. (A manifest key, not a permission prompt.) |
