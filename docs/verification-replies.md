@@ -42,7 +42,7 @@ Fixed facts used below:
 
 **When you'll see this:** "Your video must show the OAuth client ID" or "must include all OAuth clients in the project."
 
-> Thank you. The project has two OAuth clients and both appear in the video: the Chrome Extension client (ending `...4i6tksn4`) at 0:55–1:03 (shown in the extension's "Before you sign in" sheet, zoomed at 0:59) and in Google's address bar as `client_id=` at 1:09, and the Web application client (ending `...n8hac6to`) at 2:14–2:24 (sheet, zoomed at 2:20) for "Use a different Google account". If you need a different view, we will re-record and resubmit within a day. Video: [UNLISTED YOUTUBE LINK].
+> Thank you. The project has two OAuth clients and both appear in the video: the Chrome Extension client (ending `...4i6tksn4`) at 0:55–1:03 (shown in the extension's "Before you sign in" sheet, zoomed at 0:59) and in Google's address bar as `client_id=` at 1:09, and the Web application client (ending `...n8hac6to`) at 2:14–2:24 (sheet, zoomed at 2:20) for "Use a different Google account". If you need a different view, we will re-record and resubmit within a day. Video: https://youtu.be/czmlDa5QkYY.
 
 Timestamps are from the final cut `IAM-Lens-demo-verification.mp4` (3:20).
 
@@ -50,7 +50,7 @@ Timestamps are from the final cut `IAM-Lens-demo-verification.mp4` (3:20).
 
 **When you'll see this:** "The video does not show the end-to-end OAuth grant" or "the app name is not visible on the consent screen."
 
-> Thank you. The video shows the full flow for both sign-in methods: clicking Sign in in Settings (0:50), the account chooser "to continue to IAM Lens" (1:05), the unverified-app screen (1:17), Google's consent screen with the app name and both scopes (1:27–1:42, zoomed at 1:36), the extension then using the data: synced custom roles, their source projects and organizations, and a custom role's permissions (1:42–2:04), and Sign out & clear with token revocation (2:04). The Web application client flow (account picker, unverified screen, consent as a second account) is at 2:14–3:04. We will re-record with longer holds on the consent screen if that is clearer. Video: [UNLISTED YOUTUBE LINK].
+> Thank you. The video shows the full flow for both sign-in methods: clicking Sign in in Settings (0:50), the account chooser "to continue to IAM Lens" (1:05), the unverified-app screen (1:17), Google's consent screen with the app name and both scopes (1:27–1:42, zoomed at 1:36), the extension then using the data: synced custom roles, their source projects and organizations, and a custom role's permissions (1:42–2:04), and Sign out & clear with token revocation (2:04). The Web application client flow (account picker, unverified screen, consent as a second account) is at 2:14–3:04. We will re-record with longer holds on the consent screen if that is clearer. Video: https://youtu.be/czmlDa5QkYY.
 
 Timestamps are from the final cut (3:20).
 
