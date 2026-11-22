@@ -20,7 +20,10 @@ export interface GcpFetchOptions {
 
 export class GcpApiError extends Error {
   readonly status: number;
-  /** Google's `error.status` (e.g. `PERMISSION_DENIED`) or a friendly reason set by a client. */
+  /**
+   * Google's machine-readable reason: `error.details[].reason` (e.g. `ACCESS_TOKEN_SCOPE_INSUFFICIENT`,
+   * `IAM_PERMISSION_DENIED`, `SERVICE_DISABLED`, `USER_PROJECT_DENIED`), else `error.status`, else `HTTP_<n>`.
+   */
   readonly reason: string;
   constructor(status: number, reason: string, message: string) {
     super(message);
@@ -36,6 +39,7 @@ const errorBodySchema = z.object({
     message: z.string().optional(),
     status: z.string().optional(),
     errors: z.array(z.object({ reason: z.string().optional() }).passthrough()).optional(),
+    details: z.array(z.object({ reason: z.string().optional() }).passthrough()).optional(),
   }),
 });
 
@@ -55,7 +59,8 @@ async function toApiError(res: Response): Promise<GcpApiError> {
   const parsed = errorBodySchema.safeParse(json);
   if (parsed.success) {
     const e = parsed.data.error;
-    const reason = e.status ?? e.errors?.[0]?.reason ?? `HTTP_${res.status}`;
+    const reason =
+      e.details?.find((d) => d.reason)?.reason ?? e.status ?? e.errors?.[0]?.reason ?? `HTTP_${res.status}`;
     return new GcpApiError(res.status, reason, e.message ?? `Request failed (${res.status})`);
   }
   return new GcpApiError(

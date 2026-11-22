@@ -7,6 +7,8 @@ import type { GcpResource } from '@/core/gcp';
 export interface OptionsDeps {
   version: string;
   isSignedIn(): Promise<boolean>;
+  /** True when the stored token was granted before the `iam` scope was requested. */
+  needsScopeUpgrade?(): Promise<boolean>;
   /** Must be called straight from a click handler (user gesture). */
   signIn(): Promise<void>;
   /** Revokes the token and clears local custom roles. */

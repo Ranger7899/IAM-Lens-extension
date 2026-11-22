@@ -4,6 +4,7 @@ import { clearCustomRoles } from '../snapshot';
 import type { GetTokenOptions } from './http';
 import {
   AUTH_STORAGE_KEY,
+  IAM_SCOPE,
   OAUTH_AUTH_URL,
   OAUTH_CLIENT_ID,
   OAUTH_REVOKE_URL,
@@ -16,13 +17,25 @@ export interface StoredAuth {
   token: string;
   /** Epoch ms. */
   expiresAt: number;
+  /** Space-separated scopes Google granted (from the redirect fragment). */
+  scope?: string;
 }
+
+const hasIamScope = (a: StoredAuth) => (a.scope ?? '').split(/\s+/).includes(IAM_SCOPE);
 
 /** Thrown when no valid token exists and it cannot be refreshed silently; the UI should offer "Sign in again". */
 export class AuthRequiredError extends Error {
   constructor(message = 'Sign-in required') {
     super(message);
     this.name = 'AuthRequiredError';
+  }
+}
+
+/** The stored token predates the `iam` scope. Only an interactive sign-in can add it. */
+export class ScopeUpgradeRequiredError extends AuthRequiredError {
+  constructor(message = 'Sign in again to grant the new permission') {
+    super(message);
+    this.name = 'ScopeUpgradeRequiredError';
   }
 }
 
@@ -68,7 +81,12 @@ async function runFlow(interactive: boolean): Promise<StoredAuth> {
   const token = frag.get('access_token');
   const ttl = Number(frag.get('expires_in'));
   if (!token || !Number.isFinite(ttl)) throw new AuthRequiredError('Authorization response had no token');
-  const auth = { token, expiresAt: Date.now() + ttl * 1000 };
+  // Per RFC 6749 an omitted `scope` means it equals the requested scope.
+  const auth: StoredAuth = {
+    token,
+    expiresAt: Date.now() + ttl * 1000,
+    scope: frag.get('scope') ?? OAUTH_SCOPE,
+  };
   await browser.storage.session.set({ [AUTH_STORAGE_KEY]: auth });
   return auth;
 }
@@ -87,6 +105,7 @@ export async function signIn(): Promise<void> {
 export async function getToken(opts: GetTokenOptions = {}): Promise<string> {
   const cur = await readAuth();
   if (!cur) throw new AuthRequiredError();
+  if (!hasIamScope(cur)) throw new ScopeUpgradeRequiredError();
   if (!opts.forceRefresh && cur.expiresAt - Date.now() > TOKEN_MIN_TTL_MS) return cur.token;
   return (await runFlow(false)).token;
 }
@@ -94,6 +113,12 @@ export async function getToken(opts: GetTokenOptions = {}): Promise<string> {
 export async function isSignedIn(): Promise<boolean> {
   const cur = await readAuth();
   return !!cur && cur.expiresAt > Date.now();
+}
+
+/** True when a token exists but was granted before the `iam` scope was requested. */
+export async function needsScopeUpgrade(): Promise<boolean> {
+  const cur = await readAuth();
+  return !!cur && !hasIamScope(cur);
 }
 
 export async function signOut(): Promise<void> {

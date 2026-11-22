@@ -128,7 +128,7 @@ describe('options page', () => {
 
   it('shows a friendly 403, an offline message and "Sign in again" inline per source', async () => {
     const outcomes = [
-      new GcpApiError(403, 'missing iam.roles.list on projects/alpha', 'denied'),
+      new GcpApiError(403, 'IAM_PERMISSION_DENIED', 'denied'),
       new TypeError('Failed to fetch'),
       new AuthRequiredError(),
     ];
@@ -142,6 +142,40 @@ describe('options page', () => {
     await click(button(/Refresh Alpha/));
     expect(host!.textContent).toContain('Your Google session ended');
     expect(button('Sign in again')).toBeDefined();
+  });
+
+  it('shows reason-specific rows: scope insufficient offers Sign in again; others show Google text', async () => {
+    const outcomes = [
+      new GcpApiError(403, 'ACCESS_TOKEN_SCOPE_INSUFFICIENT', 'insufficient'),
+      new GcpApiError(403, 'SERVICE_DISABLED', 'IAM API has not been used'),
+      new GcpApiError(400, 'INVALID_ARGUMENT', 'Role name is malformed.'),
+    ];
+    const deps = makeDeps({ fetchRoles: vi.fn(async () => Promise.reject(outcomes.shift())) }, true);
+    await mountApp(deps);
+    await click(button('Add projects or organizations'));
+    await click(button(/Add Alpha/));
+    expect(host!.textContent).toContain('IAM Lens needs an updated permission. Sign in again.');
+    expect(button('Sign in again')).toBeDefined();
+    await click(button(/Refresh Alpha/));
+    expect(host!.textContent).toContain('The IAM API is disabled for this request');
+    await click(button(/Refresh Alpha/));
+    expect(host!.textContent).toContain('Role name is malformed.');
+  });
+
+  it('asks to sign in again when the stored token lacks the new scope', async () => {
+    const deps = makeDeps({ needsScopeUpgrade: vi.fn(async () => true) }, true);
+    await mountApp(deps);
+    expect(host!.textContent).toContain('Sign in again to grant it');
+  });
+
+  it('explains the Google consent wording in the trust sheet', async () => {
+    await mountApp(makeDeps());
+    await click(button(/Sign in with Google/));
+    const sheet = dialogOf('Before you sign in');
+    expect(sheet.textContent).toContain('Manage your IAM policies');
+    expect(
+      [...sheet.querySelectorAll('a')].some((a) => a.getAttribute('href')?.endsWith('/src/core/gcp/iam.ts')),
+    ).toBe(true);
   });
 
   it('confirms sign out in a dialog before clearing', async () => {

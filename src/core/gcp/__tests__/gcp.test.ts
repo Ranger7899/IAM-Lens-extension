@@ -153,13 +153,72 @@ describe('listCustomRoles', () => {
     expect(new URL(f.mock.calls[1][0]).searchParams.get('pageToken')).toBe('tk');
   });
 
-  it('maps 403 to a friendly reason', async () => {
-    const f = vi.fn(async () =>
-      json({ error: { code: 403, status: 'PERMISSION_DENIED', message: 'denied' } }, 403),
+  const errBody = (status: string, reason: string | undefined, message: string, code = 403) =>
+    json(
+      {
+        error: {
+          code,
+          status,
+          message,
+          details: reason
+            ? [{ '@type': 'type.googleapis.com/google.rpc.ErrorInfo', reason, domain: 'googleapis.com' }]
+            : [],
+        },
+      },
+      code,
     );
-    await expect(listCustomRoles('organizations/9', { getToken, fetch: f as never })).rejects.toMatchObject({
-      status: 403,
-      reason: 'missing iam.roles.list on organizations/9',
+  const fail = async (res: Response) => {
+    try {
+      await listCustomRoles('organizations/9', { getToken, fetch: vi.fn(async () => res) as never });
+    } catch (e) {
+      return e as GcpApiError;
+    }
+    throw new Error('expected failure');
+  };
+
+  it('exposes Google ErrorInfo reason and maps scope insufficient', async () => {
+    const e = await fail(
+      errBody(
+        'PERMISSION_DENIED',
+        'ACCESS_TOKEN_SCOPE_INSUFFICIENT',
+        'Request had insufficient authentication scopes.',
+      ),
+    );
+    expect(e).toBeInstanceOf(GcpApiError);
+    expect(e).toMatchObject({ status: 403, reason: 'ACCESS_TOKEN_SCOPE_INSUFFICIENT' });
+    expect(e.message).toBe('IAM Lens needs an updated permission. Sign in again.');
+  });
+
+  it('maps permission denied to the iam.roles.list text', async () => {
+    const e = await fail(errBody('PERMISSION_DENIED', 'IAM_PERMISSION_DENIED', 'denied'));
+    expect(e.reason).toBe('IAM_PERMISSION_DENIED');
+    expect(e.message).toContain("can't list custom roles on organizations/9");
+    expect(e.message).toContain('iam.roles.list');
+  });
+
+  it('maps service disabled', async () => {
+    const e = await fail(
+      errBody('PERMISSION_DENIED', 'SERVICE_DISABLED', 'IAM API has not been used in project 1'),
+    );
+    expect(e.reason).toBe('SERVICE_DISABLED');
+    expect(e.message).toContain('The IAM API is disabled for this request');
+  });
+
+  it('passes Google message (trimmed) for anything else', async () => {
+    const long = `Quota project issue. ${'x'.repeat(400)}`;
+    const e = await fail(errBody('PERMISSION_DENIED', 'USER_PROJECT_DENIED', long));
+    expect(e.reason).toBe('USER_PROJECT_DENIED');
+    expect(e.message.length).toBeLessThanOrEqual(200);
+    expect(e.message.startsWith('Quota project issue.')).toBe(true);
+    const e2 = await fail(errBody('INVALID_ARGUMENT', undefined, '  bad   arg ', 400));
+    expect(e2.message).toBe('bad arg');
+  });
+
+  it('crm surfaces the same reasons', async () => {
+    const f = vi.fn(async () => errBody('PERMISSION_DENIED', 'ACCESS_TOKEN_SCOPE_INSUFFICIENT', 'scopes'));
+    await expect(searchProjects('', { getToken, fetch: f as never })).rejects.toMatchObject({
+      reason: 'ACCESS_TOKEN_SCOPE_INSUFFICIENT',
+      message: 'IAM Lens needs an updated permission. Sign in again.',
     });
   });
 });

@@ -86,7 +86,11 @@ async function shot(page: Page, name: string, scheme: string, fullPage = true) {
 async function seedSignedIn(page: Page) {
   await page.evaluate(async () => {
     await chrome.storage.session.set({
-      gcpAuth: { token: 'fixture-token', expiresAt: Date.now() + 3_600_000 },
+      gcpAuth: {
+        token: 'fixture-token',
+        expiresAt: Date.now() + 3_600_000,
+        scope: 'https://www.googleapis.com/auth/iam https://www.googleapis.com/auth/cloud-platform.read-only',
+      },
     });
     const db = await new Promise<IDBDatabase>((res, rej) => {
       const r = indexedDB.open('iam-lens');

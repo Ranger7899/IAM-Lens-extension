@@ -2,8 +2,16 @@
 import 'fake-indexeddb/auto';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AuthRequiredError, getToken, isSignedIn, signIn, signOut } from './auth';
-import { AUTH_STORAGE_KEY, OAUTH_CLIENT_ID, OAUTH_SCOPE } from './authConfig';
+import {
+  AuthRequiredError,
+  ScopeUpgradeRequiredError,
+  getToken,
+  needsScopeUpgrade,
+  isSignedIn,
+  signIn,
+  signOut,
+} from './auth';
+import { AUTH_STORAGE_KEY, IAM_SCOPE, OAUTH_CLIENT_ID, OAUTH_SCOPE } from './authConfig';
 
 const REDIRECT = 'https://nkkmmkcohkjacpgiaiiadjmhcbmhgaen.chromiumapp.org/';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,6 +50,9 @@ describe('gcp auth', () => {
     expect(p.get('client_id')).toBe(OAUTH_CLIENT_ID);
     expect(p.get('response_type')).toBe('token');
     expect(p.get('scope')).toBe(OAUTH_SCOPE);
+    expect(OAUTH_SCOPE).toBe(
+      'https://www.googleapis.com/auth/iam https://www.googleapis.com/auth/cloud-platform.read-only',
+    );
     expect(p.get('prompt')).toBe('select_account');
     expect(p.get('redirect_uri')).toBe(REDIRECT);
     expect(await isSignedIn()).toBe(true);
@@ -65,7 +76,7 @@ describe('gcp auth', () => {
     expect(last.interactive).toBe(false);
     expect(new URL(last.url).searchParams.get('prompt')).toBe('none');
     await fakeBrowser.storage.session.set({
-      [AUTH_STORAGE_KEY]: { token: 'old', expiresAt: Date.now() + 30_000 },
+      [AUTH_STORAGE_KEY]: { token: 'old', expiresAt: Date.now() + 30_000, scope: OAUTH_SCOPE },
     });
     launch.mockImplementation(({ url }: { url: string }) => reply('tok3')(url));
     expect(await getToken()).toBe('tok3');
@@ -85,5 +96,38 @@ describe('gcp auth', () => {
     expect(url).toBe('https://oauth2.googleapis.com/revoke?token=tok1');
     expect(init.method).toBe('POST');
     expect(await isSignedIn()).toBe(false);
+  });
+
+  it('stores the granted scope and flags tokens that lack the iam scope', async () => {
+    launch.mockImplementation(({ url }: { url: string }) => {
+      const state = new URL(url).searchParams.get('state');
+      return Promise.resolve(
+        `${REDIRECT}#access_token=t&expires_in=3600&state=${state}&scope=${encodeURIComponent(OAUTH_SCOPE)}`,
+      );
+    });
+    await signIn();
+    const stored = (await fakeBrowser.storage.session.get(AUTH_STORAGE_KEY))[AUTH_STORAGE_KEY] as {
+      scope: string;
+    };
+    expect(stored.scope).toBe(OAUTH_SCOPE);
+    expect(await needsScopeUpgrade()).toBe(false);
+
+    await fakeBrowser.storage.session.set({
+      [AUTH_STORAGE_KEY]: {
+        token: 'old',
+        expiresAt: Date.now() + 3_600_000,
+        scope: 'https://www.googleapis.com/auth/cloud-platform.read-only',
+      },
+    });
+    expect(await needsScopeUpgrade()).toBe(true);
+    await expect(getToken()).rejects.toBeInstanceOf(ScopeUpgradeRequiredError);
+    // Legacy token with no stored scope also needs the upgrade, and no silent refresh is attempted.
+    await fakeBrowser.storage.session.set({
+      [AUTH_STORAGE_KEY]: { token: 'o', expiresAt: Date.now() + 3_600_000 },
+    });
+    launch.mockClear();
+    await expect(getToken({ forceRefresh: true })).rejects.toBeInstanceOf(ScopeUpgradeRequiredError);
+    expect(launch).not.toHaveBeenCalled();
+    expect(IAM_SCOPE).toContain('/auth/iam');
   });
 });

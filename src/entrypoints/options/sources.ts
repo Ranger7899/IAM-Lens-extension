@@ -20,6 +20,7 @@ export function parentOf(kind: SourceRecord['kind'], r: GcpResource): string {
 
 export function useCustomSources(deps: OptionsDeps) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [needsUpgrade, setNeedsUpgrade] = useState(false);
   const [sources, setSources] = useState<SourceRecord[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [busy, setBusy] = useState<ReadonlySet<string>>(new Set());
@@ -36,13 +37,19 @@ export function useCustomSources(deps: OptionsDeps) {
 
   useEffect(() => {
     let live = true;
-    void Promise.all([deps.isSignedIn(), deps.getMeta(), deps.storedRoles()]).then(([si, meta, roles]) => {
+    void Promise.all([
+      deps.isSignedIn(),
+      deps.getMeta(),
+      deps.storedRoles(),
+      deps.needsScopeUpgrade?.() ?? false,
+    ]).then(([si, meta, roles, up]) => {
       if (!live) return;
       const list = Array.isArray(meta.customSources) ? (meta.customSources as SourceRecord[]) : [];
       const c: Record<string, number> = {};
       for (const r of roles) c[r.source.parent] = (c[r.source.parent] ?? 0) + 1;
       ref.current = list;
       setSignedIn(si);
+      setNeedsUpgrade(up);
       setSources(list);
       setCounts(c);
     });
@@ -70,9 +77,12 @@ export function useCustomSources(deps: OptionsDeps) {
         await deps.saveRoles(roles);
         signalCustomRolesChanged();
         setCounts((c) => ({ ...c, [rec.parent]: roles.length }));
+        setNeedsUpgrade(false);
         next = { ...rec, fetchedAt: new Date().toISOString(), error: undefined };
       } catch (e) {
-        next = { ...rec, error: describeError(e, rec.parent) };
+        const err = describeError(e, rec.parent);
+        if (err.kind === 'scope') setNeedsUpgrade(true);
+        next = { ...rec, error: err };
       }
       const cur = ref.current;
       await commit(
@@ -125,5 +135,18 @@ export function useCustomSources(deps: OptionsDeps) {
     setSignedIn(false);
   }, [deps, commit]);
 
-  return { signedIn, setSignedIn, sources, counts, busy, add, refresh, refreshAll, remove, signOutAndClear };
+  return {
+    signedIn,
+    setSignedIn,
+    needsUpgrade,
+    setNeedsUpgrade,
+    sources,
+    counts,
+    busy,
+    add,
+    refresh,
+    refreshAll,
+    remove,
+    signOutAndClear,
+  };
 }

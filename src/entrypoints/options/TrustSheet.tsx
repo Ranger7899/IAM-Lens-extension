@@ -1,5 +1,5 @@
 import { Button, Dialog, Icon, type IconName } from '@/ui/components';
-import { REVOKE_URL, SOURCE_URL } from './constants';
+import { IAM_SOURCE_URL, REVOKE_URL, SOURCE_URL } from './constants';
 import styles from './TrustSheet.module.css';
 
 interface Point {
@@ -19,6 +19,16 @@ const POINTS: Point[] = [
     icon: 'visibility',
     title: 'Read-only',
     body: 'IAM Lens reads role definitions only. It never sees IAM policies, resources or your data, and it cannot change anything.',
+  },
+  {
+    icon: 'badge',
+    title: 'Google will say "Manage your IAM policies"',
+    body: (
+      <>
+        Google has no read-only option for listing roles, so its screen uses that wording. IAM Lens only reads
+        role definitions (list and get) and never changes anything. {link(IAM_SOURCE_URL, 'See the exact API calls')}.
+      </>
+    ),
   },
   {
     icon: 'key',

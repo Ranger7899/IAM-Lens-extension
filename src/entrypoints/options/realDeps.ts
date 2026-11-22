@@ -11,6 +11,7 @@ import {
   fetchCustomRoles,
   getToken,
   isSignedIn,
+  needsScopeUpgrade,
   searchOrganizations,
   searchProjects,
   signIn,
@@ -29,6 +30,7 @@ void browser.windows
 export const realDeps: OptionsDeps = {
   version: browser.runtime.getManifest().version,
   isSignedIn,
+  needsScopeUpgrade,
   signIn,
   signOut,
   listProjects: () => searchProjects('', { getToken }),

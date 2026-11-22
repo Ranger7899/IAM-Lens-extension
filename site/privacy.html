@@ -197,6 +197,14 @@
           custom roles.
         </li>
         <li>
+          IAM Lens requests two Google OAuth scopes:
+          <code>https://www.googleapis.com/auth/iam</code> and
+          <code>https://www.googleapis.com/auth/cloud-platform.read-only</code>. Google words the
+          first as &ldquo;Manage your IAM policies&rdquo; because it offers no read-only scope for
+          listing custom roles. IAM Lens only reads role definitions (list and get) and the names of
+          your projects and organisations, and never changes anything.
+        </li>
+        <li>
           The token and the data returned are never sent to the developer or to any third party.
         </li>
         <li>

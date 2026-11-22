@@ -1,7 +1,13 @@
-import { AuthRequiredError, GcpApiError } from '@/core/gcp';
+import {
+  AuthRequiredError,
+  classifyGcpError,
+  friendlyGcpMessage,
+  GcpApiError,
+  ScopeUpgradeRequiredError,
+} from '@/core/gcp';
 import type { UpdateResult } from '@/core';
 
-export type SourceErrorKind = 'forbidden' | 'offline' | 'auth' | 'other';
+export type SourceErrorKind = 'forbidden' | 'offline' | 'auth' | 'scope' | 'other';
 export interface SourceError {
   kind: SourceErrorKind;
   message: string;
@@ -9,34 +15,22 @@ export interface SourceError {
 
 /** Turns a thrown fetch error into a short, friendly, actionable reason. `parent` is the source being fetched. */
 export function describeError(e: unknown, parent?: string): SourceError {
+  if (e instanceof ScopeUpgradeRequiredError) {
+    return { kind: 'scope', message: 'Sign in again to grant the new permission.' };
+  }
   if (e instanceof AuthRequiredError) {
     return { kind: 'auth', message: 'Your Google session ended. Sign in again to refresh.' };
   }
   if (e instanceof GcpApiError) {
-    if (e.status === 403) {
-      if (e.reason === 'SERVICE_DISABLED' || /has not been used|is disabled/i.test(e.message)) {
-        return {
-          kind: 'forbidden',
-          message:
-            'A required Google API is turned off for this project. Enable the IAM and Resource Manager APIs.',
-        };
-      }
-      if (e.reason.startsWith('missing iam.roles.list') && parent) {
-        return {
-          kind: 'forbidden',
-          message: `Your account can't list custom roles on ${parent}. It needs iam.roles.list (for example the Role Viewer role).`,
-        };
-      }
-      return {
-        kind: 'forbidden',
-        message:
-          'Access denied. Your account needs resourcemanager.projects.get to list projects, or iam.roles.list to read their roles.',
-      };
+    const kind = classifyGcpError(e);
+    if (kind === 'scope') return { kind: 'scope', message: friendlyGcpMessage(e, parent) };
+    if (kind === 'service-disabled' || kind === 'permission') {
+      return { kind: 'forbidden', message: friendlyGcpMessage(e, parent) };
     }
     if (e.status === 404) return { kind: 'other', message: 'Not found. It may have been deleted.' };
     if (e.status === 429)
       return { kind: 'other', message: 'Google is rate limiting requests. Try again in a minute.' };
-    return { kind: 'other', message: `Google returned an error (${e.status}). ${e.message}`.trim() };
+    return { kind: 'other', message: friendlyGcpMessage(e, parent) };
   }
   if (e instanceof TypeError) {
     return {

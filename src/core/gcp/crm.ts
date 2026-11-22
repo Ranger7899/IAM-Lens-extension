@@ -1,5 +1,6 @@
 /** Cloud Resource Manager v3: find the projects and organizations a user can attach custom roles to. */
 import { z } from 'zod';
+import { withFriendlyMessage } from './errors';
 import { gcpPaginate, type GcpFetchOptions } from './http';
 
 const CRM = 'https://cloudresourcemanager.googleapis.com/v3';
@@ -44,38 +45,47 @@ function withPage(base: string, params: Record<string, string>, pageToken: strin
   return `${base}?${q.toString()}`;
 }
 
+const friendly = <T>(p: Promise<T>): Promise<T> =>
+  p.catch((e: unknown) => {
+    throw withFriendlyMessage(e);
+  });
+
 /** Projects matching `query` (Google's search syntax, e.g. `id:my-proj*`). Empty query lists all visible. */
 export function searchProjects(query: string, opts: GcpFetchOptions): Promise<GcpResource[]> {
-  return gcpPaginate(
-    (t) => withPage(`${CRM}/projects:search`, query ? { query } : {}, t),
-    opts,
-    (json) => {
-      const r = projectsSearchResponseSchema.parse(json);
-      return {
-        items: r.projects.map((p) => ({
-          id: p.projectId,
-          displayName: p.displayName ?? p.projectId,
-          name: p.name,
-        })),
-        nextPageToken: r.nextPageToken,
-      };
-    },
+  return friendly(
+    gcpPaginate(
+      (t) => withPage(`${CRM}/projects:search`, query ? { query } : {}, t),
+      opts,
+      (json) => {
+        const r = projectsSearchResponseSchema.parse(json);
+        return {
+          items: r.projects.map((p) => ({
+            id: p.projectId,
+            displayName: p.displayName ?? p.projectId,
+            name: p.name,
+          })),
+          nextPageToken: r.nextPageToken,
+        };
+      },
+    ),
   );
 }
 
 export function searchOrganizations(opts: GcpFetchOptions): Promise<GcpResource[]> {
-  return gcpPaginate(
-    (t) => withPage(`${CRM}/organizations:search`, {}, t),
-    opts,
-    (json) => {
-      const r = organizationsSearchResponseSchema.parse(json);
-      return {
-        items: r.organizations.map((o) => {
-          const id = o.name.replace(/^organizations\//, '');
-          return { id, displayName: o.displayName ?? id, name: o.name };
-        }),
-        nextPageToken: r.nextPageToken,
-      };
-    },
+  return friendly(
+    gcpPaginate(
+      (t) => withPage(`${CRM}/organizations:search`, {}, t),
+      opts,
+      (json) => {
+        const r = organizationsSearchResponseSchema.parse(json);
+        return {
+          items: r.organizations.map((o) => {
+            const id = o.name.replace(/^organizations\//, '');
+            return { id, displayName: o.displayName ?? id, name: o.name };
+          }),
+          nextPageToken: r.nextPageToken,
+        };
+      },
+    ),
   );
 }

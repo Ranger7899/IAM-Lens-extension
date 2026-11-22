@@ -54,7 +54,7 @@ function SourceRow({
           <span className={styles.error} role="alert">
             <Icon name="error" size={18} />
             <span>{rec.error.message}</span>
-            {rec.error.kind === 'auth' && (
+            {(rec.error.kind === 'auth' || rec.error.kind === 'scope') && (
               <Button variant="text" onClick={onSignInAgain}>
                 Sign in again
               </Button>
@@ -94,6 +94,7 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
     try {
       await pending;
       s.setSignedIn(true);
+      s.setNeedsUpgrade((await deps.needsScopeUpgrade?.()) ?? false);
       void s.refreshAll();
     } catch (e) {
       setAuthError(describeError(e).message);
@@ -142,6 +143,16 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
             Your Google session ended. Cached custom roles still work. Sign in again to refresh them.
           </span>
           <Button variant="tonal" icon="login" onClick={startSignIn}>
+            Sign in again
+          </Button>
+        </p>
+      )}
+
+      {signedIn && s.needsUpgrade && (
+        <p className={styles.banner} role="status">
+          <Icon name="info" size={18} />
+          <span>IAM Lens needs an updated permission to list custom roles. Sign in again to grant it.</span>
+          <Button variant="tonal" icon="login" onClick={() => void startSignIn()}>
             Sign in again
           </Button>
         </p>

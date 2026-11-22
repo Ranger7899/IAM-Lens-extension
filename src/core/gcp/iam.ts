@@ -1,7 +1,8 @@
 /** IAM v1: fetch the custom roles defined on a project or organization. */
 import { z } from 'zod';
 import type { CustomRoleInput } from '../model';
-import { GcpApiError, gcpPaginate, type GcpFetchOptions } from './http';
+import { withFriendlyMessage } from './errors';
+import { gcpPaginate, type GcpFetchOptions } from './http';
 
 const IAM = 'https://iam.googleapis.com/v1';
 
@@ -47,9 +48,6 @@ export async function listCustomRoles(parent: string, opts: GcpFetchOptions): Pr
       },
     );
   } catch (e) {
-    if (e instanceof GcpApiError && e.status === 403) {
-      throw new GcpApiError(403, `missing iam.roles.list on ${parent}`, e.message);
-    }
-    throw e;
+    throw withFriendlyMessage(e, parent);
   }
 }
