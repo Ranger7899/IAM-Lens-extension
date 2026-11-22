@@ -1,6 +1,6 @@
 # Chrome Web Store listing: IAM Lens
 
-Ready to paste. Placeholders: `<CONTACT_EMAIL>`, `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>` (the hosted site URLs; github.io or a custom domain, `<AUTHORIZED_DOMAIN>`).
+Ready to paste. Placeholders: `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>` (the hosted site URLs; github.io or a custom domain, `<AUTHORIZED_DOMAIN>`).
 
 ## Name options (none starts with a Google trademark)
 
@@ -89,4 +89,4 @@ No account is needed for the core features:
 
 Optional tabs: open Settings (options page), then "Side panel", and switch on "Minimal roles finder" and "Compare roles". The two tabs then appear next to Search in the side panel. Minimal: paste `storage.objects.get compute.instances.list` and expect a small set of roles covering both. Compare: pick two roles and check that differing permissions are shown. (They are off by default.)
 
-Optional sign-in (needs a Google Cloud account with at least one project containing a custom role): open Settings, "Custom roles", choose "Sign in", continue, approve the consent screen. Every accessible project and organization is found automatically. Back on Search, a status row shows "Custom roles · N from X projects and Y organizations · synced just now", and the refresh icon on it syncs again (it also re-syncs hourly while the panel is open). Search for the custom role: it appears with a "Custom · <project> (project)" badge. Choose "Sign out & clear" in Settings: the custom roles and the status row disappear and the local data is deleted. A test account with a sample custom role can be supplied on request: <CONTACT_EMAIL>.
+Optional sign-in (needs a Google Cloud account with at least one project containing a custom role): open Settings, "Custom roles", choose "Sign in", continue, approve the consent screen. Every accessible project and organization is found automatically. Back on Search, a status row shows "Custom roles · N from X projects and Y organizations · synced just now", and the refresh icon on it syncs again (it also re-syncs hourly while the panel is open). Search for the custom role: it appears with a "Custom · <project> (project)" badge. Choose "Sign out & clear" in Settings: the custom roles and the status row disappear and the local data is deleted. A test account with a sample custom role can be supplied on request: ysfmasad@gmail.com.

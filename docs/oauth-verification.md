@@ -1,6 +1,6 @@
 # OAuth verification: IAM Lens
 
-Placeholders: `<CONTACT_EMAIL>`, `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>`, `<AUTHORIZED_DOMAIN>`, `<EXTENSION_ID>`. The URLs and domain depend on where the site is hosted (github.io or a custom domain) and are filled in by the owner. The publishing status shown in Google Auth Platform is "Testing" until the app is published to "In production".
+Placeholders: `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TERMS_URL>`, `<AUTHORIZED_DOMAIN>`, `<EXTENSION_ID>`. The URLs and domain depend on where the site is hosted (github.io or a custom domain) and are filled in by the owner. The publishing status shown in Google Auth Platform is "Testing" until the app is published to "In production".
 
 ## App information
 
@@ -9,7 +9,7 @@ Placeholders: `<CONTACT_EMAIL>`, `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY
 - Homepage: `<HOMEPAGE_URL>`
 - Privacy policy: `<PRIVACY_POLICY_URL>`
 - Terms of service: `<TERMS_URL>`
-- Support contact: `<CONTACT_EMAIL>`
+- Support contact: ysfmasad@gmail.com
 - Sign-in is optional. The core app works without any Google account.
 
 ## Consent-screen fields (Google Auth Platform, Branding and Data Access)
@@ -17,13 +17,13 @@ Placeholders: `<CONTACT_EMAIL>`, `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY
 | Field | Value |
 | --- | --- |
 | App name | IAM Lens |
-| User support email | `<CONTACT_EMAIL>` |
+| User support email | ysfmasad@gmail.com |
 | App logo | `scripts/brand/consent-logo-120.png` (120x120 PNG, under 1 MB; regenerate with `npm run gen:consent-logo`) |
 | Application home page | `<HOMEPAGE_URL>` |
 | Application privacy policy link | `<PRIVACY_POLICY_URL>` |
 | Application terms of service link | `<TERMS_URL>` |
 | Authorized domains | `<AUTHORIZED_DOMAIN>` (the domain that hosts the homepage, privacy policy and terms links) |
-| Developer contact information | `<CONTACT_EMAIL>` |
+| Developer contact information | ysfmasad@gmail.com |
 | Scopes (Data Access) | `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform.read-only` (add both) |
 | Publishing status | Testing until verification passes, then In production |
 
