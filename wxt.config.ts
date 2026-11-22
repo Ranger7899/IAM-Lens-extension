@@ -39,7 +39,7 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   vite: () => ({ plugins: [snapshotAsset()] }),
   manifest: {
-    name: 'IAM Lens — role & permission lookup for Google Cloud',
+    name: 'IAM Lens — role and permission lookup for Google Cloud',
     description:
       'Instantly find which Google Cloud IAM roles grant a permission, and which permissions a role has.',
     // Chrome Web Store public key: pins the extension ID to odnpdglkmklhecdmggaebgakadfciooc, the store item (IAM-53),

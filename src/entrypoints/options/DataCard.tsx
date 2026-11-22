@@ -56,7 +56,9 @@ export function DataCard({
     },
     {
       label: 'Roles',
-      value: ready ? iam.index.roles.length.toLocaleString('en') : '…',
+      value: ready
+        ? iam.index.roles.filter((r) => r.source.kind === 'predefined').length.toLocaleString('en')
+        : '…',
       note: ready ? 'predefined' : '',
     },
     {

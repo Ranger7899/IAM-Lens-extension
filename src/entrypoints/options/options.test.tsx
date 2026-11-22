@@ -62,14 +62,17 @@ function makeDeps(over: Partial<OptionsDeps> = {}, signedIn = false) {
   return deps;
 }
 
-async function mountApp(deps: OptionsDeps) {
+async function mountApp(deps: OptionsDeps, customRoles: CustomRoleInput[] = []) {
   const snapshot = await makeSnapshot([{ name: 'roles/a.viewer', perms: ['a.things.get'] }]);
   host = document.createElement('div');
   document.body.append(host);
   root = createRoot(host);
   await act(async () =>
     root!.render(
-      <IamProvider loader={async () => ({ snapshot, source: 'bundled' as const })}>
+      <IamProvider
+        loader={async () => ({ snapshot, source: 'bundled' as const })}
+        customRolesLoader={async () => customRoles}
+      >
         <App deps={deps} />
       </IamProvider>,
     ),
@@ -100,6 +103,17 @@ describe('options page', () => {
     await click(button('Check for updates'));
     expect(deps.refreshNow).toHaveBeenCalledTimes(1);
     expect(host!.textContent).toContain('Up to date');
+  });
+
+  it('counts only predefined roles in the data card, not synced custom ones', async () => {
+    await mountApp(makeDeps(), [
+      { name: 'projects/p/roles/mine', perms: ['a.things.get'], source: { kind: 'custom', parent: 'projects/p' } },
+      { name: 'projects/p/roles/mine2', perms: ['a.things.get'], source: { kind: 'custom', parent: 'projects/p' } },
+    ]);
+    const roles = [...host!.querySelectorAll('dt')].find((d) => d.textContent === 'Roles')!.parentElement!;
+    const dds = roles.querySelectorAll('dd');
+    expect(dds[0].textContent).toBe('1');
+    expect(dds[1].textContent).toBe('predefined');
   });
 
   it('opens the trust sheet first and only signs in from its Continue button', async () => {
@@ -134,6 +148,17 @@ describe('options page', () => {
     expect(host!.textContent).toContain(
       'Signed in with another Google account (session lasts about an hour)',
     );
+  });
+
+  it('web-method trust sheet ends its callback sentence before the URL, with no dangling punctuation after it', async () => {
+    const deps = makeDeps({ webSignInAvailable: true, authMethod: async () => 'web' });
+    await mountApp(deps);
+    await click(button(/Use a different Google account/));
+    const sheet = dialogOf('Before you sign in');
+    const code = [...sheet.querySelectorAll('code')].find((c) => c.textContent?.startsWith('https://'))!;
+    expect(code.nextSibling).toBeNull();
+    expect(code.parentElement!.textContent).toContain('address fragment');
+    expect(code.previousSibling!.textContent!.trimEnd()).toMatch(/is:$/);
   });
 
   it('suggests the second option on ChromeOnlyError', async () => {

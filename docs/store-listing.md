@@ -4,7 +4,7 @@ Ready to paste. Site: homepage `https://iamlens.vaultline.cloud/`, privacy `http
 
 ## Name options (none starts with a Google trademark)
 
-1. IAM Lens: role & permission lookup for Google Cloud (matches `wxt.config.ts`)
+1. IAM Lens: role and permission lookup for Google Cloud (matches `wxt.config.ts`)
 2. IAM Lens for Cloud
 3. RoleLens: IAM roles & permissions finder
 

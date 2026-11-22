@@ -40,4 +40,32 @@ describe('usePendingRoute', () => {
     act(() => root.unmount());
     expect(listener).toBeUndefined();
   });
+
+  it('applies a route written shortly after mount even if no onChanged event is seen', async () => {
+    vi.useFakeTimers();
+    try {
+      const store: Record<string, unknown> = {};
+      vi.stubGlobal('chrome', {
+        storage: {
+          session: {
+            get: async (k: string) => (k in store ? { [k]: store[k] } : {}),
+            remove: async (k: string) => void delete store[k],
+          },
+          onChanged: { addListener: () => {}, removeListener: () => {} },
+        },
+      });
+      const go = vi.fn();
+      const root = createRoot(document.createElement('div'));
+      await act(async () => root.render(<Probe go={go} />));
+      expect(go).not.toHaveBeenCalled();
+      store[PENDING_ROUTE_KEY] = { route: { name: 'permission', id: 'a.b.c' }, at: Date.now() };
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1100);
+      });
+      expect(go).toHaveBeenCalledWith({ name: 'permission', id: 'a.b.c' });
+      act(() => root.unmount());
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

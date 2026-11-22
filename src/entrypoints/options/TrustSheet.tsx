@@ -71,10 +71,10 @@ const WEB_POINTS: Point[] = POINTS.map((p) => {
       ...p,
       body: (
         <>
-          Google sends the token to a small page on our own domain,{' '}
-          <code className={styles.clientId}>{WEB_OAUTH_REDIRECT_URI}</code>, in the address fragment, which is
-          never sent to a server. That page only forwards it to this extension and clears it. The token and
-          the roles stay on this device. Sessions last about an hour.
+          Google sends the token to a small page on our own domain. The token travels in the address
+          fragment, which is never sent to a server. That page only forwards it to this extension and clears
+          it. The token and the roles stay on this device. Sessions last about an hour. The page is:
+          <code className={styles.clientId}>{WEB_OAUTH_REDIRECT_URI}</code>
         </>
       ),
     };
