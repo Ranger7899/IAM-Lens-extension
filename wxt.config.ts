@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { defineConfig } from 'wxt';
+import { OAUTH_CLIENT_ID, OAUTH_SCOPES } from './src/core/gcp/authConfig';
 
 /**
  * Emits `data/roles.snapshot.json` as a separate content-hashed asset (`assets/roles.snapshot-<hash>.json`)
@@ -51,6 +52,8 @@ export default defineConfig({
           key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3I3du8O5yuUB5ogLIEEkD/2I6+J+VfR2GrkzG2P1hffdRXzvFlqmrJMAFRpVnq4+DoVEBA4yzFW8sIunItiUgPNNAVXnZtXI9S6MFsi9Gxuza/5UvSosaB7gQ98rj4+zt42PDBBC5YyY4z33HSzlW9311lek5V5SYda4YbqAE+8Ne/xbojW2x816SjsEUD69x4hDwOHx3Tdl5oQW0ewoPwPQaoj1MreMe1IR3RvMiU5EdkyezXnMeY1L2Ku5lpRSYyctsR9TG36Kokk11HZBusO6IUm4H1x8Rfv0GOWX2JcVnFT3H4ynkCxrbnJ3f+imx3C1Vz9rkbqtJfwKQSdB3wIDAQAB',
         }),
     permissions: ['sidePanel', 'storage', 'unlimitedStorage', 'alarms', 'contextMenus'],
+    // Read by chrome.identity.getAuthToken. `identity` itself stays optional and is requested at sign-in.
+    oauth2: { client_id: OAUTH_CLIENT_ID, scopes: OAUTH_SCOPES },
     optional_permissions: ['identity'],
     optional_host_permissions: ['https://*.googleapis.com/'],
     omnibox: { keyword: 'iam' },

@@ -18,7 +18,7 @@ First public release of IAM Lens: two-way Google Cloud IAM role and permission l
 - What's new: diff between the previous and current snapshot, now shown in Settings (IAM-14, IAM-39).
 
 ### Custom roles (optional sign-in)
-- Sign in with Google through `launchWebAuthFlow`; token is kept in session storage only (IAM-19).
+- Sign in with Google through `chrome.identity.getAuthToken` and a Chrome Extension OAuth client (Chrome only, uses the Chrome profile account); sign-out revokes the token (IAM-19, IAM-58).
 - Auto-sync: sign in once and every accessible project and organization is discovered and synced; refreshed on opening the side panel when older than an hour, then hourly, and on demand (IAM-44, IAM-18).
 - Custom roles are merged into the index with "Custom" source badges on every screen (IAM-21).
 - Requests the `iam` scope for `roles.list` (the only accepted non-cloud-platform scope) plus `cloud-platform.read-only` for project discovery; all calls are GET (IAM-41).

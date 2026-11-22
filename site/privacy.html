@@ -262,8 +262,10 @@
           (searching, listing and comparing roles and permissions).
         </li>
         <li>
-          The OAuth access token is kept in <code>chrome.storage.session</code>. It is held in
-          memory only and is cleared when you close the browser.
+          Sign-in uses Chrome's built-in <code>chrome.identity.getAuthToken</code> with the Google
+          account signed in to your Chrome profile. Chrome itself caches the OAuth access token. IAM
+          Lens also keeps a copy in <code>chrome.storage.session</code>, which is held in memory only
+          and is cleared when you close the browser.
         </li>
         <li>
           The custom roles, and the IDs and display names of your projects and organizations, are
@@ -285,7 +287,7 @@
       <ul>
         <li>
           <strong>Sign out &amp; clear</strong> (options page) revokes the access token with Google,
-          removes it from the browser, and deletes all stored custom roles and the stored list of
+          removes it from Chrome's token cache and from the extension, and deletes all stored custom roles and the stored list of
           projects and organizations.
         </li>
         <li>

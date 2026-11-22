@@ -21,7 +21,7 @@ Full command: `npm run typecheck && npm run lint && npm test && npm run build &&
 - [x] `optional_permissions`: `identity` (requested only when the user clicks Sign in)
 - [x] `optional_host_permissions`: `https://*.googleapis.com/` (same moment)
 - [x] `key` present (pins ID `nkkmmkcohkjacpgiaiiadjmhcbmhgaen`).
-- [x] No top-level `oauth2` block, by design: sign-in uses `identity.launchWebAuthFlow` with the client ID in code (`src/core/gcp/authConfig.ts`), which does not use the manifest `oauth2` field (that is for `getAuthToken`). Nothing to add.
+- [x] Top-level `oauth2` block present (IAM-58): sign-in uses `identity.getAuthToken` with the Chrome Extension OAuth client `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb`, and `wxt.config.ts` writes `oauth2.client_id` and both scopes into the manifest. `identity` stays an optional permission. Verify after `npm run zip` / `npm run zip:store` that the manifest in each zip contains `oauth2` (and `key` only in the non-store zip).
 - [x] No remote code: no `<script src="http...">`, no `eval`/`new Function`, no custom `content_security_policy`. The only network fetches are JSON data (roles snapshot) and Google API GETs, never executed.
 
 ## Store and Google steps
@@ -44,7 +44,7 @@ Plan (decided in IAM-53, not here):
 
 1. Try `.output/iam-lens-1.0.0-chrome.zip` (with `key`) as a draft upload. If accepted, the ID should match the pinned one and nothing else is needed.
 2. If rejected, upload `.output-store/iam-lens-1.0.0-chrome.zip` (from `npm run zip:store`, identical except no `key`). The store assigns an ID. Then either (a) in the dashboard open Package and View public key, and use that key and the new ID everywhere (manifest `key` for dev builds, Google OAuth client "Application ID"/extension ID, `docs/oauth-verification.md`), or (b) try the documented alternative of uploading the zip with the matching `key.pem`, which may preserve the pinned ID.
-3. Because the redirect URI for `launchWebAuthFlow` contains the extension ID (`https://<id>.chromiumapp.org/`), any ID change must be mirrored in the Google Cloud OAuth client before sign-in works for store users.
+3. The Chrome Extension OAuth client is bound to the extension's Item ID, so any ID change must be mirrored in the Google Cloud OAuth client (Item ID field) before sign-in works for store users. There is no redirect URI to update.
 
 ## Handing off to the owner: upload and submit
 

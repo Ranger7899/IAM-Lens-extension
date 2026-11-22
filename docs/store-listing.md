@@ -56,7 +56,7 @@ IAM Lens has one purpose: to let users look up which Google Cloud IAM roles gran
 | `unlimitedStorage` | Stores the roles snapshot (about 2 MB, about 2,400 roles and 14,000 permissions) and synced custom roles (with the list of synced projects and organizations) in IndexedDB without quota eviction. |
 | `alarms` | Schedules the periodic check for a newer predefined-roles snapshot. |
 | `contextMenus` | Adds a "Look up in IAM Lens" item for selected text such as a permission or role ID. |
-| `identity` (optional) | Requested only when the user chooses to sign in, to obtain an OAuth token (`launchWebAuthFlow`) for discovering projects and organizations and listing their custom roles. |
+| `identity` (optional) | Requested only when the user chooses to sign in, to obtain an OAuth token (`identity.getAuthToken`, Chrome only) for discovering projects and organizations and listing their custom roles. |
 | Host `https://*.googleapis.com/` (optional) | Requested only at sign-in, to call the IAM API (`iam.googleapis.com`) and Cloud Resource Manager API (`cloudresourcemanager.googleapis.com`) from the browser. |
 | OAuth scopes (at sign-in) | `https://www.googleapis.com/auth/iam` (the only scope besides `cloud-platform` that Google accepts for listing custom roles; shown as "Manage your IAM policies", but IAM Lens only reads role definitions) and `https://www.googleapis.com/auth/cloud-platform.read-only` (project and organization search, to discover all accessible projects and organizations automatically). See `docs/oauth-verification.md`. |
 | Omnibox keyword `iam` | Lets users type `iam <query>` in the address bar to search. (A manifest key, not a permission prompt.) |

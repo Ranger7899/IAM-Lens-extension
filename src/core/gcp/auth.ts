@@ -1,15 +1,18 @@
-/** Sign-in for custom roles: `launchWebAuthFlow` implicit flow, token kept in `storage.session`. */
+/**
+ * Sign-in for custom roles via `chrome.identity.getAuthToken` (Chrome Extension OAuth client, IAM-58).
+ * Chrome caches the token itself; we mirror it in `storage.session` as the "signed in" marker.
+ */
 import { browser } from 'wxt/browser';
 import { clearCustomRoles } from '../snapshot';
 import type { GetTokenOptions } from './http';
 import {
   AUTH_STORAGE_KEY,
   IAM_SCOPE,
-  OAUTH_AUTH_URL,
-  OAUTH_CLIENT_ID,
   OAUTH_REVOKE_URL,
   OAUTH_SCOPE,
+  OAUTH_SCOPES,
   OPTIONAL_PERMISSIONS,
+  TOKEN_ASSUMED_TTL_MS,
   TOKEN_MIN_TTL_MS,
 } from './authConfig';
 
@@ -17,7 +20,7 @@ export interface StoredAuth {
   token: string;
   /** Epoch ms. */
   expiresAt: number;
-  /** Space-separated scopes Google granted (from the redirect fragment). */
+  /** Space-separated scopes Google granted (from `grantedScopes`). */
   scope?: string;
 }
 
@@ -41,7 +44,17 @@ export class ScopeUpgradeRequiredError extends AuthRequiredError {
 
 // The identity API is an optional permission, so access it lazily.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const identity = () => (browser as any).identity as typeof chrome.identity;
+const identity = () => (browser as any).identity as typeof chrome.identity | undefined;
+
+/** `getAuthToken` only exists in Google Chrome. Edge, Brave and others lack it or reject it. */
+export class ChromeOnlyError extends Error {
+  constructor(message = 'Custom-role sign-in needs Google Chrome.') {
+    super(message);
+    this.name = 'ChromeOnlyError';
+  }
+}
+
+const UNSUPPORTED_RE = /not supported|unsupported|not implemented|not available/i;
 
 async function readAuth(): Promise<StoredAuth | undefined> {
   const r = await browser.storage.session.get(AUTH_STORAGE_KEY);
@@ -49,43 +62,43 @@ async function readAuth(): Promise<StoredAuth | undefined> {
   return v && typeof v.token === 'string' && typeof v.expiresAt === 'number' ? (v as StoredAuth) : undefined;
 }
 
-function randomState(): string {
-  const b = new Uint8Array(16);
-  crypto.getRandomValues(b);
-  return Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
-}
+type TokenResult = { token?: string; grantedScopes?: string[] } | string | undefined;
 
-async function runFlow(interactive: boolean): Promise<StoredAuth> {
-  const state = randomState();
-  const params = new URLSearchParams({
-    client_id: OAUTH_CLIENT_ID,
-    response_type: 'token',
-    redirect_uri: identity().getRedirectURL(),
-    scope: OAUTH_SCOPE,
-    include_granted_scopes: 'true',
-    state,
-    prompt: interactive ? 'select_account' : 'none',
-  });
-  let redirect: string | undefined;
+/** Wraps `chrome.identity.getAuthToken` (promise form in MV3, with a callback fallback). */
+async function fetchToken(interactive: boolean): Promise<StoredAuth> {
+  const id = identity();
+  if (!id || typeof id.getAuthToken !== 'function') throw new ChromeOnlyError();
+  let res: TokenResult;
   try {
-    redirect = await identity().launchWebAuthFlow({ url: `${OAUTH_AUTH_URL}?${params}`, interactive });
+    res = await new Promise<TokenResult>((resolve, reject) => {
+      const done = (r: unknown) => {
+        const err = chrome.runtime?.lastError;
+        if (err) reject(new Error(err.message));
+        else resolve(r as TokenResult);
+      };
+      try {
+        const p = id.getAuthToken({ interactive, scopes: OAUTH_SCOPES }, done) as unknown;
+        if (p && typeof (p as Promise<unknown>).then === 'function') {
+          (p as Promise<TokenResult>).then(resolve, reject);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
   } catch (e) {
-    throw new AuthRequiredError(e instanceof Error ? e.message : 'Authorization failed');
+    const msg = e instanceof Error ? e.message : 'Authorization failed';
+    if (UNSUPPORTED_RE.test(msg)) throw new ChromeOnlyError();
+    throw new AuthRequiredError(msg);
   }
-  if (!redirect) throw new AuthRequiredError('Authorization was cancelled');
-  const hash = redirect.includes('#') ? redirect.slice(redirect.indexOf('#') + 1) : '';
-  const frag = new URLSearchParams(hash);
-  const err = frag.get('error');
-  if (err) throw new AuthRequiredError(`Authorization failed: ${err}`);
-  if (frag.get('state') !== state) throw new AuthRequiredError('Authorization state mismatch');
-  const token = frag.get('access_token');
-  const ttl = Number(frag.get('expires_in'));
-  if (!token || !Number.isFinite(ttl)) throw new AuthRequiredError('Authorization response had no token');
-  // Per RFC 6749 an omitted `scope` means it equals the requested scope.
+  const token = typeof res === 'string' ? res : res?.token;
+  if (!token) throw new AuthRequiredError('Authorization was cancelled');
+  const granted =
+    typeof res === 'object' && res?.grantedScopes?.length ? res.grantedScopes.join(' ') : undefined;
+  // Without `grantedScopes` we cannot tell, so assume the requested scopes (needsScopeUpgrade then stays false).
   const auth: StoredAuth = {
     token,
-    expiresAt: Date.now() + ttl * 1000,
-    scope: frag.get('scope') ?? OAUTH_SCOPE,
+    expiresAt: Date.now() + TOKEN_ASSUMED_TTL_MS,
+    scope: granted ?? OAUTH_SCOPE,
   };
   await browser.storage.session.set({ [AUTH_STORAGE_KEY]: auth });
   return auth;
@@ -98,7 +111,7 @@ export async function signIn(): Promise<void> {
     origins: [...OPTIONAL_PERMISSIONS.origins],
   });
   if (!granted) throw new AuthRequiredError('Permission to contact Google APIs was denied');
-  await runFlow(true);
+  await fetchToken(true);
 }
 
 /** Compatible with the `getToken` option of the GCP clients. */
@@ -107,7 +120,15 @@ export async function getToken(opts: GetTokenOptions = {}): Promise<string> {
   if (!cur) throw new AuthRequiredError();
   if (!hasIamScope(cur)) throw new ScopeUpgradeRequiredError();
   if (!opts.forceRefresh && cur.expiresAt - Date.now() > TOKEN_MIN_TTL_MS) return cur.token;
-  return (await runFlow(false)).token;
+  if (opts.forceRefresh) {
+    // Chrome caches the token itself; drop it so the next call returns a new one.
+    try {
+      await identity()?.removeCachedAuthToken({ token: cur.token });
+    } catch {
+      /* best effort */
+    }
+  }
+  return (await fetchToken(false)).token;
 }
 
 export async function isSignedIn(): Promise<boolean> {
@@ -130,9 +151,19 @@ export async function signOut(): Promise<void> {
   const cur = await readAuth();
   if (cur) {
     try {
+      await identity()?.removeCachedAuthToken({ token: cur.token });
+    } catch {
+      /* best effort */
+    }
+    try {
       await fetch(`${OAUTH_REVOKE_URL}?token=${encodeURIComponent(cur.token)}`, { method: 'POST' });
     } catch {
       /* best effort: still clear local state */
+    }
+    try {
+      await identity()?.clearAllCachedAuthTokens?.();
+    } catch {
+      /* not available everywhere */
     }
   }
   await browser.storage.session.remove(AUTH_STORAGE_KEY);

@@ -5,7 +5,8 @@ Placeholders: `<DEVELOPER_NAME>`, `<HOMEPAGE_URL>`, `<PRIVACY_POLICY_URL>`, `<TE
 ## App information
 
 - App name: IAM Lens
-- Type: Chrome extension OAuth client, ID `<EXTENSION_ID>` (pinned via manifest key)
+- Type: "Chrome Extension" OAuth client (client ID `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb.apps.googleusercontent.com`), Item ID `<EXTENSION_ID>` (pinned via manifest key). It has no redirect URIs and no client secret. `chromiumapp.org` is not an authorized domain and is not needed: sign-in uses `chrome.identity.getAuthToken`, and the client ID is in the manifest `oauth2` block.
+- Sign-in works in Google Chrome only, with the Google account signed in to the Chrome profile (no account picker).
 - Homepage: `<HOMEPAGE_URL>`
 - Privacy policy: `<PRIVACY_POLICY_URL>`
 - Terms of service: `<TERMS_URL>`
@@ -57,16 +58,16 @@ All calls are HTTP GET, made from the extension in the user's browser, with pagi
 | IAM v1 `roles.list` (projects) | GET `iam.googleapis.com/v1/projects/<id>/roles?view=FULL&showDeleted=false` | `iam` | Read the custom roles of each project |
 | IAM v1 `roles.list` (organizations) | GET `iam.googleapis.com/v1/organizations/<id>/roles?view=FULL&showDeleted=false` | `iam` | Read the custom roles of each organization |
 
-Sync behaviour: runs when the side panel opens if the last sync is over 1 hour old, then every hour while the panel is open, and on demand (refresh button, "Sync now"). Up to 4 sources are fetched at once. A source the account cannot read (403/404) is skipped and counted as "no access". Roles of sources that are no longer accessible are removed. Token revocation uses `oauth2.googleapis.com/revoke` on sign-out.
+Sync behaviour: runs when the side panel opens if the last sync is over 1 hour old, then every hour while the panel is open, and on demand (refresh button, "Sync now"). Up to 4 sources are fetched at once. A source the account cannot read (403/404) is skipped and counted as "no access". Roles of sources that are no longer accessible are removed. Chrome caches the `getAuthToken` token itself; the extension keeps only a session marker. Sign-out calls `removeCachedAuthToken`, revokes the token at `oauth2.googleapis.com/revoke` and clears Chrome's cached tokens.
 
 ## Demo video script (unlisted YouTube, about 3 minutes, English narration or captions)
 
 1. (0:00-0:30) No-sign-in lookup. Show the extension in `chrome://extensions` (ID `<EXTENSION_ID>`) and state the single purpose. Open the side panel, search `storage.objects.get`, open `roles/viewer`. Say that predefined roles work with no sign-in.
-2. (0:30-1:05) Settings, Sign in. Open Settings (options page), show the Custom roles card and the privacy note, click "Sign in". The Google sign-in window must show the address bar with `client_id=` clearly readable (Google requires the OAuth client ID to be visible). Pause on it for a few seconds. If the sign-in window hides the URL, also show it with the Network panel of the extension's service worker or by repeating the flow once with the URL visible.
+2. (0:30-1:05) Settings, Sign in. Open Settings (options page), show the Custom roles card and the privacy note, click "Sign in". `getAuthToken` opens Google's consent window without an editable address bar. Google requires the OAuth client ID to be visible, so show it two ways: open `chrome://extensions`, enable Developer mode, open the extension's manifest (or `chrome-extension://<EXTENSION_ID>/manifest.json`) and pause on `oauth2.client_id`; and, if the consent window shows its URL, pause on `client_id=` there as well.
 3. (1:05-1:40) Consent screen. Show the app name "IAM Lens", the developer contact, and both scope lines ("Manage your IAM policies" and the read-only Cloud Platform line) readable. Zoom on them, say aloud that the extension only issues read (GET) requests for role definitions and project names. Approve.
 4. (1:40-2:05) Auto-sync status row. Open the side panel Search page and show the status row: "Custom roles · N from X projects and Y organizations · synced just now". Say that all accessible projects and organizations are found automatically, with nothing to choose or configure, and that it re-syncs hourly while the panel is open.
 5. (2:05-2:25) Custom role. Search for a custom role and show its badge "Custom · <project> (project)" and its permissions.
 6. (2:25-2:40) Refresh button. Click the refresh icon on the status row, show "Syncing…" then the updated "synced just now". Mention only GET requests (optionally show the service-worker Network panel with GETs to `iam.googleapis.com` and `cloudresourcemanager.googleapis.com`).
 7. (2:40-3:00) Sign out and clear. In Settings click "Sign out & clear", confirm, show the custom roles and the status row disappearing, and state that the token was revoked and local data deleted. Close: no analytics, no remote code, data stays local, Limited Use compliance.
 
-Recording tips: use a throwaway Google Cloud account with a few projects and at least one custom role, hide personal info and real project names, 1080p, keep the URL bar with `client_id=` visible during consent.
+Recording tips: use a throwaway Google Cloud account with a few projects and at least one custom role, hide personal info and real project names, 1080p, show `oauth2.client_id` from the manifest (and `client_id=` in the consent window URL if visible). Sign in with a Google account that is signed in to the Chrome profile you are recording.

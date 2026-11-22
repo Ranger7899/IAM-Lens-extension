@@ -74,7 +74,8 @@ export function CustomRolesCard({ deps }: { deps: OptionsDeps }) {
           <p>
             Sign in once with the Google account that can see your Cloud projects. IAM Lens then includes
             every project and organization that account can access, read-only, and fetches custom role
-            definitions straight from Google to this browser. They stay on this device.
+            definitions straight from Google to this browser. They stay on this device. Custom-role sign-in
+            works in Google Chrome only, using the account signed in to your Chrome profile.
           </p>
           <div>
             <Button variant="filled" icon="login" onClick={() => setTrustOpen(true)}>
