@@ -26,7 +26,8 @@ const POINTS: Point[] = [
     body: (
       <>
         Google has no read-only option for listing roles, so its screen uses that wording. IAM Lens only reads
-        role definitions (list and get) and never changes anything. {link(IAM_SOURCE_URL, 'See the exact API calls')}.
+        role definitions (list and get) and never changes anything.{' '}
+        {link(IAM_SOURCE_URL, 'See the exact API calls')}.
       </>
     ),
   },
