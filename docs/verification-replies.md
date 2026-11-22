@@ -7,7 +7,7 @@ Fixed facts used below:
 - Project `iam-chrome`. Developer Yousef Masad, ysfmasad@gmail.com. Source (MIT): https://github.com/Ranger7899/IAM-Lens-extension
 - Chrome Extension client `609543680898-4i6tksn4mkca32r3mhd5h5ih7tm7c6vb.apps.googleusercontent.com` (`chrome.identity.getAuthToken`, Item ID `odnpdglkmklhecdmggaebgakadfciooc`).
 - Web application client `609543680898-n8hac6to84t8kf4qimatt2inbesumusr.apps.googleusercontent.com` (origin `https://iamlens.vaultline.cloud`, redirect `https://iamlens.vaultline.cloud/auth/callback.html`).
-- Scopes: `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform.read-only` (both listed as sensitive [CHECK: confirm on the Data Access page]).
+- Scopes: `https://www.googleapis.com/auth/iam` and `https://www.googleapis.com/auth/cloud-platform.read-only` (both listed as sensitive (confirmed on the Data Access page, 2026-11-22)).
 - Authorized domain `vaultline.cloud`. Homepage `https://iamlens.vaultline.cloud/`, privacy `/privacy.html`, terms `/terms.html`.
 - Privacy policy headings (site/privacy.html): What IAM Lens is; No analytics, no tracking, no remote code; Predefined roles snapshot; Optional sign-in and custom roles; Google user data IAM Lens accesses; When IAM Lens contacts Google; Scopes requested and why; How your data is used, stored and shared; Deleting your data; Google API Services User Data Policy; Permissions; Children; Changes to this policy; Contact.
 
@@ -42,17 +42,17 @@ Fixed facts used below:
 
 **When you'll see this:** "Your video must show the OAuth client ID" or "must include all OAuth clients in the project."
 
-> Thank you. The project has two OAuth clients and both appear in the video: the Chrome Extension client (ending `...4i6tksn4`) at [0:52] and [1:05], and the Web application client (ending `...n8hac6to`) at [2:10], where the account-picker URL shows `client_id=`. Because the Chrome Extension client uses `chrome.identity.getAuthToken`, Google's window has no editable address bar, so its ID is shown in the extension's "Before you sign in" sheet and in the manifest `oauth2.client_id`. If you need a different view, we will re-record and resubmit within a day. Video: [UNLISTED YOUTUBE LINK].
+> Thank you. The project has two OAuth clients and both appear in the video: the Chrome Extension client (ending `...4i6tksn4`) at 0:55–1:03 (shown in the extension's "Before you sign in" sheet, zoomed at 0:59) and in Google's address bar as `client_id=` at 1:09, and the Web application client (ending `...n8hac6to`) at 2:14–2:24 (sheet, zoomed at 2:20) for "Use a different Google account". If you need a different view, we will re-record and resubmit within a day. Video: [UNLISTED YOUTUBE LINK].
 
-[CHECK] timestamps against the final cut (planned order is in docs/video/script.md, shots A5, A6, A6b, A7). The "Before you sign in" sheet showing the client ID is per that script; confirm it exists in the shipped build.
+Timestamps are from the final cut `IAM-Lens-demo-verification.mp4` (3:20).
 
 ## 4. Video does not show the full consent flow or the app name
 
 **When you'll see this:** "The video does not show the end-to-end OAuth grant" or "the app name is not visible on the consent screen."
 
-> Thank you. The video shows the full flow for both sign-in methods: clicking Sign in in Settings [1:00], Google's consent window with the app name "IAM Lens" and both scope lines ("Manage your IAM policies" and the read-only Cloud Platform line) held on screen [1:15-1:55], clicking Allow, the extension then using the data (custom roles with a "Custom" badge) [2:05], and sign-out with token revocation [2:48]. The Web application client flow, including Google's account picker and the redirect, is at [2:10]. We will re-record with longer holds on the consent screen if that is clearer. Video: [UNLISTED YOUTUBE LINK].
+> Thank you. The video shows the full flow for both sign-in methods: clicking Sign in in Settings (0:50), the account chooser "to continue to IAM Lens" (1:05), the unverified-app screen (1:17), Google's consent screen with the app name and both scopes (1:27–1:42, zoomed at 1:36), the extension then using the data: synced custom roles, their source projects and organizations, and a custom role's permissions (1:42–2:04), and Sign out & clear with token revocation (2:04). The Web application client flow (account picker, unverified screen, consent as a second account) is at 2:14–3:04. We will re-record with longer holds on the consent screen if that is clearer. Video: [UNLISTED YOUTUBE LINK].
 
-[CHECK] timestamps. If Google shows an "unverified app" warning while recording, say so in the narration; do not claim approval.
+Timestamps are from the final cut (3:20).
 
 ## 5. Homepage issues
 
@@ -60,7 +60,7 @@ Fixed facts used below:
 
 > Thank you. The homepage is https://iamlens.vaultline.cloud/, on our verified domain vaultline.cloud. It describes what IAM Lens does (looks up which Google Cloud IAM roles grant a permission and which permissions a role contains), how the optional Google sign-in is used, and links to the privacy policy (https://iamlens.vaultline.cloud/privacy.html) and terms (https://iamlens.vaultline.cloud/terms.html). The consent screen uses the same URLs. It also states that the app is independent and not affiliated with Google. Please tell us which requirement you do not see met and we will fix it right away.
 
-[CHECK] open site/index.html and confirm it visibly links privacy and terms and describes the sign-in use before sending. [CHECK] Search Console shows the domain as verified (see item 7).
+[CHECK] open site/index.html and confirm it visibly links privacy and terms and describes the sign-in use before sending. [CHECK] Search Console shows the domain as verified (see item 7: vaultline.cloud verified 2026-11-22).
 
 ## 6. Privacy policy issues
 
@@ -72,7 +72,7 @@ Fixed facts used below:
 
 **When you'll see this:** "Verify ownership of your authorized domains" / "The homepage is not on a domain you own."
 
-> Thank you. The authorized domain is vaultline.cloud, and it is the only one listed. It hosts the homepage, privacy policy, terms and the OAuth callback page. We are verifying it in Google Search Console with a Google account that is an Owner of the project iam-chrome [CHECK: state "verified on <date>" once done, and confirm the Search Console account is the project owner]. We do not use or need chromiumapp.org: the Chrome Extension client has no redirect URI, and the Web application client redirects to https://iamlens.vaultline.cloud/auth/callback.html. Please let us know if you see a domain in the consent screen settings that is not verified.
+> Thank you. The authorized domain is vaultline.cloud, and it is the only one listed. It hosts the homepage, privacy policy, terms and the OAuth callback page. It is verified in Google Search Console (2026-11-22) by an Owner of the project iam-chrome. We do not use or need chromiumapp.org: the Chrome Extension client has no redirect URI, and the Web application client redirects to https://iamlens.vaultline.cloud/auth/callback.html. Please let us know if you see a domain in the consent screen settings that is not verified.
 
 ## 8. Request for test credentials
 
