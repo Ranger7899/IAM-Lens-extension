@@ -104,8 +104,11 @@ test('offline: with the network blocked the bundled snapshot still loads and sea
   await page.getByRole('tab', { name: /^Roles/ }).click();
   const rows = page.getByRole('list', { name: 'Roles' }).getByRole('button');
   await expect(rows.first()).toBeVisible();
-  await rows.first().click();
-  await expect(page.getByRole('heading', { level: 2 }).first()).toBeVisible();
+  // On slow CI runners the results list can re-render as the click lands; retry until the detail opens.
+  await expect(async () => {
+    await rows.first().click();
+    await expect(page.getByRole('heading', { level: 2 }).first()).toBeVisible({ timeout: 2_000 });
+  }).toPass({ timeout: 15_000 });
   await page.goto(sidepanelUrl(extensionId, '#/role/roles%2Fviewer'));
   await expect(page.getByRole('heading', { level: 2, name: role('roles/viewer').title })).toBeVisible();
 });

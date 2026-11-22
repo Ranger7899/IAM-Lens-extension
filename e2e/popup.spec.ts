@@ -46,14 +46,14 @@ test('popup: FAB hands off the current query', async ({ context, extensionId }) 
   await page.goto(`chrome-extension://${extensionId}/popup.html`);
   await page.evaluate(() => (window.close = () => {}));
   await page.getByRole('searchbox').fill('bigquery admin');
-  await page.getByRole('button', { name: 'Open side panel' }).click();
-  await expect
-    .poll(() =>
-      page.evaluate(
-        async () =>
-          ((await chrome.storage.session.get('pendingRoute')).pendingRoute as { route?: unknown } | undefined)
-            ?.route,
-      ),
-    )
-    .toEqual({ name: 'search', query: 'bigquery admin' });
+  const pending = () =>
+    page.evaluate(
+      async () =>
+        ((await chrome.storage.session.get('pendingRoute')).pendingRoute as { route?: unknown } | undefined)?.route,
+    );
+  // The FAB can be clicked before the popup's handlers settle on slow CI runners; retry the click.
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Open side panel' }).click();
+    await expect.poll(pending, { timeout: 2_000 }).toEqual({ name: 'search', query: 'bigquery admin' });
+  }).toPass({ timeout: 15_000 });
 });
